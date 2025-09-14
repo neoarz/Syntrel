@@ -66,7 +66,6 @@ If you want to use prefix commands, make sure to also enable the intent below in
 """
 intents.message_content = True
 
-# Setup both of the loggers
 
 
 class LoggingFormatter(logging.Formatter):
@@ -103,17 +102,14 @@ class LoggingFormatter(logging.Formatter):
 logger = logging.getLogger("discord_bot")
 logger.setLevel(logging.INFO)
 
-# Console handler
 console_handler = logging.StreamHandler()
 console_handler.setFormatter(LoggingFormatter())
-# File handler
 file_handler = logging.FileHandler(filename="discord.log", encoding="utf-8", mode="w")
 file_handler_formatter = logging.Formatter(
     "[{asctime}] [{levelname:<8}] {name}: {message}", "%Y-%m-%d %H:%M:%S", style="{"
 )
 file_handler.setFormatter(file_handler_formatter)
 
-# Add the handlers
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
@@ -154,8 +150,25 @@ class DiscordBot(commands.Bot):
         """
         The code in this function is executed whenever the bot will start.
         """
-        for file in os.listdir(f"{os.path.realpath(os.path.dirname(__file__))}/cogs"):
-            if file.endswith(".py"):
+        cogs_path = f"{os.path.realpath(os.path.dirname(__file__))}/cogs"
+        
+        for folder in os.listdir(cogs_path):
+            folder_path = os.path.join(cogs_path, folder)
+            if os.path.isdir(folder_path) and not folder.startswith('__'):
+                for file in os.listdir(folder_path):
+                    if file.endswith(".py") and not file.startswith('__'):
+                        extension = file[:-3]
+                        try:
+                            await self.load_extension(f"cogs.{folder}.{extension}")
+                            self.logger.info(f"Loaded extension '{folder}.{extension}'")
+                        except Exception as e:
+                            exception = f"{type(e).__name__}: {e}"
+                            self.logger.error(
+                                f"Failed to load extension {folder}.{extension}\n{exception}"
+                            )
+        
+        for file in os.listdir(cogs_path):
+            if file.endswith(".py") and not file.startswith('__'):
                 extension = file[:-3]
                 try:
                     await self.load_extension(f"cogs.{extension}")
