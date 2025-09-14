@@ -7,6 +7,7 @@ Version: 6.4.0
 """
 
 import discord
+from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 
@@ -18,74 +19,131 @@ class Help(commands.Cog, name="help"):
     @commands.hybrid_command(
         name="help", description="List all commands the bot has loaded."
     )
-    async def help(self, context: Context) -> None:
-        embed = discord.Embed(
-            title="Help", description="List of available commands:", color=0xBEBEFE
-        )
+    @app_commands.describe(category="Choose a specific category to view its commands")
+    async def help(self, context: Context, category: str = None) -> None:
         
         category_mapping = {
-            "help": "General",
-            "botinfo": "General", 
-            "serverinfo": "General",
-            "ping": "General",
-            "invite": "General",
-            "server": "General",
-            "8ball": "General",
-            "bitcoin": "General",
-            "feedback": "General",
-            "context_menus": "General",
+            "help": "general",
+            "botinfo": "general", 
+            "serverinfo": "general",
+            "ping": "general",
+            "invite": "general",
+            "server": "general",
+            "8ball": "general",
+            "bitcoin": "general",
+            "feedback": "general",
+            "context_menus": "general",
             
-            "randomfact": "Fun",
-            "coinflip": "Fun", 
-            "rps": "Fun",
+            "randomfact": "fun",
+            "coinflip": "fun", 
+            "rps": "fun",
             
-            "kick": "Moderation",
-            "ban": "Moderation",
-            "nick": "Moderation",
-            "purge": "Moderation",
-            "hackban": "Moderation",
-            "warnings": "Moderation",
-            "archive": "Moderation",
+            "kick": "moderation",
+            "ban": "moderation",
+            "nick": "moderation",
+            "purge": "moderation",
+            "hackban": "moderation",
+            "warnings": "moderation",
+            "archive": "moderation",
             
+            "sync": "owner",
+            "cog_management": "owner",
+            "shutdown": "owner",
+            "say": "owner",
             
-            "sync": "Owner",
-            "cog_management": "Owner",
-            "shutdown": "Owner",
-            "say": "Owner",
-            
-        
-            "testcommand": "Template"
+            "testcommand": "template"
         }
         
-    
-        categories = {}
+        category_descriptions = {
+            "general": "General commands",
+            "fun": "Funny commands", 
+            "moderation": "Administration commands",
+            "template": "Template commands",
+            "owner": "Owner commands"
+        }
         
-        for cog_name in self.bot.cogs:
-            cog = self.bot.get_cog(cog_name)
-            if cog:
-                commands_list = cog.get_commands()
-                for command in commands_list:
-                    category = category_mapping.get(cog_name.lower(), "Other")
-                    if category == "Owner" and not (await self.bot.is_owner(context.author)):
+        if category is None:
+            embed = discord.Embed(
+                title="Help", 
+                color=0xBEBEFE
+            )
+            
+            available_categories = set()
+            for cog_name in self.bot.cogs:
+                mapped_category = category_mapping.get(cog_name.lower())
+                if mapped_category:
+                    if mapped_category == "owner" and not (await self.bot.is_owner(context.author)):
                         continue
-                    
-                    if category not in categories:
-                        categories[category] = []
-                    
-                    description = command.description.partition("\n")[0] if command.description else "No description available"
-                    categories[category].append((command.name, description))
-        
-        category_order = ["General", "Fun", "Moderation", "Template", "Owner", "Other"]
-        
-        for category in category_order:
-            if category in categories and categories[category]:
-                data = []
-                for command_name, description in sorted(categories[category]):
-                    data.append(f"{command_name} - {description}")
-                help_text = "\n".join(data)
+                    available_categories.add(mapped_category)
+            
+            category_list = []
+            for cat in sorted(available_categories):
+                description = category_descriptions.get(cat, f"{cat.capitalize()} commands")
+                category_list.append(f"**/help {cat}** » {description}")
+            
+            if category_list:
                 embed.add_field(
-                    name=category, value=f"```{help_text}```", inline=False
+                    name="", 
+                    value="\n".join(category_list), 
+                    inline=False
                 )
+            
+            await context.send(embed=embed)
+            return
+        
+        category = category.lower()
+        if category not in category_descriptions:
+            embed = discord.Embed(
+                title="Error",
+                description=f"Category '{category}' not found. Use `/help` to see available categories.",
+                color=0xE02B2B
+            )
+            await context.send(embed=embed)
+            return
+        
+        if category == "owner" and not (await self.bot.is_owner(context.author)):
+            embed = discord.Embed(
+                title="Error",
+                description="You don't have permission to view owner commands.",
+                color=0xE02B2B
+            )
+            await context.send(embed=embed)
+            return
+        
+        commands_in_category = []
+        for cog_name in self.bot.cogs:
+            if category_mapping.get(cog_name.lower()) == category:
+                cog = self.bot.get_cog(cog_name)
+                if cog:
+                    commands_list = cog.get_commands()
+                    for command in commands_list:
+                        description = command.description.partition("\n")[0] if command.description else "No description available"
+                        commands_in_category.append((command.name, description))
+        
+        if not commands_in_category:
+            embed = discord.Embed(
+                title="Error",
+                description=f"No commands found in category '{category}'.",
+                color=0xE02B2B
+            )
+            await context.send(embed=embed)
+            return
+        
+        embed = discord.Embed(
+            title="Help",
+            color=0xBEBEFE
+        )
+        
+        data = []
+        for command_name, description in sorted(commands_in_category):
+            data.append(f"**{command_name}** » {description}")
+        
+        help_text = "\n".join(data)
+        embed.add_field(
+            name=f"{category.capitalize()} Commands", 
+            value=help_text, 
+            inline=False
+        )
         
         await context.send(embed=embed)
 
