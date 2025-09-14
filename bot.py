@@ -124,6 +124,7 @@ class DiscordBot(commands.Bot):
             command_prefix=commands.when_mentioned_or(os.getenv("PREFIX")),
             intents=intents,
             help_command=None,
+            owner_id=int(os.getenv("OWNER_ID")) if os.getenv("OWNER_ID") else None,
         )
         """
         This creates custom bot variables so that we can access these variables in cogs more easily.
@@ -190,7 +191,18 @@ class DiscordBot(commands.Bot):
         self.logger.info(
             f"Running on: {platform.system()} {platform.release()} ({os.name})"
         )
-        self.logger.info("-------------------")
+        
+        if self.owner_id:
+            try:
+                owner = await self.fetch_user(self.owner_id)
+                self.logger.info(f"Owner found: {owner.name} (ID: {self.owner_id})")
+            except discord.NotFound:
+                self.logger.warning(f"Owner ID {self.owner_id} not found - owner commands may not work")
+            except Exception as e:
+                self.logger.error(f"Error fetching owner: {e}")
+        else:
+            self.logger.warning("No owner ID set - owner commands will not work")
+            
         await self.init_db()
         await self.load_cogs()
         self.status_task.start()
