@@ -1,11 +1,3 @@
-"""
-Copyright © Krypton 2019-Present - https://github.com/kkrypt0nn (https://krypton.ninja)
-Description:
-🐍 A simple template to start to code your own and personalized Discord bot in Python
-
-Version: 6.4.0
-"""
-
 import random
 import discord
 from discord import app_commands
@@ -52,10 +44,11 @@ class EightBall(commands.Cog, name="8ball"):
             "Very doubtful.",
         ]
         embed = discord.Embed(
-            title="**My Answer:**",
+            title="8 Ball",
             description=f"{random.choice(answers)}",
-            color=0xBEBEFE,
+            color=0x7289DA,
         )
+        embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
         embed.set_footer(text=f"The question was: {question}")
         await context.send(embed=embed)
 

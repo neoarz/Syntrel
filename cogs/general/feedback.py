@@ -1,11 +1,3 @@
-"""
-Copyright © Krypton 2019-Present - https://github.com/kkrypt0nn (https://krypton.ninja)
-Description:
-🐍 A simple template to start to code your own and personalized Discord bot in Python
-
-Version: 6.4.0
-"""
-
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -46,9 +38,10 @@ class Feedback(commands.Cog, name="feedback"):
         interaction = feedback_form.interaction
         await interaction.response.send_message(
             embed=discord.Embed(
-                description="Thank you for your feedback, the owners have been notified about it.",
-                color=0xBEBEFE,
-            )
+                title="Thank You!",
+                description="Your feedback has been submitted, the owners have been notified about it.",
+                color=0x7289DA,
+            ).set_author(name="Feedback System", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
         )
 
         app_owner = (await self.bot.application_info()).owner
@@ -56,8 +49,8 @@ class Feedback(commands.Cog, name="feedback"):
             embed=discord.Embed(
                 title="New Feedback",
                 description=f"{interaction.user} (<@{interaction.user.id}>) has submitted a new feedback:\n```\n{feedback_form.answer}\n```",
-                color=0xBEBEFE,
-            )
+                color=0x7289DA,
+            ).set_author(name="Feedback System", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
         )
 
 

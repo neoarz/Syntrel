@@ -151,6 +151,8 @@ class DiscordBot(commands.Bot):
         The code in this function is executed whenever the bot will start.
         """
         cogs_path = f"{os.path.realpath(os.path.dirname(__file__))}/cogs"
+        disabled_env = os.getenv("DISABLED_COGS", "")
+        disabled_cogs = {entry.strip().lower() for entry in disabled_env.split(",") if entry.strip()}
         
         for folder in os.listdir(cogs_path):
             folder_path = os.path.join(cogs_path, folder)
@@ -158,6 +160,10 @@ class DiscordBot(commands.Bot):
                 for file in os.listdir(folder_path):
                     if file.endswith(".py") and not file.startswith('__'):
                         extension = file[:-3]
+                        full_name = f"{folder}.{extension}".lower()
+                        if extension.lower() in disabled_cogs or full_name in disabled_cogs:
+                            self.logger.info(f"Skipped disabled extension '{full_name}'")
+                            continue
                         try:
                             await self.load_extension(f"cogs.{folder}.{extension}")
                             self.logger.info(f"Loaded extension '{folder}.{extension}'")
@@ -170,6 +176,9 @@ class DiscordBot(commands.Bot):
         for file in os.listdir(cogs_path):
             if file.endswith(".py") and not file.startswith('__'):
                 extension = file[:-3]
+                if extension.lower() in disabled_cogs:
+                    self.logger.info(f"Skipped disabled extension '{extension}'")
+                    continue
                 try:
                     await self.load_extension(f"cogs.{extension}")
                     self.logger.info(f"Loaded extension '{extension}'")

@@ -44,13 +44,13 @@ class Help(commands.Cog, name="help"):
             "ping": "general",
             "invite": "general",
             "server": "general",
-            "8ball": "general",
             "feedback": "general",
-            "context_menus": "general",
+        #   "context_menus": "general",
             
             "randomfact": "fun",
             "coinflip": "fun", 
             "rps": "fun",
+            "8ball": "fun",
             
             "kick": "moderation",
             "ban": "moderation",
