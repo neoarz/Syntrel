@@ -32,7 +32,7 @@ class BotInfo(commands.Cog, name="botinfo"):
             value=f"/ (Slash Commands) or {self.bot.bot_prefix} for normal commands",
             inline=False,
         )
-        if context.interaction:
+        if getattr(context, "interaction", None):
             await context.interaction.response.send_message(embed=embed, ephemeral=True)
         else:
             await context.send(embed=embed)

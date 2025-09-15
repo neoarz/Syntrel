@@ -42,7 +42,6 @@ class Help(commands.Cog, name="help"):
             "botinfo": "general", 
             "serverinfo": "general",
             "ping": "general",
-            "invite": "general",
             "feedback": "general",
         #   "context_menus": "general",
             
@@ -63,6 +62,7 @@ class Help(commands.Cog, name="help"):
             "cog_management": "owner",
             "shutdown": "owner",
             "say": "owner",
+            "invite": "owner",
             
             "testcommand": "template"
         }
@@ -134,14 +134,32 @@ class Help(commands.Cog, name="help"):
             return
         
         commands_in_category = []
+        seen_names = set()
         for cog_name in self.bot.cogs:
             if category_mapping.get(cog_name.lower()) == category:
                 cog = self.bot.get_cog(cog_name)
                 if cog:
                     commands_list = cog.get_commands()
                     for command in commands_list:
+                        name = command.name
+                        if name in seen_names:
+                            continue
                         description = command.description.partition("\n")[0] if command.description else "No description available"
-                        commands_in_category.append((command.name, description))
+                        commands_in_category.append((name, description))
+                        seen_names.add(name)
+
+        for app_command in self.bot.tree.get_commands():
+            bound_cog = getattr(app_command, "binding", None)
+            if bound_cog is None:
+                continue
+            bound_cog_name = getattr(bound_cog, "qualified_name", "").lower()
+            if category_mapping.get(bound_cog_name) != category:
+                continue
+            if app_command.name in seen_names:
+                continue
+            description = app_command.description.partition("\n")[0] if getattr(app_command, "description", None) else "No description available"
+            commands_in_category.append((app_command.name, description))
+            seen_names.add(app_command.name)
         
         if not commands_in_category:
             embed = discord.Embed(

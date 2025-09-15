@@ -41,7 +41,8 @@ class Feedback(commands.Cog, name="feedback"):
                 title="Thank You!",
                 description="Your feedback has been submitted, the owners have been notified about it.",
                 color=0x7289DA,
-            ).set_author(name="Feedback System", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            ).set_author(name="Feedback System", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"),
+            ephemeral=True,
         )
 
         app_owner = (await self.bot.application_info()).owner

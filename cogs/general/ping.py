@@ -31,7 +31,10 @@ class Ping(commands.Cog, name="ping"):
             color=0xBEBEFE,
         )
         embed.set_author(name="Ping", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-        await context.send(embed=embed)
+        if getattr(context, "interaction", None):
+            await context.interaction.response.send_message(embed=embed, ephemeral=True)
+        else:
+            await context.send(embed=embed)
 
 
 async def setup(bot) -> None:
