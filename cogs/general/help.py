@@ -49,6 +49,7 @@ class Help(commands.Cog, name="help"):
             "coinflip": "fun", 
             "rps": "fun",
             "8ball": "fun",
+            "minesweeper": "fun",
             
             "kick": "moderation",
             "ban": "moderation",

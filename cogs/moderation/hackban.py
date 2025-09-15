@@ -1,11 +1,3 @@
-"""
-Copyright © Krypton 2019-Present - https://github.com/kkrypt0nn (https://krypton.ninja)
-Description:
-🐍 A simple template to start to code your own and personalized Discord bot in Python
-
-Version: 6.4.0
-"""
-
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -42,16 +34,18 @@ class HackBan(commands.Cog, name="hackban"):
                 int(user_id)
             )
             embed = discord.Embed(
+                title="Ban",
                 description=f"**{user}** (ID: {user_id}) was banned by **{context.author}**!",
-                color=0xBEBEFE,
-            )
+                color=0x7289DA,
+            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
             embed.add_field(name="Reason:", value=reason)
             await context.send(embed=embed)
         except Exception:
             embed = discord.Embed(
+                title="Error!",
                 description="An error occurred while trying to ban the user. Make sure ID is an existing ID that belongs to a user.",
                 color=0xE02B2B,
-            )
+            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
             await context.send(embed=embed)
 
 
