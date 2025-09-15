@@ -43,7 +43,6 @@ class Help(commands.Cog, name="help"):
             "serverinfo": "general",
             "ping": "general",
             "invite": "general",
-            "server": "general",
             "feedback": "general",
         #   "context_menus": "general",
             
