@@ -47,7 +47,7 @@ class ServerInfo(commands.Cog, name="serverinfo"):
             name=f"Roles ({len(context.guild.roles)})", 
             value=roles
         )
-        embed.set_footer(text=f"Created at: {context.guild.created_at}")
+        embed.set_footer(text=f"Created at: {context.guild.created_at.strftime('%m/%d/%Y')}")
         
         if getattr(context, "interaction", None):
             await context.interaction.response.send_message(embed=embed, ephemeral=True)
@@ -56,4 +56,3 @@ class ServerInfo(commands.Cog, name="serverinfo"):
 
 async def setup(bot) -> None:
     await bot.add_cog(ServerInfo(bot))
-    
