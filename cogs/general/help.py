@@ -88,7 +88,10 @@ class Help(commands.Cog, name="help"):
                     inline=False
                 )
             
-            await context.send(embed=embed)
+            if context.interaction:
+                await context.interaction.response.send_message(embed=embed, ephemeral=True)
+            else:
+                await context.author.send(embed=embed)
             return
         
         category = category.lower()
@@ -98,7 +101,10 @@ class Help(commands.Cog, name="help"):
                 description=f"Category '{category}' not found. Use `/help` to see available categories.",
                 color=0xE02B2B
             )
-            await context.send(embed=embed)
+            if context.interaction:
+                await context.interaction.response.send_message(embed=embed, ephemeral=True)
+            else:
+                await context.author.send(embed=embed)
             return
         
         if category == "owner" and not (await self.bot.is_owner(context.author)):
@@ -107,7 +113,10 @@ class Help(commands.Cog, name="help"):
                 description="You don't have permission to view owner commands.",
                 color=0xE02B2B
             )
-            await context.send(embed=embed)
+            if context.interaction:
+                await context.interaction.response.send_message(embed=embed, ephemeral=True)
+            else:
+                await context.author.send(embed=embed)
             return
         
         commands_in_category = []
@@ -126,11 +135,14 @@ class Help(commands.Cog, name="help"):
                 description=f"No commands found in category '{category}'.",
                 color=0xE02B2B
             )
-            await context.send(embed=embed)
+            if context.interaction:
+                await context.interaction.response.send_message(embed=embed, ephemeral=True)
+            else:
+                await context.author.send(embed=embed)
             return
         
         embed = discord.Embed(
-            title="Help",
+            title=f"Help » {category.capitalize()}",
             color=0xBEBEFE
         )
         
@@ -140,12 +152,15 @@ class Help(commands.Cog, name="help"):
         
         help_text = "\n".join(data)
         embed.add_field(
-            name=f"{category.capitalize()} Commands", 
+            name="", 
             value=help_text, 
             inline=False
         )
         
-        await context.send(embed=embed)
+        if context.interaction:
+            await context.interaction.response.send_message(embed=embed, ephemeral=True)
+        else:
+            await context.author.send(embed=embed)
 
 
 async def setup(bot) -> None:
