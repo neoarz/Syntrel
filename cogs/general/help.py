@@ -80,9 +80,9 @@ class Help(commands.Cog, name="help"):
         if category is None:
             embed = discord.Embed(
                 title="Help", 
-                color=0x808080
+                color=0x7289DA
             )
-            embed.set_author(name="Help", icon_url="https://yes.nighty.works/raw/HP69uM.png")
+            embed.set_author(name="Help", icon_url="https://yes.nighty.works/raw/T9mnBO.png")
             
             available_categories = set()
             for cog_name in self.bot.cogs:
@@ -115,7 +115,7 @@ class Help(commands.Cog, name="help"):
             embed = discord.Embed(
                 title="Error",
                 description=f"Category '{category}' not found. Use `/help` to see available categories.",
-                color=0x808080
+                color=0x7289DA
             )
             if context.interaction:
                 await context.interaction.response.send_message(embed=embed, ephemeral=True)
@@ -127,7 +127,7 @@ class Help(commands.Cog, name="help"):
             embed = discord.Embed(
                 title="Error",
                 description="You don't have permission to view owner commands.",
-                color=0x808080
+                color=0x7289DA
             )
             if context.interaction:
                 await context.interaction.response.send_message(embed=embed, ephemeral=True)
@@ -149,7 +149,7 @@ class Help(commands.Cog, name="help"):
             embed = discord.Embed(
                 title="Error",
                 description=f"No commands found in category '{category}'.",
-                color=0x808080
+                color=0x7289DA
             )
             if context.interaction:
                 await context.interaction.response.send_message(embed=embed, ephemeral=True)
@@ -159,9 +159,9 @@ class Help(commands.Cog, name="help"):
         
         embed = discord.Embed(
             title=f"/help » {category.lower()}",
-            color=0x808080
+            color=0x7289DA
         )
-        embed.set_author(name="Help", icon_url="https://yes.nighty.works/raw/HP69uM.png")
+        embed.set_author(name="Help", icon_url="https://yes.nighty.works/raw/T9mnBO.png")
         data = []
         for command_name, description in sorted(commands_in_category):
             data.append(f"**/{command_name}** » {description}")
