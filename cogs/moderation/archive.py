@@ -40,12 +40,12 @@ class Archive(commands.Cog, name="archive"):
                 else ""
             )
             
-            message_line = f"{message.created_at.strftime('%d.%m.%Y %H:%M:%S')} {message.author} {message.id}: {message.clean_content} {attachments_text}\n"
+            message_line = f"{message.created_at.strftime('%m/%d/%Y %H:%M:%S')} {message.author} {message.id}: {message.clean_content} {attachments_text}\n"
             messages.append(message_line)
         
         with open(log_file, "w", encoding="UTF-8") as f:
             f.write(
-                f'Archived messages from: #{context.channel} ({context.channel.id}) in the guild "{context.guild}" ({context.guild.id}) at {datetime.now().strftime("%d.%m.%Y %H:%M:%S")}\n'
+                f'Archived messages from: #{context.channel} ({context.channel.id}) in the guild "{context.guild}" ({context.guild.id}) at {datetime.now().strftime("%m/%d/%Y %H:%M:%S")}\n'
             )
 
             for message_line in reversed(messages):

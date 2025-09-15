@@ -1,3 +1,6 @@
+# This is not used anymore, but I'm keeping it here for reference
+# TODO: Remove this once we have a better way to handle context menus
+
 # import discord
 # from discord import app_commands
 # from discord.ext import commands
