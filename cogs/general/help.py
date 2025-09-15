@@ -45,7 +45,6 @@ class Help(commands.Cog, name="help"):
             "invite": "general",
             "server": "general",
             "8ball": "general",
-            "bitcoin": "general",
             "feedback": "general",
             "context_menus": "general",
             

@@ -1,16 +1,7 @@
-"""
-Copyright © Krypton 2019-Present - https://github.com/kkrypt0nn (https://krypton.ninja)
-Description:
-🐍 A simple template to start to code your own and personalized Discord bot in Python
-
-Version: 6.4.0
-"""
-
 import random
 import discord
 from discord.ext import commands
 from discord.ext.commands import Context
-
 
 class RockPaperScissors(discord.ui.Select):
     def __init__(self) -> None:
@@ -40,36 +31,35 @@ class RockPaperScissors(discord.ui.Select):
         }
         user_choice = self.values[0].lower()
         user_choice_index = choices[user_choice]
-
         bot_choice = random.choice(list(choices.keys()))
         bot_choice_index = choices[bot_choice]
 
-        result_embed = discord.Embed(color=0xBEBEFE)
-        result_embed.set_author(
-            name=interaction.user.name, icon_url=interaction.user.display_avatar.url
-        )
+        result_embed = discord.Embed(title="Rock Paper Scissors", color=0xBEBEFE)
+        result_embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
 
         winner = (3 + user_choice_index - bot_choice_index) % 3
+        
+        # Get the user mention
+        user_mention = interaction.user.mention
+        
         if winner == 0:
-            result_embed.description = f"**That's a draw!**\nYou've chosen {user_choice} and I've chosen {bot_choice}."
+            result_embed.description = f"**That's a draw!** You've chosen {user_choice} and I've chosen {bot_choice}.\n-# gg {user_mention}"
             result_embed.colour = 0xF59E42
         elif winner == 1:
-            result_embed.description = f"**You won!**\nYou've chosen {user_choice} and I've chosen {bot_choice}."
+            result_embed.description = f"**You won!** You've chosen {user_choice} and I've chosen {bot_choice}.\n-# gg {user_mention}"
             result_embed.colour = 0x57F287
         else:
-            result_embed.description = f"**You lost!**\nYou've chosen {user_choice} and I've chosen {bot_choice}."
+            result_embed.description = f"**You lost!** You've chosen {user_choice} and I've chosen {bot_choice}.\n-# gg {user_mention}"
             result_embed.colour = 0xE02B2B
 
         await interaction.response.edit_message(
             embed=result_embed, content=None, view=None
         )
 
-
 class RockPaperScissorsView(discord.ui.View):
     def __init__(self) -> None:
         super().__init__()
         self.add_item(RockPaperScissors())
-
 
 class RPS(commands.Cog, name="rps"):
     def __init__(self, bot) -> None:
@@ -79,14 +69,14 @@ class RPS(commands.Cog, name="rps"):
         name="rps", description="Play the rock paper scissors game against the bot."
     )
     async def rock_paper_scissors(self, context: Context) -> None:
-        """
-        Play the rock paper scissors game against the bot.
-
-        :param context: The hybrid command context.
-        """
         view = RockPaperScissorsView()
-        await context.send("Please make your choice", view=view)
-
+        embed = discord.Embed(
+            title="Rock Paper Scissors",
+            description="Please make your choice",
+            color=0x7289DA
+        )
+        embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+        await context.send(embed=embed, view=view)
 
 async def setup(bot) -> None:
     await bot.add_cog(RPS(bot))
