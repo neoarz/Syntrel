@@ -8,14 +8,14 @@ class Choice(discord.ui.View):
         super().__init__()
         self.value = None
 
-    @discord.ui.button(label="Heads", style=discord.ButtonStyle.blurple)
+    @discord.ui.button(label="Heads", style=discord.ButtonStyle.primary)
     async def confirm(
         self, interaction: discord.Interaction, button: discord.ui.Button
     ) -> None:
         self.value = "heads"
         self.stop()
 
-    @discord.ui.button(label="Tails", style=discord.ButtonStyle.red)
+    @discord.ui.button(label="Tails", style=discord.ButtonStyle.primary)
     async def cancel(
         self, interaction: discord.Interaction, button: discord.ui.Button
     ) -> None:
