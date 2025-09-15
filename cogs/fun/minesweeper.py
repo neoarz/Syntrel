@@ -132,7 +132,7 @@ class MsView(discord.ui.View):
         bombemo = "💣"
         embed = discord.Embed(
             title="Minesweeper",
-            description="💥 BOOM! You hit a bomb! Game Over!",
+            description=f"💥 BOOM! You hit a bomb. Game Over!\n-# gg {self.ctx.author.mention}",
             color=0xE02B2B
         )
         embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
