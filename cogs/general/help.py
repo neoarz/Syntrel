@@ -64,8 +64,6 @@ class Help(commands.Cog, name="help"):
             "shutdown": "owner",
             "say": "owner",
             "invite": "owner",
-            
-            "testcommand": "template"
         }
         
         category_descriptions = {
