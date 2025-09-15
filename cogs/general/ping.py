@@ -30,6 +30,7 @@ class Ping(commands.Cog, name="ping"):
             description=f"The bot latency is {round(self.bot.latency * 1000)}ms.",
             color=0xBEBEFE,
         )
+        embed.set_author(name="Ping", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
         await context.send(embed=embed)
 
 

@@ -6,6 +6,7 @@ Description:
 Version: 6.4.0
 """
 
+import os
 import discord
 from discord.ext import commands
 from discord.ext.commands import Context
@@ -25,10 +26,18 @@ class Invite(commands.Cog, name="invite"):
 
         :param context: The hybrid command context.
         """
-        embed = discord.Embed(
-            description=f"Invite me by clicking [here]({self.bot.invite_link}).",
-            color=0xD75BF4,
+        client = self.bot.user
+        if client is None:
+            await context.send("Bot is not ready. Try again shortly.")
+            return
+        permissions = os.getenv("INVITE_PERMISSIONS", "0")
+        invite_url = (
+            f"https://discord.com/api/oauth2/authorize?client_id={client.id}"
+            f"&scope=bot%20applications.commands&permissions={permissions}"
         )
+        embed = discord.Embed(description=f"Invite me by clicking [here]({invite_url}).", color=0x7289DA)
+        embed.set_author(name="Invite Me", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+        
         try:
             await context.author.send(embed=embed)
             await context.send("I sent you a private message!")
