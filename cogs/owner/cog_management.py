@@ -16,7 +16,7 @@ class CogManagement(commands.Cog, name="cog_management"):
             else:
                 await interaction.response.send_message(embed=embed, ephemeral=ephemeral)
         else:
-            await self.send_embed(context, embed)
+            await context.send(embed=embed)
 
     @commands.hybrid_command(
         name="load",
@@ -109,7 +109,7 @@ class CogManagement(commands.Cog, name="cog_management"):
     async def cog_command_error(self, context: Context, error) -> None:
         if isinstance(error, commands.NotOwner):
             embed = discord.Embed(
-                title="Error",
+                title="Permission Denied",
                 description="You are not the owner of the bot!",
                 color=0xE02B2B
             )

@@ -112,7 +112,6 @@ class DiscordBot(commands.Bot):
             command_prefix=commands.when_mentioned_or(os.getenv("PREFIX")),
             intents=intents,
             help_command=None,
-            owner_id=int(os.getenv("OWNER_ID")) if os.getenv("OWNER_ID") else None,
         )
         """
         This creates custom bot variables so that we can access these variables in cogs more easily.
