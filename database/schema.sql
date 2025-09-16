@@ -1,5 +1,5 @@
 -- Copyright © Krypton 2019-Present - https://github.com/kkrypt0nn/Python-Discord-Bot-Template/blob/main/database/schema.sql
--- Used/Edited by neoarz
+-- Used by neoarz
 
 CREATE TABLE IF NOT EXISTS `warns` (
   `id` int(11) NOT NULL,
