@@ -233,6 +233,22 @@ class DiscordBot(commands.Bot):
         """
         if message.author == self.user or message.author.bot:
             return
+        
+        # Reacts to messages which mention the bot
+        if self.user in message.mentions:
+            try:
+                emoji_string = "<a:PandaPing:1417550314260926575>"
+                self.logger.debug(f"Attempting to react with PandaPing emoji: {emoji_string}")
+                await message.add_reaction(emoji_string)
+                self.logger.debug("Successfully reacted with PandaPing emoji")
+            except Exception as e:
+                self.logger.debug(f"Failed to react with PandaPing emoji: {e}")
+                try:
+                    self.logger.debug("Falling back to wave emoji")
+                    await message.add_reaction("👋")
+                    self.logger.debug("Successfully reacted with wave emoji")
+                except Exception as fallback_error:
+                    self.logger.debug(f"Failed to react with fallback emoji: {fallback_error}")
         await self.process_commands(message)
 
     async def on_command_completion(self, context: Context) -> None:
@@ -260,6 +276,16 @@ class DiscordBot(commands.Bot):
         :param context: The context of the normal command that failed executing.
         :param error: The error that has been faced.
         """
+        if isinstance(error, commands.CommandNotFound):
+            if context.guild is not None:
+                self.logger.info(
+                    f"Unknown command in {context.guild.name} (ID: {context.guild.id}) by {context.author} (ID: {context.author.id}): {context.message.content}"
+                )
+            else:
+                self.logger.info(
+                    f"Unknown command in DMs by {context.author} (ID: {context.author.id}): {context.message.content}"
+                )
+            return
         if isinstance(error, commands.CommandOnCooldown):
             minutes, seconds = divmod(error.retry_after, 60)
             hours, minutes = divmod(minutes, 60)
