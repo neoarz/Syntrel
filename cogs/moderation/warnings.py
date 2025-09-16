@@ -131,7 +131,7 @@ class Warnings(commands.Cog, name="warnings"):
         total = await self.bot.database.remove_warn(warn_id, user.id, context.guild.id)
         embed = discord.Embed(
             title="Warning",
-            description=f"I've removed the warning **#{warn_id}** from **{member}**!\nTotal warns for this user: {total}",
+            description=f"Removed the warning **#{warn_id}** from **{member}**!\nTotal warns for this user: {total}",
             color=0x7289DA,
         )
         embed.set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
