@@ -1,11 +1,3 @@
-"""
-Copyright © Krypton 2019-Present - https://github.com/kkrypt0nn (https://krypton.ninja)
-Description:
-🐍 A simple template to start to code your own and personalized Discord bot in Python
-
-Version: 6.4.0
-"""
-
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -18,10 +10,8 @@ class Kick(commands.Cog, name="kick"):
 
     @commands.hybrid_command(
         name="kick",
-        description="Kick a user out of the server.",
+        description="Kicks a user from the server.",
     )
-    @commands.has_permissions(kick_members=True)
-    @commands.bot_has_permissions(kick_members=True)
     @app_commands.describe(
         user="The user that should be kicked.",
         reason="The reason why the user should be kicked.",
@@ -29,42 +19,109 @@ class Kick(commands.Cog, name="kick"):
     async def kick(
         self, context: Context, user: discord.User, *, reason: str = "Not specified"
     ) -> None:
-        """
-        Kick a user out of the server.
-
-        :param context: The hybrid command context.
-        :param user: The user that should be kicked from the server.
-        :param reason: The reason for the kick. Default is "Not specified".
-        """
-        member = context.guild.get_member(user.id) or await context.guild.fetch_member(
-            user.id
-        )
-        if member.guild_permissions.administrator:
-            embed = discord.Embed(
-                description="User has administrator permissions.", color=0xE02B2B
-            )
-            await context.send(embed=embed)
-        else:
-            try:
-                embed = discord.Embed(
-                    description=f"**{member}** was kicked by **{context.author}**!",
-                    color=0xBEBEFE,
-                )
-                embed.add_field(name="Reason:", value=reason)
-                await context.send(embed=embed)
+        try:
+            member = context.guild.get_member(user.id)
+            if not member:
                 try:
-                    await member.send(
-                        f"You were kicked by **{context.author}** from **{context.guild.name}**!\nReason: {reason}"
-                    )
-                except:
-                    pass
-                await member.kick(reason=reason)
-            except:
+                    member = await context.guild.fetch_member(user.id)
+                except discord.NotFound:
+                    embed = discord.Embed(
+                        title="Error!",
+                        description="This user is not in the server.",
+                        color=0xE02B2B,
+                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                    await context.send(embed=embed, ephemeral=True)
+                    return
+            
+            if not context.author.guild_permissions.kick_members and context.author != context.guild.owner:
                 embed = discord.Embed(
-                    description="An error occurred while trying to kick the user. Make sure my role is above the role of the user you want to kick.",
+                    title="Missing Permissions!",
+                    description="You don't have the `Kick Members` permission to use this command.",
                     color=0xE02B2B,
-                )
+                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                await context.send(embed=embed, ephemeral=True)
+                return
+            
+            if member and member.top_role >= context.guild.me.top_role:
+                embed = discord.Embed(
+                    title="Cannot Kick User",
+                    description="This user has a higher or equal role to me. Make sure my role is above theirs.",
+                    color=0xE02B2B,
+                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                await context.send(embed=embed, ephemeral=True)
+                return
+            
+            if member and context.author != context.guild.owner:
+                if member.top_role >= context.author.top_role:
+                    embed = discord.Embed(
+                        title="Cannot Kick User", 
+                        description="You cannot kick this user as they have a higher or equal role to you.",
+                        color=0xE02B2B,
+                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                    await context.send(embed=embed, ephemeral=True)
+                    return
+            
+            try:
+                if member:
+                    try:
+                        await member.send(
+                            embed=discord.Embed(
+                                title="Kick",
+                                description=f"You were kicked by **{context.author}** from **{context.guild.name}**!\nReason: {reason}",
+                                color=0xE02B2B,
+                            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                           
+                        )
+                    except (discord.Forbidden, discord.HTTPException):
+                        pass
+                
+                await member.kick(reason=reason)
+                
+                embed = discord.Embed(
+                    title="Kick",
+                    description=f"**{user}** was kicked by **{context.author}**!",
+                    color=0x7289DA,
+                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                embed.add_field(name="Reason:", value=reason)
+                
                 await context.send(embed=embed)
+                
+            except discord.Forbidden:
+                embed = discord.Embed(
+                    title="Error!",
+                    description="I don't have permission to kick this user. Make sure my role is above theirs.",
+                    color=0xE02B2B,
+                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                await context.send(embed=embed, ephemeral=True)
+            except discord.HTTPException as e:
+                if "Cannot kick the owner of a guild" in str(e):
+                    embed = discord.Embed(
+                        title="Cannot Kick User",
+                        description="You cannot kick the server owner.",
+                        color=0xE02B2B,
+                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                else:
+                    embed = discord.Embed(
+                        title="Error!",
+                        description=f"Discord API error: {str(e)}",
+                        color=0xE02B2B,
+                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                await context.send(embed=embed, ephemeral=True)
+            except Exception as e:
+                embed = discord.Embed(
+                    title="Debug Error!",
+                    description=f"Error type: {type(e).__name__}\nError message: {str(e)}",
+                    color=0xE02B2B,
+                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                await context.send(embed=embed, ephemeral=True)
+                
+        except Exception as e:
+            embed = discord.Embed(
+                title="Error!",
+                description="An unexpected error occurred.",
+                color=0xE02B2B,
+            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+            await context.send(embed=embed, ephemeral=True)
 
 
 async def setup(bot) -> None:
