@@ -13,10 +13,7 @@ class Help(commands.Cog, name="help"):
         interaction: discord.Interaction,
         current: str,
     ) -> list[app_commands.Choice[str]]:
-        categories = ["general", "fun", "moderation", "template"]
-        
-        if await self.bot.is_owner(interaction.user):
-            categories.append("owner")
+        categories = ["general", "fun", "moderation", "template", "owner"]
         
         suggestions = []
         for category in categories:
@@ -85,8 +82,6 @@ class Help(commands.Cog, name="help"):
             for cog_name in self.bot.cogs:
                 mapped_category = category_mapping.get(cog_name.lower())
                 if mapped_category:
-                    if mapped_category == "owner" and not (await self.bot.is_owner(context.author)):
-                        continue
                     available_categories.add(mapped_category)
             
             category_list = []
@@ -120,17 +115,6 @@ class Help(commands.Cog, name="help"):
                 await context.author.send(embed=embed)
             return
         
-        if category == "owner" and not (await self.bot.is_owner(context.author)):
-            embed = discord.Embed(
-                title="Error",
-                description="You don't have permission to view owner commands.",
-                color=0x7289DA
-            )
-            if context.interaction:
-                await context.interaction.response.send_message(embed=embed, ephemeral=True)
-            else:
-                await context.author.send(embed=embed)
-            return
         
         commands_in_category = []
         seen_names = set()

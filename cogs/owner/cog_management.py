@@ -42,7 +42,7 @@ class CogManagement(commands.Cog, name="cog_management"):
             await self.send_embed(context, embed, ephemeral=True)
             return
         embed = discord.Embed(
-            description=f"Successfully loaded the `{cog}` cog.", color=0xBEBEFE
+            description=f"Successfully loaded the `{cog}` cog.", color=0x7289DA
         )
         embed.set_author(name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp")
         await self.send_embed(context, embed)
@@ -71,7 +71,7 @@ class CogManagement(commands.Cog, name="cog_management"):
             await self.send_embed(context, embed, ephemeral=True)
             return
         embed = discord.Embed(
-            description=f"Successfully unloaded the `{cog}` cog.", color=0xBEBEFE
+            description=f"Successfully unloaded the `{cog}` cog.", color=0x7289DA
         )
         embed.set_author(name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp")
         await self.send_embed(context, embed)
@@ -101,7 +101,7 @@ class CogManagement(commands.Cog, name="cog_management"):
             return
         embed = discord.Embed(
             title="Cog Management",
-            description=f"Successfully reloaded the `{cog}` cog.", color=0xBEBEFE
+            description=f"Successfully reloaded the `{cog}` cog.", color=0x7289DA
         )
         embed.set_author(name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp")
         await self.send_embed(context, embed)

@@ -35,7 +35,7 @@
 #         embed = discord.Embed(
 #             title="Message without spoilers",
 #             description=message.content.replace("||", ""),
-#             color=0xBEBEFE,
+#             color=0x7289DA,
 #         )
 #         if spoiler_attachment is not None:
 #             embed.set_image(url=attachment.url)
@@ -52,7 +52,7 @@
 #         """
 #         embed = discord.Embed(
 #             description=f"The ID of {user.mention} is `{user.id}`.",
-#             color=0xBEBEFE,
+#             color=0x7289DA,
 #         )
 #         await interaction.response.send_message(embed=embed, ephemeral=True)
 #

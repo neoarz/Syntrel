@@ -34,7 +34,7 @@ class RockPaperScissors(discord.ui.Select):
         bot_choice = random.choice(list(choices.keys()))
         bot_choice_index = choices[bot_choice]
 
-        result_embed = discord.Embed(title="Rock Paper Scissors", color=0xBEBEFE)
+        result_embed = discord.Embed(title="Rock Paper Scissors", color=0x7289DA)
         result_embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
 
         winner = (3 + user_choice_index - bot_choice_index) % 3

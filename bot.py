@@ -205,16 +205,16 @@ class DiscordBot(commands.Bot):
             f"Running on: {platform.system()} {platform.release()} ({os.name})"
         )
         
-        if self.owner_id:
-            try:
-                owner = await self.fetch_user(self.owner_id)
-                self.logger.info(f"Owner found: {owner.name} (ID: {self.owner_id})")
-            except discord.NotFound:
-                self.logger.warning(f"Owner ID {self.owner_id} not found - owner commands may not work")
-            except Exception as e:
-                self.logger.error(f"Error fetching owner: {e}")
-        else:
-            self.logger.warning("No owner ID set - owner commands will not work")
+        try:
+            app_info = await self.application_info()
+            if app_info.team:
+                self.logger.info(f"Bot owned by team: {app_info.team.name}")
+                for member in app_info.team.members:
+                    self.logger.info(f"Team member: {member.name} (ID: {member.id})")
+            else:
+                self.logger.info(f"Bot owner: {app_info.owner.name} (ID: {app_info.owner.id})")
+        except Exception as e:
+            self.logger.error(f"Error fetching application info: {e}")
             
         await self.init_db()
         await self.load_cogs()

@@ -19,7 +19,7 @@ class BotInfo(commands.Cog, name="botinfo"):
         :param context: The hybrid command context.
         """
         embed = discord.Embed(
-            title="Nyrix Discord Bot",
+            title="Syntrel Discord Bot",
             color=0x7289DA,
         )
         embed.set_author(name="Bot Information", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
