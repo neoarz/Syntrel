@@ -38,9 +38,11 @@ class Warnings(commands.Cog, name="warnings"):
         
         if context.invoked_subcommand is None:
             embed = discord.Embed(
+                title="Warning",
                 description="Please specify a subcommand.\n\n**Subcommands:**\n`add` - Add a warning to a user.\n`remove` - Remove a warning from a user.\n`list` - List all warnings of a user.",
                 color=0x7289DA,
             )
+            embed.set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
             await self.send_embed(context, embed)
 
     @warning.command(
@@ -92,6 +94,7 @@ class Warnings(commands.Cog, name="warnings"):
             await member.send(embed=dm_embed)
         except:
             fallback = discord.Embed(
+                title="Warning",
                 description=f"{member.mention}, you were warned by **{context.author}**!\nReason: {reason}",
                 color=0xE02B2B,
             )
@@ -127,6 +130,7 @@ class Warnings(commands.Cog, name="warnings"):
         )
         total = await self.bot.database.remove_warn(warn_id, user.id, context.guild.id)
         embed = discord.Embed(
+            title="Warning",
             description=f"I've removed the warning **#{warn_id}** from **{member}**!\nTotal warns for this user: {total}",
             color=0x7289DA,
         )

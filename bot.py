@@ -271,10 +271,6 @@ class DiscordBot(commands.Bot):
             )
             await context.send(embed=embed)
         elif isinstance(error, commands.NotOwner):
-            embed = discord.Embed(
-                description="You are not the owner of the bot!", color=0xE02B2B
-            )
-            await context.send(embed=embed)
             if context.guild:
                 self.logger.warning(
                     f"{context.author} (ID: {context.author.id}) tried to execute an owner only command in the guild {context.guild.name} (ID: {context.guild.id}), but the user is not an owner of the bot."
