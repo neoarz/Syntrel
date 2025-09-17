@@ -1,5 +1,4 @@
 # Copyright © Krypton 2019-Present - https://github.com/kkrypt0nn/Python-Discord-Bot-Template/blob/main/database/__init__.py
-# Used by neoarz
 
 import aiosqlite
 
