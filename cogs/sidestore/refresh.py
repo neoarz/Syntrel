@@ -17,9 +17,9 @@ class Refresh(commands.Cog, name="refresh"):
             color=0x8e82f9,
             description=(
                 '# Can\'t Refresh or Install Apps\n\n---\n\n' +
-                '1. **Make sure your device is connected to a stable Wi-Fi network and not using cellular data.**\n' +
-                '2. **Verify VPN is connected in the StosVPN app.**\n' +
-                '3. **Turn off, then turn back on StosVPN, and wait a few seconds in Sidestore before trying to refresh.**\n' +
+                '1. Make sure your device is connected to a stable Wi-Fi network and not using cellular data.\n' +
+                '2. Verify VPN is connected in the StosVPN app.\n' +
+                '3. Turn off, then turn back on StosVPN, and wait a few seconds in Sidestore before trying to refresh.\n' +
                 '4. **Create a brand new pairing file.**\n' +
                 '   - If none of the above worked, it is very likely that the pairing file is corrupted. You can reference the documentation on how to create a new pairing file [here](https://docs.sidestore.io/docs/troubleshooting/#cant-refresh-or-install-apps).\n' +
                 '   - After creating a new pairing file, go to Sidestore settings and press "Reset pairing file," then choose the new pairing file you just created.\n'
