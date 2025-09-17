@@ -28,14 +28,14 @@ class Server(commands.Cog, name="server"):
             )
         )
         embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
-        embed.set_footer(text=f'Last Edited by neoarz | Last updated at {int(time.time())}')
+        embed.set_footer(text=f'Last Edited by neoarz')
         embed.timestamp = discord.utils.utcnow()
 
         view = discord.ui.View()
         view.add_item(discord.ui.Button(
             label="Edit Command",
             style=discord.ButtonStyle.secondary,
-            url="https://github.com/neoarz/syntrel",
+            url="https://github.com/neoarz/syntrel/blob/main/cogs/sidestore/server.py",
             emoji="<:githubicon:1417717356846776340>"
         ))
         view.add_item(discord.ui.Button(

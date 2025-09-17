@@ -41,7 +41,7 @@ class Pairing(commands.Cog, name="pairing"):
         view.add_item(discord.ui.Button(
             label="Edit Command",
             style=discord.ButtonStyle.secondary,
-            url="https://github.com/neoarz/syntrel",
+            url="https://github.com/neoarz/syntrel/blob/main/cogs/sidestore/pairing.py",
             emoji="<:githubicon:1417717356846776340>"
         ))
         view.add_item(discord.ui.Button(

@@ -30,7 +30,7 @@ class Sparse(commands.Cog, name="sparse"):
         view.add_item(discord.ui.Button(
             label="Edit Command",
             style=discord.ButtonStyle.secondary,
-            url="https://github.com/neoarz/syntrel",
+            url="https://github.com/neoarz/syntrel/blob/main/cogs/sidestore/sparse.py",
             emoji="<:githubicon:1417717356846776340>"
         ))
         view.add_item(discord.ui.Button(
