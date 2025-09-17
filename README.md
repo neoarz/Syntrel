@@ -1,5 +1,3 @@
-# Python Discord Bot Template
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/bannerdark.png">
   <source media="(prefers-color-scheme: light)" srcset="assets/bannerlight.png">
@@ -7,32 +5,20 @@
 </picture>
 
 <p align="center">
-  <a href="https://discord.gg/xj6y5ZaTMr"><img src="https://img.shields.io/discord/1358456011316396295?logo=discord"></a>
-  <a href="https://github.com/kkrypt0nn/Python-Discord-Bot-Template/releases"><img src="https://img.shields.io/github/v/release/kkrypt0nn/Python-Discord-Bot-Template"></a>
-  <a href="https://github.com/kkrypt0nn/Python-Discord-Bot-Template/commits/main"><img src="https://img.shields.io/github/last-commit/kkrypt0nn/Python-Discord-Bot-Template"></a>
-  <a href="https://github.com/kkrypt0nn/Python-Discord-Bot-Template/blob/main/LICENSE.md"><img src="https://img.shields.io/github/license/kkrypt0nn/Python-Discord-Bot-Template"></a>
-  <a href="https://github.com/kkrypt0nn/Python-Discord-Bot-Template"><img src="https://img.shields.io/github/languages/code-size/kkrypt0nn/Python-Discord-Bot-Template"></a>
-  <a href="https://conventionalcommits.org/en/v1.0.0/"><img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white"></a>
-  <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+  <a href="https://github.com/neoarz/neos-helper-bot/blob/main/LICENSE.md">
+    <img src="https://img.shields.io/github/license/neoarz/neos-helper-bot?label=License&color=5865F2&style=for-the-badge&labelColor=23272A" />
+  </a>
+  <a href="https://github.com/neoarz/neos-helper-bot/commits/main">
+    <img src="https://img.shields.io/github/last-commit/neoarz/neos-helper-bot?label=Last%20Commit&color=5865F2&style=for-the-badge&labelColor=23272A" />
+  </a>
+  <a href="https://github.com/neoarz/neos-helper-bot">
+    <img src="https://img.shields.io/github/languages/code-size/neoarz/neos-helper-bot?label=Code%20Size&color=5865F2&style=for-the-badge&labelColor=23272A" />
+  </a>
 </p>
 
 > [!NOTE]
-> This project is in a **feature-freeze mode**, please read more about it [here](https://github.com/kkrypt0nn/Python-Discord-Bot-Template/issues/112). It can be summed up in a few bullet points:
-> 
-> * The project **will** receive bug fixes
-> * The project **will** be updated to make sure it works with the **latest** discord.py version
-> * The project **will not** receive any new features, **unless one of the following applies**:
->   * A new feature is added to Discord and it would be beneficial to have it in the template
->   * A feature got a breaking change, this fits with the same point that the project will **always** support the latest discord.py version
+> This project is still in the making!!! I would appreciate if you gave this repo a star, that would mean a lot to me!
 
-This repository is a template that everyone can use for the start of their Discord bot.
-
-When I first started creating my Discord bot it took me a while to get everything setup and working with cogs and more.
-I would've been happy if there were any template existing. However, there wasn't any existing template. That's why I
-decided to create my own template to let **you** guys create your Discord bot easily.
-
-Please note that this template is not supposed to be the best template, but a good template to start learning how
-discord.py works and to make your own bot easily.
 
 If you plan to use this template to make your own template or bot, you **have to**:
 
