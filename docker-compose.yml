@@ -1,7 +1,7 @@
 services:
   discord-bot:
     build: .
-    image: python-discord-bot-template
+    image: syntrel-discord-bot
     env_file:
       - .env
     volumes:
