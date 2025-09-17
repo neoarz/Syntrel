@@ -1,5 +1,11 @@
 # Python Discord Bot Template
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/bannerdark.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/bannerlight.png">
+  <img alt="Neos Helper Bot Banner" src="assets/bannerlight.png" style="width: 100%; height: auto;">
+</picture>
+
 <p align="center">
   <a href="https://discord.gg/xj6y5ZaTMr"><img src="https://img.shields.io/discord/1358456011316396295?logo=discord"></a>
   <a href="https://github.com/kkrypt0nn/Python-Discord-Bot-Template/releases"><img src="https://img.shields.io/github/v/release/kkrypt0nn/Python-Discord-Bot-Template"></a>
