@@ -8,13 +8,6 @@
 
 <br>
 
-> [!IMPORTANT]
-> **Dual Licensing**
-> 
-> Alot of the inspiration for this code is from the [Python Discord Bot Template](https://github.com/kkrypt0nn/Python-Discord-Bot-Template) by [kkrypt0nn](https://github.com/kkrypt0nn). Please check out their repo for more information. I have made many changes to the code and havent explicitly stated in most files, that why I have thought it would be best to keep this note at the top of the README.md file.
-
-<br>
-
 > [!NOTE]
 > **New Project**
 > 
