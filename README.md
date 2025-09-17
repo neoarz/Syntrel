@@ -1,7 +1,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/bannerdark.png">
   <source media="(prefers-color-scheme: light)" srcset="assets/bannerlight.png">
-  <img alt="Neos Helper Bot Banner" src="assets/bannerlight.png" style="width: 80%; height: auto;">
+  <img alt="Neos Helper Bot Banner" src="assets/bannerlight.png" style="width: 80%; height: auto; display: block; margin: 0 auto;">
 </picture>
 
 
