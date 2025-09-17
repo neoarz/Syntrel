@@ -33,7 +33,7 @@ class Crash(commands.Cog, name="crash"):
         view.add_item(discord.ui.Button(
             label="Edit Command",
             style=discord.ButtonStyle.secondary,
-            url="https://github.com/neoarz/neos-helper-bot/blob/main/cogs/sidestore/crash.py",
+            url="https://github.com/neoarz/Syntrel/blob/main/cogs/sidestore/crash.py",
             emoji="<:githubicon:1417717356846776340>"
         ))
 

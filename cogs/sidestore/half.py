@@ -42,7 +42,7 @@ class Half(commands.Cog, name="half"):
         view.add_item(discord.ui.Button(
             label="Edit Command",
             style=discord.ButtonStyle.secondary,
-            url="https://github.com/neoarz/neos-helper-bot/blob/main/cogs/sidestore/half.py",
+            url="https://github.com/neoarz/Syntrel/blob/main/cogs/sidestore/half.py",
             emoji="<:githubicon:1417717356846776340>"
         ))
         view.add_item(discord.ui.Button(
