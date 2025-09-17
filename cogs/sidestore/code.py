@@ -35,7 +35,7 @@ class Code(commands.Cog, name="code"):
             )
         )
         embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
-        embed.set_footer(text=f'Last Edited by neoarz | Last updated at {int(time.time())}')
+        embed.set_footer(text=f'Last Edited by neoarz')
         embed.timestamp = discord.utils.utcnow()
         
         view = discord.ui.View()
