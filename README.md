@@ -11,7 +11,9 @@
 > [!IMPORTANT]
 > **Give Credits Where its Due**
 > 
-> Alot of the inspiration for this code is from the [Python Discord Bot Template](https://github.com/kkrypt0nn/Python-Discord-Bot-Template) by [kkrypt0nn](https://github.com/kkrypt0nn). Please check out their repo for more information. I have made many changes to the code and havent explicitly stated in every file, that why I have thought it would be best to keep it at the top of the README.md file.
+> Alot of the inspiration for this code is from the [Python Discord Bot Template](https://github.com/kkrypt0nn/Python-Discord-Bot-Template) by [kkrypt0nn](https://github.com/kkrypt0nn). Please check out their repo for more information. I have made many changes to the code and havent explicitly stated in most files, that why I have thought it would be best to keep this note at the top of the README.md file.
+
+<br>
 
 > [!NOTE]
 > **New Project**
@@ -23,4 +25,6 @@
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE.md) file for details
 
+<h6>
 License cannot be changed.
+</h6>
