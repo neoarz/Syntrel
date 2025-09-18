@@ -64,6 +64,7 @@ class Help(commands.Cog, name="help"):
             "server": "sidestore",
             "half": "sidestore",
             "sparse": "sidestore",
+            "afc": "sidestore",
             
             "sync": "owner",
             "cog_management": "owner",

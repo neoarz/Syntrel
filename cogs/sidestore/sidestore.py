@@ -43,6 +43,11 @@ class SidestoreSelect(discord.ui.Select):
                 label="SparseRestore",
                 value="sparse",
                 description="Information about SparseRestore exploit",
+            ),
+            discord.SelectOption(
+                label="AFC Connection Failure",
+                value="afc",
+                description="Help with AFC Connection Failure issues",
             )
         ]
         super().__init__(placeholder="Choose a SideStore command...", options=options)
