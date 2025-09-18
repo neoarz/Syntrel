@@ -32,7 +32,11 @@ class Ping(commands.Cog, name="ping"):
         )
         embed.set_author(name="Ping", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
         if getattr(context, "interaction", None):
-            await context.interaction.response.send_message(embed=embed, ephemeral=True)
+            inter = context.interaction
+            if not inter.response.is_done():
+                await inter.response.send_message(embed=embed, ephemeral=True)
+            else:
+                await inter.followup.send(embed=embed, ephemeral=True)
         else:
             await context.send(embed=embed)
 
