@@ -12,7 +12,15 @@
 
 [ ] Fix logging and add graceful shutdown
 
+[ ] Add video downloader commands (yt-dlp)
+
+[ ] Add uptime checker for the bot iself 
+
+
+
 
 ## Future
 
 [ ] Add webhook support
+
+[ ] Make a web dashboard for the bot

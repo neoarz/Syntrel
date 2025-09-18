@@ -13,7 +13,7 @@ class Help(commands.Cog, name="help"):
         interaction: discord.Interaction,
         current: str,
     ) -> list[app_commands.Choice[str]]:
-        categories = ["general", "fun", "moderation", "template", "owner", "sidestore"]
+        categories = ["general", "fun", "moderation", "owner", "sidestore"]
         
         suggestions = []
         for category in categories:
@@ -35,19 +35,22 @@ class Help(commands.Cog, name="help"):
     async def help(self, context: Context, category: str = None) -> None:
         
         category_mapping = {
+            # General Commands
             "help": "general",
             "botinfo": "general", 
             "serverinfo": "general",
             "ping": "general",
             "feedback": "general",
         #   "context_menus": "general",
-            
+        
+            # Fun Commands
             "randomfact": "fun",
             "coinflip": "fun", 
             "rps": "fun",
             "8ball": "fun",
             "minesweeper": "fun",
             
+            # Moderation Commands
             "kick": "moderation",
             "ban": "moderation",
             "nick": "moderation",
@@ -56,6 +59,7 @@ class Help(commands.Cog, name="help"):
             "warnings": "moderation",
             "archive": "moderation",
             
+            # SideStore Commands
             "sidestore": "sidestore",
             "refresh": "sidestore",
             "code": "sidestore",
@@ -66,6 +70,7 @@ class Help(commands.Cog, name="help"):
             "sparse": "sidestore",
             "afc": "sidestore",
             
+            # Owner Commands
             "sync": "owner",
             "cog_management": "owner",
             "shutdown": "owner",
@@ -77,7 +82,6 @@ class Help(commands.Cog, name="help"):
             "general": "General commands",
             "fun": "Funny commands", 
             "moderation": "Administration commands",
-            "template": "Template commands",
             "owner": "Owner commands",
             "sidestore": "SideStore troubleshooting commands"
         }
