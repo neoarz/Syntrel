@@ -13,8 +13,8 @@
 > 
 > This project is still in the making!!! I would appreciate if you gave this repo a star, that would mean a lot to me!
 
+<br>
 
 ## License
 
-Dual licensed project
-See [LICENSE](LICENSE) file for detailed attribution information
+Dual licensed project, see [LICENSE](LICENSE) file for detailed attribution information
