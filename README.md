@@ -14,15 +14,7 @@
 > This project is still in the making!!! I would appreciate if you gave this repo a star, that would mean a lot to me!
 
 
-## Licenses
+## License
 
-#### Third-Party Components (Apache 2.0)
-- Code derived from the [Python Discord Bot Template](https://github.com/kkrypt0nn/Python-Discord-Bot-Template) by [kkrypt0nn](https://github.com/kkrypt0nn) remains under the Apache License 2.0
-- See [LICENSE-APACHE](licenses/LICENSE-APACHE) for the full Apache 2.0 license text
-
-
-#### Original Contributions (MIT)
-- New code, modifications, and enhancements by neoarz are licensed under the MIT License
-- See [LICENSE-MIT](licenses/LICENSE-MIT) for the full MIT license text
-
+Dual licensed project
 See [LICENSE](LICENSE) file for detailed attribution information
