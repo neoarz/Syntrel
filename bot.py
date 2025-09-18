@@ -163,6 +163,20 @@ class DiscordBot(commands.Bot):
                             self.logger.error(
                                 f"Failed to load extension {folder}.{extension}\n{exception}"
                             )
+                    elif os.path.isdir(os.path.join(folder_path, file)) and not file.startswith('__'):
+                        if os.path.exists(os.path.join(folder_path, file, "__init__.py")):
+                            full_name = f"{folder}.{file}".lower()
+                            if file.lower() in disabled_cogs or full_name in disabled_cogs:
+                                self.logger.info(f"Skipped disabled extension '{full_name}'")
+                                continue
+                            try:
+                                await self.load_extension(f"cogs.{folder}.{file}")
+                                self.logger.info(f"Loaded extension '{folder}.{file}'")
+                            except Exception as e:
+                                exception = f"{type(e).__name__}: {e}"
+                                self.logger.error(
+                                    f"Failed to load extension {folder}.{file}\n{exception}"
+                                )
         
         for file in os.listdir(cogs_path):
             if file.endswith(".py") and not file.startswith('__'):
