@@ -49,10 +49,11 @@ class Labubu(commands.Cog, name="labubu"):
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣹⣿⣿⣿⣾⣷⣾⡗⣒⠶⣿⣿⣿⡷⣾⣿⣿⣿⣿⣿⣿⢿⣿⣿⣿⣿⣿⣿⣿"""
 
         embed = discord.Embed(
-            description=f"```\n{labubu_art}\n```",
+            description=f"```ansi\n{labubu_art}\n```",
             color=0x7289DA,
         )
         embed.set_author(name="Labubu", icon_url="https://yes.nighty.works/raw/YxMC0r.png")
+        embed.set_footer(text=f"May look broken on mobile")
         
         if getattr(context, "interaction", None):
             inter = context.interaction
