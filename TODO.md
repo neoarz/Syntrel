@@ -1,11 +1,11 @@
 # Todo List for Syntrel
 
 [ ] Finish [idevice commands](https://github.com/jkcoxson/idevice/blob/master/idevice/src/lib.rs#L522)
-> [ ] Add /idevice command
-> 
-> [ ] Add /idevice-pair command
+> [X] Add /idevice command
 >
-> [ ] Add /no apps command
+> [X] Add /no apps command
+>
+> [ ] Add rest of the errors yikes
 
 [ ] Add unit tests
 
