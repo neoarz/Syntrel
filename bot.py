@@ -4,6 +4,7 @@ import os
 import platform
 import random
 import sys
+import time
 
 import aiosqlite
 import discord
@@ -125,6 +126,7 @@ class DiscordBot(commands.Bot):
         self.database = None
         self.bot_prefix = os.getenv("PREFIX")
         self.invite_link = os.getenv("INVITE_LINK")
+        self.start_time = time.time()
 
     async def init_db(self) -> None:
         async with aiosqlite.connect(
@@ -224,6 +226,22 @@ class DiscordBot(commands.Bot):
                 f"{os.path.realpath(os.path.dirname(__file__))}/database/database.db"
             )
         )
+
+    def get_uptime(self) -> str:
+        uptime_seconds = int(time.time() - self.start_time)
+        days = uptime_seconds // 86400
+        hours = (uptime_seconds % 86400) // 3600
+        minutes = (uptime_seconds % 3600) // 60
+        seconds = uptime_seconds % 60
+        
+        if days > 0:
+            return f"{days}d {hours}h {minutes}m {seconds}s"
+        elif hours > 0:
+            return f"{hours}h {minutes}m {seconds}s"
+        elif minutes > 0:
+            return f"{minutes}m {seconds}s"
+        else:
+            return f"{seconds}s"
 
     async def on_message(self, message: discord.Message) -> None:
         """

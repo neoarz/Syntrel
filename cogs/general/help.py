@@ -41,6 +41,7 @@ class Help(commands.Cog, name="help"):
             "serverinfo": "general",
             "ping": "general",
             "feedback": "general",
+            "uptime": "general",
         #   "context_menus": "general",
         
             # Fun Commands
