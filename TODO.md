@@ -22,6 +22,8 @@
 
 [ ] Clean tag system from [tags branch](https://github.com/neoarz/Syntrel/tree/tags) (make sure db is persistent)
 
+[ ] Clean up talk system from [talk branch](https://github.com/neoarz/Syntrel/tree/talk)
+
 [ ] Fix logging and add graceful shutdown
 
 [ ] Add uptime checker for the bot iself 
