@@ -25,7 +25,7 @@ class Noapps(commands.Cog, name="noapps"):
                 'More details can be found at [SideStore\'s official website](https://sidestore.io/)'
             )
         )
-        embed.set_author(name="iDevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
+        embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
         embed.set_footer(text=f'Last Edited by neoarz')
         embed.timestamp = discord.utils.utcnow()
 

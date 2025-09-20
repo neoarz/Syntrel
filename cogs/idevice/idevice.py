@@ -52,15 +52,15 @@ class Idevice(commands.Cog, name="idevice"):
         self.bot = bot
 
     @commands.hybrid_command(
-        name="idevice", description="iDevice troubleshooting and help"
+        name="idevice", description="idevice troubleshooting and help"
     )
     async def idevice(self, context: Context) -> None:
         embed = discord.Embed(
-            title="iDevice Commands",
+            title="idevice Commands",
             description="Choose a command from the dropdown below to get help with specific issues:",
             color=0xfa8c4a
         )
-        embed.set_author(name="iDevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
+        embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
         
         view = IdeviceView(self.bot)
         
