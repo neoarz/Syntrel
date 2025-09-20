@@ -17,7 +17,7 @@ class Half(commands.Cog, name="half"):
             color=0x8e82f9,
             description=(
                 '# Sidestore/IPAs Stuck Halfway Through Installing or Refreshing\n\n---\n' +
-                '### Method 1: Basic Troubleshooting\n\n' +
+                '### Make Sure You are on the Latest Version of SideStore\n\n' +
                 '- Restart SideStore\n' +
                 '- Restart device\n' +
                 '- Clear Cache\n' +
@@ -25,13 +25,7 @@ class Half(commands.Cog, name="half"):
                 '- Reset adi.pb\n' +
                 '- Sign out from SideStore and sign back in\n' +
                 '- Regenerate pairing file\n' +
-                '- Reinstall SideStore\n\n' +
-                '### Method 2: If Method 1 Doesn\'t Work\n\n' +
-                '1. Delete Sidestore\n' +
-                '2. Reinstall SideStore using the guide at https://docs.sidestore.io/\n' +
-                '3. **Do not use the IPA provided by the website**, instead use this older version: [Sidestore 0.5.9 download](https://github.com/SideStore/SideStore/releases/download/0.5.9/SideStore.ipa)\n' +
-                '4. Setup SideStore and StosVPN as usual\n' +
-                '> -# Step 3 is the important one (make sure to do that)\n'
+                '- Reinstall SideStore\n\n' 
             )
         )
         embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
