@@ -140,8 +140,12 @@ cython_debug/
 # PyCharm IDEA
 .idea/*
 
+# VS Code
+.vscode/
+
 # SQLITE database
 *.db
 
 # Log file
 discord.log
+
