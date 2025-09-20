@@ -26,7 +26,7 @@
 
 [ ] Fix logging and add graceful shutdown
 
-[ ] Add uptime checker for the bot iself 
+[X] Add uptime checker for the bot iself 
 
 
 
