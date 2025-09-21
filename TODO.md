@@ -24,7 +24,7 @@
 
 [ ] Clean up talk system from [talk branch](https://github.com/neoarz/Syntrel/tree/talk)
 
-[ ] Fix logging and add graceful shutdown
+[X] Fix logging and add graceful shutdown
 
 [X] Add uptime checker for the bot iself 
 
