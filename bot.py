@@ -1,8 +1,10 @@
+import asyncio
 import json
 import logging
 import os
 import platform
 import random
+import signal
 import sys
 import time
 
@@ -113,6 +115,7 @@ class DiscordBot(commands.Bot):
         self.bot_prefix = os.getenv("PREFIX")
         self.invite_link = os.getenv("INVITE_LINK")
         self.start_time = time.time()
+        self._shutdown = False
 
     async def init_db(self) -> None:
         async with aiosqlite.connect(
@@ -229,6 +232,30 @@ class DiscordBot(commands.Bot):
         else:
             return f"{seconds}s"
 
+    async def close(self) -> None:
+        if self._shutdown:
+            return
+        self._shutdown = True
+        
+        self.logger.info("Starting shutdown process...")
+        
+        if self.status_task and not self.status_task.is_being_cancelled():
+            self.status_task.cancel()
+            self.logger.info("Status task cancelled")
+            
+        if self.database and self.database.connection:
+            try:
+                await self.database.connection.close()
+                self.logger.warning("Database connection closed")
+            except Exception as e:
+                self.logger.error(f"Error closing database connection: {e}")
+            
+        try:
+            await super().close()
+            self.logger.critical("Bot shutdown complete")
+        except Exception as e:
+            self.logger.error(f"Error during bot shutdown: {e}")
+
     async def on_message(self, message: discord.Message) -> None:
         """
         The code in this event is executed every time someone sends a message, with or without the prefix
@@ -264,6 +291,11 @@ class DiscordBot(commands.Bot):
         full_command_name = context.command.qualified_name
         split = full_command_name.split(" ")
         executed_command = str(split[0])
+        
+        # Skip logging for shutdown command as it logs manually before shutdown
+        if executed_command.lower() == "shutdown":
+            return
+            
         if context.guild is not None:
             self.logger.info(
                 f"Executed {executed_command} command in {context.guild.name} (ID: {context.guild.id}) by {context.author} (ID: {context.author.id})"
@@ -336,5 +368,22 @@ class DiscordBot(commands.Bot):
             raise error
 
 
+def signal_handler(signum, frame):
+    logger.info("Shutdown requested. Closing bot...")
+    if bot.loop and not bot.loop.is_closed():
+        asyncio.create_task(bot.close())
+        bot.loop.call_soon_threadsafe(bot.loop.stop)
+
+
 bot = DiscordBot()
-bot.run(os.getenv("TOKEN"))
+
+if __name__ == "__main__":
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+    
+    try:
+        bot.run(os.getenv("TOKEN"))
+    except KeyboardInterrupt:
+        pass
+    except:
+        pass

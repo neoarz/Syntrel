@@ -10,7 +10,7 @@ class Udid(commands.Cog, name="udid"):
         self.bot = bot
 
     @commands.hybrid_command(
-        name="udid", description="Information about SideStore UDID error"
+        name="udid", description="SideStore could not determine device UDID"
     )
     async def udid(self, context: Context) -> None:
         embed = discord.Embed(

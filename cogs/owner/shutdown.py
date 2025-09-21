@@ -1,3 +1,5 @@
+import os
+import signal
 import discord
 from discord.ext import commands
 from discord.ext.commands import Context
@@ -28,6 +30,16 @@ class Shutdown(commands.Cog, name="shutdown"):
 
         :param context: The hybrid command context.
         """
+        # Log command execution before shutdown starts
+        if context.guild is not None:
+            self.bot.logger.info(
+                f"Executed shutdown command in {context.guild.name} (ID: {context.guild.id}) by {context.author} (ID: {context.author.id})"
+            )
+        else:
+            self.bot.logger.info(
+                f"Executed shutdown command by {context.author} (ID: {context.author.id}) in DMs"
+            )
+            
         embed = discord.Embed(
             title="Shutdown",
             description="Shutting down. Bye! <a:PandaThanos:1417483671253811262>",
@@ -35,7 +47,7 @@ class Shutdown(commands.Cog, name="shutdown"):
         ).set_author(name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp")
 
         await self.send_embed(context, embed)
-        await self.bot.close()
+        os.kill(os.getpid(), signal.SIGTERM)
 
     async def cog_command_error(self, context: Context, error) -> None:
         if isinstance(error, commands.NotOwner):
