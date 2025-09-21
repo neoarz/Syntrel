@@ -48,6 +48,11 @@ class SidestoreSelect(discord.ui.Select):
                 label="AFC Connection Failure",
                 value="afc",
                 description="Help with AFC Connection Failure issues",
+            ),
+            discord.SelectOption(
+                label="UDID Error",
+                value="udid",
+                description="SideStore could not determine device UDID",
             )
         ]
         super().__init__(placeholder="Choose a SideStore command...", options=options)

@@ -70,6 +70,7 @@ class Help(commands.Cog, name="help"):
             "half": "sidestore",
             "sparse": "sidestore",
             "afc": "sidestore",
+            "udid": "sidestore",
             
             # iDevice Commands
             "idevice": "idevice",
