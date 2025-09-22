@@ -11,28 +11,8 @@
 
 [ ] Add documentation to readme
 
-[ ] Create utility commands
-> [ ] Add /ai command 
-> 
-> [ ] Add /translate command
-> 
-> [ ] Add /tweety command
-> 
-> [ ] Add /videodownload command
-
 [ ] Clean tag system from [tags branch](https://github.com/neoarz/Syntrel/tree/tags) (make sure db is persistent)
-
-[ ] Clean up talk system from [talk branch](https://github.com/neoarz/Syntrel/tree/talk)
 
 [X] Fix logging and add graceful shutdown
 
 [X] Add uptime checker for the bot iself 
-
-
-
-
-## Future
-
-[ ] Add webhook support
-
-[ ] Make a web dashboard for the bot
