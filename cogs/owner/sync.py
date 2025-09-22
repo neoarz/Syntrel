@@ -18,10 +18,12 @@ class Sync(commands.Cog, name="sync"):
         else:
             await context.send(embed=embed)
 
-    @commands.command(
+    @commands.hybrid_command(
         name="sync",
         description="Synchonizes the slash commands.",
     )
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.describe(scope="The scope of the sync. Can be `global` or `guild`")
     @commands.is_owner()
     async def sync(self, context: Context, scope: str) -> None:
@@ -60,10 +62,12 @@ class Sync(commands.Cog, name="sync"):
         embed.set_author(name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp")
         await self.send_embed(context, embed, ephemeral=True)
 
-    @commands.command(
+    @commands.hybrid_command(
         name="unsync",
         description="Unsynchonizes the slash commands.",
     )
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.describe(
         scope="The scope of the sync. Can be `global`, `current_guild` or `guild`"
     )

@@ -1,6 +1,7 @@
 import os
 import signal
 import discord
+from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 
@@ -23,6 +24,8 @@ class Shutdown(commands.Cog, name="shutdown"):
         name="shutdown",
         description="Make the bot shutdown.",
     )
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.allowed_installs(guilds=True, users=True)
     @commands.is_owner()
     async def shutdown(self, context: Context) -> None:
         """

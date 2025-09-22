@@ -22,6 +22,8 @@ class CogManagement(commands.Cog, name="cog_management"):
         name="load",
         description="Load a cog",
     )
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.describe(cog="The name of the cog to load")
     @commands.is_owner()
     async def load(self, context: Context, cog: str) -> None:
@@ -51,6 +53,8 @@ class CogManagement(commands.Cog, name="cog_management"):
         name="unload",
         description="Unloads a cog.",
     )
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.describe(cog="The name of the cog to unload")
     @commands.is_owner()
     async def unload(self, context: Context, cog: str) -> None:
@@ -80,6 +84,8 @@ class CogManagement(commands.Cog, name="cog_management"):
         name="reload",
         description="Reloads a cog.",
     )
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.describe(cog="The name of the cog to reload")
     @commands.is_owner()
     async def reload(self, context: Context, cog: str) -> None:

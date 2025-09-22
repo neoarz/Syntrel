@@ -30,6 +30,8 @@ class Help(commands.Cog, name="help"):
     @commands.hybrid_command(
         name="help", description="List all commands the bot has loaded."
     )
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.describe(category="Choose a specific category to view its commands")
     @app_commands.autocomplete(category=category_autocomplete)
     async def help(self, context: Context, category: str = None) -> None:

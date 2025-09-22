@@ -22,6 +22,8 @@ class Say(commands.Cog, name="say"):
         name="say",
         description="The bot will say anything you want.",
     )
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.describe(message="The message that should be repeated by the bot")
     @commands.is_owner()
     async def say(self, context: Context, *, message: str) -> None:
@@ -37,6 +39,8 @@ class Say(commands.Cog, name="say"):
         name="embed",
         description="The bot will say anything you want, but within embeds.",
     )
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.describe(message="The message that should be repeated by the bot")
     @commands.is_owner()
     async def embed(self, context: Context, *, message: str) -> None:

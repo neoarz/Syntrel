@@ -1,5 +1,6 @@
 import os
 import discord
+from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 
@@ -22,6 +23,8 @@ class Invite(commands.Cog, name="invite"):
         name="invite",
         description="Get the invite link of the bot to be able to invite it.",
     )
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.allowed_installs(guilds=True, users=True)
     @commands.is_owner()
     async def invite(self, context: Context) -> None:
         """
