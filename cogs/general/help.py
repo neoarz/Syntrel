@@ -72,7 +72,7 @@ class Help(commands.Cog, name="help"):
             "afc": "sidestore",
             "udid": "sidestore",
             
-            # iDevice Commands
+            # idevice Commands
             "idevice": "idevice",
             "noapps": "idevice",
             
