@@ -21,13 +21,32 @@ class IdeviceSelect(discord.ui.Select):
         command = self.bot.get_command(command_name)
         
         if command:
-            ctx = await self.bot.get_context(interaction.message)
-            if ctx:
-                await ctx.invoke(command)
+            try:
+                ctx = await self.bot.get_context(interaction.message)
+                if ctx:
+                    await ctx.invoke(command)
+                    embed = discord.Embed(
+                        title="Command Executed",
+                        description=f"Successfully executed `/{command_name}`",
+                        color=0x00FF00
+                    )
+                    embed.set_author(name="iDevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
+                    await interaction.response.edit_message(embed=embed, view=None)
+            except discord.Forbidden:
+                self.bot.logger.warning(f"Bot missing permissions in server {interaction.guild.name} (ID: {interaction.guild.id}) - cannot execute {command_name} command")
                 embed = discord.Embed(
-                    title="Command Executed",
-                    description=f"Successfully executed `/{command_name}`",
-                    color=0x00FF00
+                    title="Permission Error",
+                    description="The bot doesn't have the required permissions in this server to execute commands. Please contact a server administrator to add the bot to the server.",
+                    color=0xFF0000
+                )
+                embed.set_author(name="iDevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
+                await interaction.response.edit_message(embed=embed, view=None)
+            except Exception as e:
+                self.bot.logger.error(f"Error executing {command_name} command: {e}")
+                embed = discord.Embed(
+                    title="Error",
+                    description="An error occurred while executing the command.",
+                    color=0xFF0000
                 )
                 embed.set_author(name="iDevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
                 await interaction.response.edit_message(embed=embed, view=None)
