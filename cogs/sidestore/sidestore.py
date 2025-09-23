@@ -77,7 +77,7 @@ class SidestoreSelect(discord.ui.Select):
                 self.bot.logger.warning(f"Bot missing permissions in server {interaction.guild.name} (ID: {interaction.guild.id}) - cannot execute {command_name} command")
                 embed = discord.Embed(
                     title="Permission Error",
-                    description="The bot doesn't have the required permissions in this server to execute commands. Please contact a server administrator to add the bot to the server.",
+                    description="The bot doesn't have the required permissions in this server to execute this command. Use the slash command `/{command_name}` instead.",
                     color=0xFF0000
                 )
                 embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
