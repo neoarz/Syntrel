@@ -12,7 +12,12 @@ class ideviceSelect(discord.ui.Select):
                 label="No Apps",
                 value="noapps",
                 description="Help when apps aren't showing in installed apps view",
-            )
+            ),
+            discord.SelectOption(
+                label="Error Codes",
+                value="errorcodes_ephemeral",
+                description="Browse idevice error code slash commands",
+            ),
         ]
         super().__init__(placeholder="Choose an idevice command...", options=options)
 
@@ -20,6 +25,17 @@ class ideviceSelect(discord.ui.Select):
         command_name = self.values[0]
         command = self.bot.get_command(command_name)
         
+        if command_name == "errorcodes_ephemeral":
+            embed = discord.Embed(
+                title="Idevice Error Codes",
+                description="Use /errorcode to search errors by name or number.",
+                color=0xfa8c4a,
+            )
+            embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
+            await interaction.response.edit_message(embed=embed, view=None)
+            await interaction.followup.send(embed=embed, ephemeral=True)
+            return
+
         if command:
             try:
                 ctx = await self.bot.get_context(interaction.message)
