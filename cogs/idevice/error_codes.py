@@ -84,7 +84,7 @@ class ErrorCodes(commands.Cog, name="errorcodes"):
         items = []
         for key, (title, code) in self.key_to_data.items():
             if not current or current_lower in key.lower() or current_lower in title.lower() or current_lower in str(code):
-                items.append(app_commands.Choice(name=f"{key} • {title} ({code})", value=key))
+                items.append(app_commands.Choice(name=f"{key} » {title} ({code})", value=key))
                 if len(items) >= 25:
                     break
         return items
@@ -105,12 +105,20 @@ class ErrorCodes(commands.Cog, name="errorcodes"):
             return
         title, code = self.key_to_data[key]
         embed = discord.Embed(
-            title=title,
-            description=f"Code: `{code}`\nName: `{key}`",
+            description=f"## Error Code: {code}\n\n**Name**: `{key}`\n**Description**: {title}",
             color=0xfa8c4a,
         )
         embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
-        await interaction.response.send_message(embed=embed, ephemeral=True)
+        
+        view = discord.ui.View()
+        view.add_item(discord.ui.Button(
+            label="Edit Command",
+            style=discord.ButtonStyle.secondary,
+            url="https://github.com/neoarz/Syntrel/blob/main/cogs/idevice/error_codes.py",
+            emoji="<:githubicon:1417717356846776340>"
+        ))
+        
+        await interaction.response.send_message(embed=embed, view=view)
 
 async def setup(bot) -> None:
     cog = ErrorCodes(bot)
