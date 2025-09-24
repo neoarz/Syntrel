@@ -179,7 +179,7 @@ class DiscordBot(commands.Bot):
         """
         Setup the game status task of the bot.
         """
-        statuses = ["Sidestore", "MeloNX", "Armsx2", "Stikdebug", "Feather"]
+        statuses = ["SideStore", "MeloNX", "ARMSX2", "StikDebug", "Feather"]
         await self.change_presence(activity=discord.Game(random.choice(statuses)))
 
     @status_task.before_loop
