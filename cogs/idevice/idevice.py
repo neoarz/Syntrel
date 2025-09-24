@@ -16,7 +16,7 @@ class ideviceSelect(discord.ui.Select):
             discord.SelectOption(
                 label="Error Codes",
                 value="errorcodes_ephemeral",
-                description="Browse idevice error code slash commands",
+                description="Browse idevice error codes",
             ),
         ]
         super().__init__(placeholder="Choose an idevice command...", options=options)
@@ -27,13 +27,12 @@ class ideviceSelect(discord.ui.Select):
         
         if command_name == "errorcodes_ephemeral":
             embed = discord.Embed(
-                title="Idevice Error Codes",
-                description="Use /errorcode to search errors by name or number.",
-                color=0xfa8c4a,
+                title="Command Executed",
+                description=f"Successfully executed `/{command_name}`",
+                color=0x00FF00
             )
             embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
             await interaction.response.edit_message(embed=embed, view=None)
-            await interaction.followup.send(embed=embed, ephemeral=True)
             return
 
         if command:
