@@ -18,15 +18,15 @@
 
 ## Commands
 
-| Command group | Amount | Subcommands |
-| --- | --- | --- |
-| owner | 5 | `sync`, `cog_management`, `shutdown`, `say`, `invite` |
-| general | 6 | `help`, `botinfo`, `serverinfo`, `ping`, `feedback`, `uptime` |
-| fun | 5 | `randomfact`, `coinflip`, `rps`, `8ball`, `minesweeper` |
-| moderation | 7 | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive` |
-| sidestore | 10 | `sidestore`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
-| idevice | 3 | `idevice`, `noapps`, `errorcode` |
-| miscellaneous | 2 | `keanu`, `labubu` |
+| Command group | Subcommands |
+| --- | --- |
+| owner | `sync`, `cog_management`, `shutdown`, `say`, `invite` |
+| general | `help`, `botinfo`, `serverinfo`, `ping`, `feedback`, `uptime` |
+| fun | `randomfact`, `coinflip`, `rps`, `8ball`, `minesweeper` |
+| moderation | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive` |
+| sidestore | `sidestore`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
+| idevice | `idevice`, `noapps`, `errorcode` |
+| miscellaneous | `keanu`, `labubu` |
 
 ## Download
 
