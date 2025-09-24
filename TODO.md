@@ -5,7 +5,7 @@
 >
 > [X] Add /no apps command
 >
-> [ ] Add rest of the errors yikes
+> [X] Add rest of the errors yikes
 
 [ ] Add unit tests
 

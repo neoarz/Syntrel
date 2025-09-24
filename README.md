@@ -8,9 +8,20 @@
 
 <br>
 
-Modern, modular Discord bot built with `discord.py` 2.6+, async SQLite, and a clean cog architecture.
+<div align="center">
 
-### Features
+All in one discord bot for helping with [SideStore](https://discord.gg/3DwCwpBHfv), [idevice](https://discord.gg/ZnNcrRT3M8), and more.
+
+</div>
+
+> [!NOTE]
+> **Download**
+> 
+> This bot is heavily customized and may not be a good starting point template wise. But if you wanna use this bot, or maybe add to your own server, here is the download link: 
+> 
+> [https://discord.com/oauth2/authorize?client_id=1376728824108286034](https://discord.com/oauth2/authorize?client_id=1376728824108286034)
+
+### Commands
 
 | Command group | Subcommands |
 | --- | --- |
@@ -19,7 +30,7 @@ Modern, modular Discord bot built with `discord.py` 2.6+, async SQLite, and a cl
 | fun | `randomfact`, `coinflip`, `rps`, `8ball`, `minesweeper` |
 | moderation | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive` |
 | sidestore | `sidestore`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
-| idevice | `idevice`, `noapps` |
+| idevice | `idevice`, `noapps`, `errorcode` |
 | miscellaneous | `keanu`, `labubu` |
 
 Additional:
