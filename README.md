@@ -16,11 +16,6 @@
 
 <br>
 
-> [!NOTE]
-> 
-> This bot is heavily customized and may not be a good starting point template wise. But if you wanna use this bot, or maybe add to your own server, [download](#download) it by clicking the button below. After downloading run `/help` to get started.
-
-
 ## Commands
 
 | Command group | Subcommands |
@@ -42,7 +37,7 @@
 </div>
 
 
-
+<br>
 
 ## Contributing
 
