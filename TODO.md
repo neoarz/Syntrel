@@ -1,18 +1,18 @@
 # Todo List for Syntrel
 
-[ ] Finish [idevice commands](https://github.com/jkcoxson/idevice/blob/master/idevice/src/lib.rs#L522)
-> [X] Add /idevice command
->
-> [X] Add /no apps command
->
-> [ ] Add rest of the errors yikes
+- [x] Finish [idevice commands](https://github.com/jkcoxson/idevice/blob/master/idevice/src/lib.rs#L522)
+  - [x] Add /idevice command
+  - [x] Add /no apps command
+  - [x] Add rest of the errors yikes
 
-[ ] Add unit tests
+- [ ] Add unit tests
 
-[ ] Add documentation to readme
+- [ ] Add documentation to readme
 
-[ ] Clean tag system from [tags branch](https://github.com/neoarz/Syntrel/tree/tags) (make sure db is persistent)
+- [ ] Finish CONTRIBUTING.md
 
-[X] Fix logging and add graceful shutdown
+- [ ] Clean tag system from [tags branch](https://github.com/neoarz/Syntrel/tree/tags) (make sure db is persistent)
 
-[X] Add uptime checker for the bot iself 
+- [x] Fix logging and add graceful shutdown
+
+- [x] Add uptime checker for the bot iself 

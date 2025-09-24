@@ -1,0 +1,332 @@
+[
+    {
+        "name": "socket",
+        "description": "device socket io failed",
+        "code": -1
+    },
+    {
+        "name": "pem_parse_failed",
+        "description": "PEM parse failed",
+        "code": -2
+    },
+    {
+        "name": "rustls",
+        "description": "TLS error",
+        "code": -3
+    },
+    {
+        "name": "tls_builder_failed",
+        "description": "TLS verifiction build failed",
+        "code": -4
+    },
+    {
+        "name": "plist",
+        "description": "io on plist",
+        "code": -5
+    },
+    {
+        "name": "utf8",
+        "description": "can't convert bytes to utf8",
+        "code": -6
+    },
+    {
+        "name": "unexpected_response",
+        "description": "unexpected response from device",
+        "code": -7
+    },
+    {
+        "name": "get_prohibited",
+        "description": "this request was prohibited",
+        "code": -8
+    },
+    {
+        "name": "session_inactive",
+        "description": "no SSL session is active",
+        "code": -9
+    },
+    {
+        "name": "invalid_host_id",
+        "description": "device does not have pairing file",
+        "code": -10
+    },
+    {
+        "name": "no_established_connection",
+        "description": "no established connection",
+        "code": -11
+    },
+    {
+        "name": "heartbeat_sleepy_time",
+        "description": "device went to sleep",
+        "code": -12
+    },
+    {
+        "name": "heartbeat_timeout",
+        "description": "heartbeat timeout",
+        "code": -13
+    },
+    {
+        "name": "not_found",
+        "description": "not found",
+        "code": -14
+    },
+    {
+        "name": "service_not_found",
+        "description": "service not found",
+        "code": -15
+    },
+    {
+        "name": "cdtunnel_packet_too_short",
+        "description": "CDTunnel packet too short",
+        "code": -16
+    },
+    {
+        "name": "cdtunnel_packet_invalid_magic",
+        "description": "CDTunnel packet invalid magic",
+        "code": -17
+    },
+    {
+        "name": "packet_size_mismatch",
+        "description": "Proclaimed packet size does not match actual size",
+        "code": -18
+    },
+    {
+        "name": "json",
+        "description": "JSON serialization failed",
+        "code": -19
+    },
+    {
+        "name": "device_not_found",
+        "description": "device not found",
+        "code": -20
+    },
+    {
+        "name": "device_locked",
+        "description": "device lockded",
+        "code": -21
+    },
+    {
+        "name": "usb_connection_refused",
+        "description": "device refused connection",
+        "code": -22
+    },
+    {
+        "name": "usb_bad_command",
+        "description": "bad command",
+        "code": -23
+    },
+    {
+        "name": "usb_bad_device",
+        "description": "bad device",
+        "code": -24
+    },
+    {
+        "name": "usb_bad_version",
+        "description": "usb bad version",
+        "code": -25
+    },
+    {
+        "name": "bad_build_manifest",
+        "description": "bad build manifest",
+        "code": -26
+    },
+    {
+        "name": "image_not_mounted",
+        "description": "image not mounted",
+        "code": -27
+    },
+    {
+        "name": "pairing_dialog_response_pending",
+        "description": "pairing trust dialog pending",
+        "code": -28
+    },
+    {
+        "name": "user_denied_pairing",
+        "description": "user denied pairing trust",
+        "code": -29
+    },
+    {
+        "name": "password_protected",
+        "description": "device is locked",
+        "code": -30
+    },
+    {
+        "name": "misagent_failure",
+        "description": "misagent operation failed",
+        "code": -31
+    },
+    {
+        "name": "installation_proxy_operation_failed",
+        "description": "installation proxy operation failed",
+        "code": -32
+    },
+    {
+        "name": "afc",
+        "description": "afc error",
+        "code": -33
+    },
+    {
+        "name": "unknown_afc_opcode",
+        "description": "unknown afc opcode",
+        "code": -34
+    },
+    {
+        "name": "invalid_afc_magic",
+        "description": "invalid afc magic",
+        "code": -35
+    },
+    {
+        "name": "afc_missing_attribute",
+        "description": "missing file attribute",
+        "code": -36
+    },
+    {
+        "name": "crash_report_mover_bad_response",
+        "description": "crash report mover sent the wrong response",
+        "code": -37
+    },
+    {
+        "name": "reqwest",
+        "description": "http reqwest error",
+        "code": -38
+    },
+    {
+        "name": "internal_error",
+        "description": "internal error",
+        "code": -39
+    },
+    {
+        "name": "unknown_frame",
+        "description": "unknown http frame type",
+        "code": -40
+    },
+    {
+        "name": "unknown_http_setting",
+        "description": "unknown http setting type",
+        "code": -41
+    },
+    {
+        "name": "uninitialized_stream_id",
+        "description": "Unintialized stream ID",
+        "code": -42
+    },
+    {
+        "name": "unknown_xpc_type",
+        "description": "unknown XPC type",
+        "code": -43
+    },
+    {
+        "name": "malformed_xpc",
+        "description": "malformed XPC message",
+        "code": -44
+    },
+    {
+        "name": "invalid_xpc_magic",
+        "description": "invalid XPC magic",
+        "code": -45
+    },
+    {
+        "name": "unexpected_xpc_version",
+        "description": "unexpected XPC version",
+        "code": -46
+    },
+    {
+        "name": "invalid_c_string",
+        "description": "invalid C string",
+        "code": -47
+    },
+    {
+        "name": "http_stream_reset",
+        "description": "stream reset",
+        "code": -48
+    },
+    {
+        "name": "http_go_away",
+        "description": "go away packet received",
+        "code": -49
+    },
+    {
+        "name": "ns_keyed_archive_error",
+        "description": "NSKeyedArchive error",
+        "code": -50
+    },
+    {
+        "name": "unknown_aux_value_type",
+        "description": "Unknown aux value type",
+        "code": -51
+    },
+    {
+        "name": "unknown_channel",
+        "description": "unknown channel",
+        "code": -52
+    },
+    {
+        "name": "addr_parse_error",
+        "description": "cannot parse string as IpAddr",
+        "code": -53
+    },
+    {
+        "name": "disable_memory_limit_failed",
+        "description": "disable memory limit failed",
+        "code": -54
+    },
+    {
+        "name": "not_enough_bytes",
+        "description": "not enough bytes",
+        "code": -55
+    },
+    {
+        "name": "utf8_error",
+        "description": "failed to parse bytes as valid utf8",
+        "code": -56
+    },
+    {
+        "name": "invalid_argument",
+        "description": "invalid argument passed",
+        "code": -57
+    },
+    {
+        "name": "unknown_error_type",
+        "description": "unknown error returned from device",
+        "code": -59
+    },
+    {
+        "name": "ffi_invalid_arg",
+        "description": "invalid arguments were passed",
+        "code": -60
+    },
+    {
+        "name": "ffi_invalid_string",
+        "description": "invalid string was passed",
+        "code": -61
+    },
+    {
+        "name": "ffi_buffer_too_small",
+        "description": "buffer passed is too small",
+        "code": -62
+    },
+    {
+        "name": "unsupported_watch_key",
+        "description": "unsupported watch key",
+        "code": -63
+    },
+    {
+        "name": "malformed_command",
+        "description": "malformed command",
+        "code": -64
+    },
+    {
+        "name": "integer_overflow",
+        "description": "integer overflow",
+        "code": -65
+    },
+    {
+        "name": "canceled_by_user",
+        "description": "canceled by user",
+        "code": -66
+    },
+    {
+        "name": "malformed_package_archive",
+        "description": "malformed package archive",
+        "code": -67
+    }
+]
