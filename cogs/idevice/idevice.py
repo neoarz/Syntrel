@@ -2,6 +2,142 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
+import json
+import os
+import math
+
+
+def load_error_codes():
+    try:
+        json_path = os.path.join(os.path.dirname(__file__), 'errorcodes.json')
+        with open(json_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return []
+    except json.JSONDecodeError:
+        return []
+
+
+class ErrorCodesBrowserView(discord.ui.View):
+    def __init__(self, items_per_page=9):
+        super().__init__(timeout=300)
+        self.error_codes = load_error_codes()
+        self.items_per_page = items_per_page
+        self.current_page = 0
+        self.max_pages = math.ceil(len(self.error_codes) / items_per_page) if self.error_codes else 1
+        self.update_buttons()
+    
+    def update_buttons(self):
+        self.clear_items()
+        
+        first_button = discord.ui.Button(
+            emoji="<:leftmax:1420240325770870905>",
+            style=discord.ButtonStyle.primary,
+            disabled=(self.current_page == 0)
+        )
+        first_button.callback = self.first_page
+        self.add_item(first_button)
+        
+        prev_button = discord.ui.Button(
+            emoji="<:left:1420240344926126090>",
+            style=discord.ButtonStyle.primary,
+            disabled=(self.current_page == 0)
+        )
+        prev_button.callback = self.prev_page
+        self.add_item(prev_button)
+        
+        stop_button = discord.ui.Button(
+            emoji="<:middle:1420240356087173160>",
+            style=discord.ButtonStyle.secondary
+        )
+        stop_button.callback = self.stop_interaction
+        self.add_item(stop_button)
+        
+        next_button = discord.ui.Button(
+            emoji="<:right:1420240334100627456>",
+            style=discord.ButtonStyle.primary,
+            disabled=(self.current_page >= self.max_pages - 1)
+        )
+        next_button.callback = self.next_page
+        self.add_item(next_button)
+        
+        last_button = discord.ui.Button(
+            emoji="<:rightmax:1420240368846372886>",
+            style=discord.ButtonStyle.primary,
+            disabled=(self.current_page >= self.max_pages - 1)
+        )
+        last_button.callback = self.last_page
+        self.add_item(last_button)
+    
+    def create_embed(self):
+        if not self.error_codes:
+            embed = discord.Embed(
+                title="Error Codes",
+                description="No error codes found.",
+                color=0xfa8c4a
+            )
+            embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
+            embed.set_footer(text="Page 0 of 0")
+            return embed
+        
+        embed = discord.Embed(
+            title="Error Codes",
+            color=0xfa8c4a
+        )
+        embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
+        
+        start_idx = self.current_page * self.items_per_page
+        end_idx = min(start_idx + self.items_per_page, len(self.error_codes))
+        current_codes = self.error_codes[start_idx:end_idx]
+        
+        for i, error in enumerate(current_codes):
+            field_value = f"**Code:** `{error.get('code', 'N/A')}`\n**Name:** `{error.get('name', 'Unknown')}`\n**Description:** {error.get('description', 'No description')}"
+            embed.add_field(
+                name="\u200b",
+                value=field_value,
+                inline=True
+            )
+        
+        # Add empty fields to maintain 3x3 grid if needed
+        while len(current_codes) % 3 != 0:
+            embed.add_field(name="\u200b", value="\u200b", inline=True)
+        
+        embed.set_footer(text=f"Page {self.current_page + 1} of {self.max_pages}")
+        
+        return embed
+    
+    async def first_page(self, interaction: discord.Interaction):
+        self.current_page = 0
+        self.update_buttons()
+        embed = self.create_embed()
+        await interaction.response.edit_message(embed=embed, view=self)
+    
+    async def prev_page(self, interaction: discord.Interaction):
+        if self.current_page > 0:
+            self.current_page -= 1
+        self.update_buttons()
+        embed = self.create_embed()
+        await interaction.response.edit_message(embed=embed, view=self)
+    
+    async def stop_interaction(self, interaction: discord.Interaction):
+        self.clear_items()
+        embed = self.create_embed()
+        embed.set_footer(text="Interaction stopped")
+        await interaction.response.edit_message(embed=embed, view=self)
+        self.stop()
+    
+    async def next_page(self, interaction: discord.Interaction):
+        if self.current_page < self.max_pages - 1:
+            self.current_page += 1
+        self.update_buttons()
+        embed = self.create_embed()
+        await interaction.response.edit_message(embed=embed, view=self)
+    
+    async def last_page(self, interaction: discord.Interaction):
+        self.current_page = self.max_pages - 1
+        self.update_buttons()
+        embed = self.create_embed()
+        await interaction.response.edit_message(embed=embed, view=self)
 
 
 class ideviceSelect(discord.ui.Select):
@@ -23,18 +159,25 @@ class ideviceSelect(discord.ui.Select):
 
     async def callback(self, interaction: discord.Interaction):
         command_name = self.values[0]
-        command = self.bot.get_command(command_name)
         
         if command_name == "errorcodes_ephemeral":
+            # Send success message first
             embed = discord.Embed(
                 title="Command Executed",
-                description=f"Successfully executed `/{command_name}`",
+                description="Successfully executed `/errorcodes`",
                 color=0x00FF00
             )
             embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
             await interaction.response.edit_message(embed=embed, view=None)
+            
+            # Follow up with the error codes browser
+            view = ErrorCodesBrowserView()
+            embed = view.create_embed()
+            await interaction.followup.send(embed=embed, view=view, ephemeral=True)
             return
-
+        
+        command = self.bot.get_command(command_name)
+        
         if command:
             try:
                 ctx = await self.bot.get_context(interaction.message)
