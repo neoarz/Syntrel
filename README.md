@@ -10,13 +10,13 @@
 
 <div align="center">
 
-All in one discord bot for helping with [SideStore](https://discord.gg/3DwCwpBHfv), [idevice](https://discord.gg/ZnNcrRT3M8), and more.
+**All in one discord bot for helping with [SideStore](https://discord.gg/3DwCwpBHfv), [idevice](https://discord.gg/ZnNcrRT3M8), and more.**
 
 </div>
 
+<br>
+
 > [!NOTE]
-> **Download**
-> 
 > This bot is heavily customized and may not be a good starting point template wise. But if you wanna use this bot, or maybe add to your own server, here is the download link: 
 > 
 > [https://discord.com/oauth2/authorize?client_id=1376728824108286034](https://discord.com/oauth2/authorize?client_id=1376728824108286034)
