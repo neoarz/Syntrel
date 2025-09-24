@@ -22,8 +22,8 @@
 ### Download
 
 <div align="left">
-  <a href="https://apps.apple.com/us/app/stikdebug/id6744045754" target="_blank" rel="noopener noreferrer">
-    <img src="assets/download.png" alt="Download" style="width: 200px; height: auto;">
+  <a href="https://discord.com/oauth2/authorize?client_id=1376728824108286034" target="_blank" rel="noopener noreferrer">
+    <img src="assets/download.png" alt="Download" style="width: 300px; height: auto;">
   </a>
 </div>
 
