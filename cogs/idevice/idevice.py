@@ -98,7 +98,7 @@ class ErrorCodesBrowserView(discord.ui.View):
                 inline=True
             )
         
-        # Add empty fields to maintain 3x3 grid if needed
+
         while len(current_codes) % 3 != 0:
             embed.add_field(name="\u200b", value="\u200b", inline=True)
         
@@ -151,7 +151,7 @@ class ideviceSelect(discord.ui.Select):
             ),
             discord.SelectOption(
                 label="Error Codes",
-                value="errorcodes_ephemeral",
+                value="errorcodes",
                 description="Browse idevice error codes",
             ),
         ]
@@ -159,21 +159,40 @@ class ideviceSelect(discord.ui.Select):
 
     async def callback(self, interaction: discord.Interaction):
         command_name = self.values[0]
-        
-        if command_name == "errorcodes_ephemeral":
-            # Send success message first
-            embed = discord.Embed(
-                title="Command Executed",
-                description="Successfully executed `/errorcodes`",
-                color=0x00FF00
-            )
-            embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
-            await interaction.response.edit_message(embed=embed, view=None)
-            
-            # Follow up with the error codes browser
-            view = ErrorCodesBrowserView()
-            embed = view.create_embed()
-            await interaction.followup.send(embed=embed, view=view, ephemeral=True)
+
+        if command_name == "errorcodes":
+            try:
+                view = ErrorCodesBrowserView()
+                embed = view.create_embed()
+                
+                success_embed = discord.Embed(
+                    title="Command Executed",
+                    description="Successfully executed `/errorcodes`",
+                    color=0x00FF00
+                )
+                success_embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
+                await interaction.response.edit_message(embed=success_embed, view=None)
+                
+                await interaction.followup.send(embed=embed, view=view, ephemeral=True)
+                
+            except discord.Forbidden:
+                self.bot.logger.warning(f"Bot missing permissions in server {interaction.guild.name} (ID: {interaction.guild.id}) - cannot execute errorcodes command")
+                embed = discord.Embed(
+                    title="Permission Error",
+                    description="The bot doesn't have the required permissions in this server to execute this command. Use the slash command `/errorcodes` instead.",
+                    color=0xFF0000
+                )
+                embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
+                await interaction.response.edit_message(embed=embed, view=None)
+            except Exception as e:
+                self.bot.logger.error(f"Error executing errorcodes command: {e}")
+                embed = discord.Embed(
+                    title="Error",
+                    description="An error occurred while executing the command.",
+                    color=0xFF0000
+                )
+                embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
+                await interaction.response.edit_message(embed=embed, view=None)
             return
         
         command = self.bot.get_command(command_name)
@@ -194,7 +213,7 @@ class ideviceSelect(discord.ui.Select):
                 self.bot.logger.warning(f"Bot missing permissions in server {interaction.guild.name} (ID: {interaction.guild.id}) - cannot execute {command_name} command")
                 embed = discord.Embed(
                     title="Permission Error",
-                    description="The bot doesn't have the required permissions in this server to execute this command. Use the slash command `/{command_name}` instead.",
+                    description=f"The bot doesn't have the required permissions in this server to execute this command. Use the slash command `/{command_name}` instead.",
                     color=0xFF0000
                 )
                 embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")

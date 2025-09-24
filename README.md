@@ -17,17 +17,12 @@
 <br>
 
 > [!NOTE]
-> This bot is heavily customized and may not be a good starting point template wise. But if you wanna use this bot, or maybe add to your own server, download it by clicking the button below.
+> **Download**
+> 
+> This bot is heavily customized and may not be a good starting point template wise. But if you wanna use this bot, or maybe add to your own server, [download](#download) it by clicking the button below. After downloading run `/help` to get started.
 
-### Download
 
-<div align="left">
-  <a href="https://discord.com/oauth2/authorize?client_id=1376728824108286034" target="_blank" rel="noopener noreferrer">
-    <img src="assets/download.png" alt="Download" style="width: 300px; height: auto;">
-  </a>
-</div>
-
-### Commands
+## Commands
 
 | Command group | Subcommands |
 | --- | --- |
@@ -38,6 +33,16 @@
 | sidestore | `sidestore`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
 | idevice | `idevice`, `noapps`, `errorcode` |
 | miscellaneous | `keanu`, `labubu` |
+
+## Download
+
+<div align="left">
+  <a href="https://discord.com/oauth2/authorize?client_id=1376728824108286034" target="_blank" rel="noopener noreferrer">
+    <img src="assets/download.png" alt="Download" style="width: 300px; height: auto;">
+  </a>
+</div>
+
+
 
 
 ## Contributing
