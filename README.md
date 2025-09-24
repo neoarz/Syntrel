@@ -17,9 +17,15 @@
 <br>
 
 > [!NOTE]
-> This bot is heavily customized and may not be a good starting point template wise. But if you wanna use this bot, or maybe add to your own server, here is the download link: 
-> 
-> [https://discord.com/oauth2/authorize?client_id=1376728824108286034](https://discord.com/oauth2/authorize?client_id=1376728824108286034)
+> This bot is heavily customized and may not be a good starting point template wise. But if you wanna use this bot, or maybe add to your own server, download it by clicking the button below.
+
+### Download
+
+<div align="left">
+  <a href="https://apps.apple.com/us/app/stikdebug/id6744045754" target="_blank" rel="noopener noreferrer">
+    <img src="assets/download.png" alt="Download" style="width: 200px; height: auto;">
+  </a>
+</div>
 
 ### Commands
 
