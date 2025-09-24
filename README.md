@@ -16,33 +16,32 @@
 
 <br>
 
+
 ## Commands
 
-| Command group | Subcommands |
-| --- | --- |
-| owner | `sync`, `cog_management`, `shutdown`, `say`, `invite` |
-| general | `help`, `botinfo`, `serverinfo`, `ping`, `feedback`, `uptime` |
-| fun | `randomfact`, `coinflip`, `rps`, `8ball`, `minesweeper` |
-| moderation | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive` |
-| sidestore | `sidestore`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
-| idevice | `idevice`, `noapps`, `errorcode` |
-| miscellaneous | `keanu`, `labubu` |
+| Command group | Description | Subcommands |
+| --- | --- | --- |
+| owner | Bot administration and management commands | `sync`, `cog_management`, `shutdown`, `say`, `invite` |
+| general | Basic bot information and utility commands | `help`, `botinfo`, `serverinfo`, `ping`, `feedback`, `uptime` |
+| fun | Entertainment and interactive game commands | `randomfact`, `coinflip`, `rps`, `8ball`, `minesweeper` |
+| moderation | Server moderation and management tools | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive` |
+| sidestore | SideStore-specific troubleshooting and support | `sidestore`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
+| idevice | idevice-specific troubleshooting and support | `idevice`, `noapps`, `errorcode` |
+| miscellaneous | Additional utility and specialty commands | `keanu`, `labubu` |
 
 ## Download
 
 <div align="left">
   <a href="https://discord.com/oauth2/authorize?client_id=1376728824108286034" target="_blank" rel="noopener noreferrer">
-    <img src="assets/download.png" alt="Download" style="width: 300px; height: auto;">
+    <img src="assets/download.png" alt="Download" style="width: 290px; height: auto;">
   </a>
 </div>
 
 
-<br>
-
 ## Contributing
 
-Contributions are welcome. See `CONTRIBUTING.md` for guidelines.
+Contributions are welcome. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines.
 
 ## License
 
-Dual licensed project, see [LICENSE](LICENSE) file for detailed attribution information
+Dual licensed project, see [`LICENSE`](LICENSE) file for detailed attribution information
