@@ -3,6 +3,7 @@ import os
 import discord
 from discord import app_commands
 from discord.ext import commands
+from discord.ext.commands import Context
 
 
 class ErrorCodes(commands.Cog, name="errorcodes"):
@@ -34,10 +35,10 @@ class ErrorCodes(commands.Cog, name="errorcodes"):
                     break
         return items
 
-    @app_commands.command(name="errorcode", description="Look up an idevice error code by name or number")
+    @commands.hybrid_command(name="errorcode", description="Look up an idevice error code by name or number")
     @app_commands.describe(name="Start typing to search all error names and codes")
     @app_commands.autocomplete(name=errorcode_autocomplete)
-    async def errorcode(self, interaction: discord.Interaction, name: str):
+    async def errorcode(self, context: Context, name: str):
         key = name
         if key not in self.key_to_data:
             try:
@@ -46,7 +47,10 @@ class ErrorCodes(commands.Cog, name="errorcodes"):
             except ValueError:
                 key = None
         if key is None or key not in self.key_to_data:
-            await interaction.response.send_message("Error not found.", ephemeral=True)
+            if context.interaction:
+                await context.interaction.response.send_message("Error not found.", ephemeral=True)
+            else:
+                await context.send("Error not found.")
             return
             
         title, code = self.key_to_data[key]
@@ -65,7 +69,10 @@ class ErrorCodes(commands.Cog, name="errorcodes"):
             emoji="<:githubicon:1417717356846776340>"
         ))
         
-        await interaction.response.send_message(embed=embed, view=view)
+        if context.interaction:
+            await context.interaction.response.send_message(embed=embed, view=view)
+        else:
+            await context.send(embed=embed, view=view)
 
 async def setup(bot) -> None:
     cog = ErrorCodes(bot)

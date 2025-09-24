@@ -77,6 +77,7 @@ class Help(commands.Cog, name="help"):
             # idevice Commands
             "idevice": "idevice",
             "noapps": "idevice",
+            "errorcode": "idevice",
             
             # Owner Commands
             "sync": "owner",
