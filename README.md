@@ -40,7 +40,8 @@
 | miscellaneous | `keanu`, `labubu` |
 
 
-### Contributing
+## Contributing
+
 Contributions are welcome. See `CONTRIBUTING.md` for guidelines.
 
 ## License
