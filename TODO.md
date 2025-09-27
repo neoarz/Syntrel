@@ -18,6 +18,8 @@
 
 - [ ] Add whois command
 
+- [ ] Add git log to info 
+
 - [ ] Clean tag system from [tags branch](https://github.com/neoarz/Syntrel/tree/tags) (make sure db is persistent)
 
 - [x] Fix logging and add graceful shutdown
