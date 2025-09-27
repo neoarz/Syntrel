@@ -91,6 +91,7 @@ class Help(commands.Cog, name="help"):
             # Miscellaneous Commands
             "keanu": "miscellaneous",
             "labubu": "miscellaneous",
+            "piracy": "miscellaneous",
         }
         
         category_descriptions = {
