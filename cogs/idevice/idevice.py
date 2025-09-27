@@ -9,7 +9,7 @@ import math
 
 def load_error_codes():
     try:
-        json_path = os.path.join(os.path.dirname(__file__), 'errorcodes.json')
+        json_path = os.path.join(os.path.dirname(__file__), 'files/errorcodes.json')
         with open(json_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     except FileNotFoundError:
@@ -158,6 +158,11 @@ class ideviceSelect(discord.ui.Select):
                 label="Developer Mode",
                 value="developermode",
                 description="How to turn on developer mode",
+            ),
+            discord.SelectOption(
+                label="Mount DDI",
+                value="mountddi",
+                description="How to manually mount DDI",
             ),
         ]
         super().__init__(placeholder="Choose an idevice command...", options=options)

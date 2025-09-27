@@ -79,6 +79,7 @@ class Help(commands.Cog, name="help"):
             "noapps": "idevice",
             "errorcodes": "idevice",
             "developermode": "idevice",
+            "mountddi": "idevice",
             
             # Owner Commands
             "sync": "owner",

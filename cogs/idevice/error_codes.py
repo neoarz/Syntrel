@@ -14,7 +14,7 @@ class ErrorCodes(commands.Cog, name="errorcodes"):
         self.code_to_key = {error['code']: error['name'] for error in self.errors}
 
     def load_errors(self):
-        json_path = os.path.join(os.path.dirname(__file__), 'errorcodes.json')
+        json_path = os.path.join(os.path.dirname(__file__), 'files/errorcodes.json')
         try:
             with open(json_path, 'r', encoding='utf-8') as f:
                 return json.load(f)
