@@ -20,7 +20,7 @@
 
 | Command group | Subcommands |
 | --- | --- |
-| owner | `sync`, `cog_management`, `shutdown`, `say`, `invite` |
+| owner | `sync`, `cog_management`, `shutdown`, `say`, `invite`, `logs` |
 | general | `help`, `botinfo`, `serverinfo`, `ping`, `feedback`, `uptime` |
 | fun | `randomfact`, `coinflip`, `rps`, `8ball`, `minesweeper` |
 | moderation | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive` |

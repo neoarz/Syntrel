@@ -105,7 +105,7 @@ _ascii_art = """
 ╚══════╝   ╚═╝   ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝
 """
 
-_start_rgb = (255, 69, 0)   # Red-orange
+_start_rgb = (255, 69, 0)   
 _end_rgb = (255, 165, 0)   # Orange  
 
 ascii = gradient_text_selective(_ascii_art, _start_rgb, _end_rgb, "neoarz", "Made by ")
