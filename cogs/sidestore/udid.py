@@ -18,7 +18,7 @@ class Udid(commands.Cog, name="udid"):
             description=(
                 '# SideStore Could Not Determine Device UDID\n\n---\n\n' +
                 'This error usually occurs when the pairing file is corrupted. Please generate a new pairing file and try again.\n\n' +
-                'If you forgot how to generate a new pairing file, you can refer to the [documentation](https://docs.sidestore.io/docs/installation/pairing-file/) below.'
+                'If you forgot how to generate a new pairing file, you can refer to the documentation below.'
             )
         )
         embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
@@ -31,6 +31,12 @@ class Udid(commands.Cog, name="udid"):
             style=discord.ButtonStyle.secondary,
             url="https://github.com/neoarz/Syntrel/blob/main/cogs/sidestore/udid.py",
             emoji="<:githubicon:1417717356846776340>"
+        ))
+        view.add_item(discord.ui.Button(
+            label="Documentation",
+            style=discord.ButtonStyle.secondary,
+            url="https://docs.sidestore.io/docs/installation/pairing-file/",
+            emoji="<:sidestorepride:1417717648795631787>"
         ))
 
         if context.interaction:
