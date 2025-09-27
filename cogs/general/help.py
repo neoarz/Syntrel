@@ -96,7 +96,7 @@ class Help(commands.Cog, name="help"):
         
         category_descriptions = {
             "general": "General commands",
-            "fun": "Funny commands", 
+            "fun": "Fun commands", 
             "moderation": "Administration commands",
             "owner": "Owner commands",
             "sidestore": "SideStore troubleshooting commands",

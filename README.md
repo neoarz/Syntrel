@@ -25,8 +25,8 @@
 | fun | `randomfact`, `coinflip`, `rps`, `8ball`, `minesweeper` |
 | moderation | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive` |
 | sidestore | `sidestore`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
-| idevice | `idevice`, `noapps`, `errorcode` |
-| miscellaneous | `keanu`, `labubu` |
+| idevice | `idevice`, `noapps`, `errorcode`, `developermode`, `mountddi` |
+| miscellaneous | `keanu`, `labubu`, `piracy` |
 
 ## Download
 
