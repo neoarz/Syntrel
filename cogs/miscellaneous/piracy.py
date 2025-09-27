@@ -13,7 +13,7 @@ class Piracy(commands.Cog, name="piracy"):
     )
     async def piracy(self, context: Context) -> None:
         embed = discord.Embed(
-            color=0x7289DA,
+            color=0xE02B2B,
         )
         embed.set_author(name="Piracy", icon_url="https://yes.nighty.works/raw/rVYXlf.png")
         embed.set_image(url="https://yes.nighty.works/raw/lEhuWK.png")

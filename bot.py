@@ -15,6 +15,7 @@ from discord.ext.commands import Context
 from dotenv import load_dotenv
 
 from database import DatabaseManager
+from utils.ascii_art import ascii
 
 load_dotenv()
 
@@ -210,6 +211,7 @@ class DiscordBot(commands.Bot):
                 self.logger.info(f"Bot owner: {app_info.owner.name} (ID: {app_info.owner.id})")
         except Exception as e:
             self.logger.error(f"Error fetching application info: {e}")
+        
             
         await self.init_db()
         await self.load_cogs()
@@ -382,6 +384,10 @@ def signal_handler(signum, frame):
 bot = DiscordBot()
 
 if __name__ == "__main__":
+    os.system('clear' if os.name == 'posix' else 'cls')
+    
+    print(ascii)
+    
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
     

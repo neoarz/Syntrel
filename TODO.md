@@ -4,7 +4,7 @@
   - [x] Add /idevice command
   - [x] Add /no apps command
   - [x] Add rest of the errors yikes
-  - [ ] Add ddi mounting command
+  - [x] Add ddi mounting command
 
 - [ ] Add unit tests
 
