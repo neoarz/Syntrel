@@ -154,6 +154,11 @@ class ideviceSelect(discord.ui.Select):
                 value="errorcodes",
                 description="Browse idevice error codes",
             ),
+            discord.SelectOption(
+                label="Developer Mode",
+                value="developermode",
+                description="How to turn on developer mode",
+            ),
         ]
         super().__init__(placeholder="Choose an idevice command...", options=options)
 
@@ -264,6 +269,7 @@ class idevice(commands.Cog, name="idevice"):
             await context.interaction.response.send_message(embed=embed, view=view, ephemeral=True)
         else:
             await context.send(embed=embed, view=view)
+
 
 
 async def setup(bot) -> None:
