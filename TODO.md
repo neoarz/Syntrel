@@ -1,6 +1,6 @@
 # Todo List for Syntrel
 
-- [ ] Finish [idevice commands](https://github.com/jkcoxson/idevice/blob/master/idevice/src/lib.rs#L522)
+- [x] Finish [idevice commands](https://github.com/jkcoxson/idevice/blob/master/idevice/src/lib.rs#L522)
   - [x] Add /idevice command
   - [x] Add /no apps command
   - [x] Add rest of the errors yikes
@@ -13,6 +13,10 @@
 - [ ] Finish CONTRIBUTING.md
 
 - [ ] Create github action 
+
+- [ ] Add video commands
+
+- [ ] Add whois command
 
 - [ ] Clean tag system from [tags branch](https://github.com/neoarz/Syntrel/tree/tags) (make sure db is persistent)
 
