@@ -20,6 +20,16 @@
 
 - [ ] Add git log to info 
 
+- [ ] Add try it and see command
+
+- [ ] ~~Add rickroll command~~
+
+- [ ] Add sending code (regular and from github)
+
+- [ ] Add random color command
+
+- [ ] Add translate command
+
 - [ ] Clean tag system from [tags branch](https://github.com/neoarz/Syntrel/tree/tags) (make sure db is persistent)
 
 - [x] Fix logging and add graceful shutdown
