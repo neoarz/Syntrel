@@ -9,7 +9,7 @@ class Labubu(commands.Cog, name="labubu"):
 
     @commands.hybrid_command(
         name="labubu",
-        description="Shows Labubu ASCII art",
+        description="Labubu ASCII art",
     )
     async def labubu(self, context: Context) -> None:
         labubu_art = """⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠀⠙⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿

@@ -20,9 +20,9 @@
 
 - [ ] Add git log to info 
 
-- [ ] Add try it and see command
+- [x] Add try it and see command
 
-- [ ] ~~Add rickroll command~~
+- [x] ~~Add rickroll command~~
 
 - [ ] Add sending code (regular and from github)
 
