@@ -31,7 +31,7 @@ class Nick(commands.Cog, name="nick"):
                 title="Missing Permissions!",
                 description="You are missing the permission(s) `manage_nicknames` to execute this command!",
                 color=0xE02B2B,
-            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
             return await context.send(embed=embed, ephemeral=True)
         
         if not context.guild.me.guild_permissions.manage_nicknames:
@@ -39,7 +39,7 @@ class Nick(commands.Cog, name="nick"):
                 title="Missing Permissions!",
                 description="I am missing the permission(s) `manage_nicknames` to execute this command!",
                 color=0xE02B2B,
-            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
             return await context.send(embed=embed, ephemeral=True)
 
         member = context.guild.get_member(user.id) or await context.guild.fetch_member(
@@ -51,14 +51,14 @@ class Nick(commands.Cog, name="nick"):
                 title="Nickname",
                 description=f"**{member}'s** new nickname is **{nickname}**!",
                 color=0x7289DA,
-            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
             await context.send(embed=embed)
         except:
             embed = discord.Embed(
                 title="Missing Permissions!",
                 description="An error occurred while trying to change the nickname of the user. Make sure my role is above the role of the user you want to change the nickname.",
                 color=0xE02B2B,
-            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
             await context.send(embed=embed, ephemeral=True)
 
 

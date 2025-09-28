@@ -26,7 +26,8 @@
 | moderation | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive` |
 | sidestore | `sidestore`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
 | idevice | `idevice`, `noapps`, `errorcode`, `developermode`, `mountddi` |
-| miscellaneous | `keanu`, `labubu`, `piracy` |
+| miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll` |
+| utilities | `translate` |
 
 ## Download
 

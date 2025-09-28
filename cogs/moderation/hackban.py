@@ -37,7 +37,7 @@ class HackBan(commands.Cog, name="hackban"):
                 title="Ban",
                 description=f"**{user}** (ID: {user_id}) was banned by **{context.author}**!",
                 color=0x7289DA,
-            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
             embed.add_field(name="Reason:", value=reason)
             await context.send(embed=embed)
         except Exception:
@@ -45,7 +45,7 @@ class HackBan(commands.Cog, name="hackban"):
                 title="Error!",
                 description="An error occurred while trying to ban the user. Make sure ID is an existing ID that belongs to a user.",
                 color=0xE02B2B,
-            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
             await context.send(embed=embed)
 
 

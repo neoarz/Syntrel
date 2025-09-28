@@ -29,7 +29,7 @@ class Kick(commands.Cog, name="kick"):
                         title="Error!",
                         description="This user is not in the server.",
                         color=0xE02B2B,
-                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                     await context.send(embed=embed, ephemeral=True)
                     return
             
@@ -38,7 +38,7 @@ class Kick(commands.Cog, name="kick"):
                     title="Missing Permissions!",
                     description="You don't have the `Kick Members` permission to use this command.",
                     color=0xE02B2B,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                 await context.send(embed=embed, ephemeral=True)
                 return
             
@@ -47,7 +47,7 @@ class Kick(commands.Cog, name="kick"):
                     title="Cannot Kick User",
                     description="This user has a higher or equal role to me. Make sure my role is above theirs.",
                     color=0xE02B2B,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                 await context.send(embed=embed, ephemeral=True)
                 return
             
@@ -57,7 +57,7 @@ class Kick(commands.Cog, name="kick"):
                         title="Cannot Kick User", 
                         description="You cannot kick this user as they have a higher or equal role to you.",
                         color=0xE02B2B,
-                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                     await context.send(embed=embed, ephemeral=True)
                     return
             
@@ -69,7 +69,7 @@ class Kick(commands.Cog, name="kick"):
                                 title="Kick",
                                 description=f"You were kicked by **{context.author}** from **{context.guild.name}**!\nReason: {reason}",
                                 color=0xE02B2B,
-                            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                            
                         )
                     except (discord.Forbidden, discord.HTTPException):
@@ -81,7 +81,7 @@ class Kick(commands.Cog, name="kick"):
                     title="Kick",
                     description=f"**{user}** was kicked by **{context.author}**!",
                     color=0x7289DA,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                 embed.add_field(name="Reason:", value=reason)
                 
                 await context.send(embed=embed)
@@ -91,7 +91,7 @@ class Kick(commands.Cog, name="kick"):
                     title="Error!",
                     description="I don't have permission to kick this user. Make sure my role is above theirs.",
                     color=0xE02B2B,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                 await context.send(embed=embed, ephemeral=True)
             except discord.HTTPException as e:
                 if "Cannot kick the owner of a guild" in str(e):
@@ -99,20 +99,20 @@ class Kick(commands.Cog, name="kick"):
                         title="Cannot Kick User",
                         description="You cannot kick the server owner.",
                         color=0xE02B2B,
-                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                 else:
                     embed = discord.Embed(
                         title="Error!",
                         description=f"Discord API error: {str(e)}",
                         color=0xE02B2B,
-                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                 await context.send(embed=embed, ephemeral=True)
             except Exception as e:
                 embed = discord.Embed(
                     title="Debug Error!",
                     description=f"Error type: {type(e).__name__}\nError message: {str(e)}",
                     color=0xE02B2B,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                 await context.send(embed=embed, ephemeral=True)
                 
         except Exception as e:
@@ -120,7 +120,7 @@ class Kick(commands.Cog, name="kick"):
                 title="Error!",
                 description="An unexpected error occurred.",
                 color=0xE02B2B,
-            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
             await context.send(embed=embed, ephemeral=True)
 
 

@@ -13,7 +13,7 @@ class Help(commands.Cog, name="help"):
         interaction: discord.Interaction,
         current: str,
     ) -> list[app_commands.Choice[str]]:
-        categories = ["general", "fun", "moderation", "owner", "sidestore", "idevice", "miscellaneous"]
+        categories = ["general", "fun", "moderation", "owner", "sidestore", "idevice", "miscellaneous", "utilities"]
         
         suggestions = []
         for category in categories:
@@ -89,6 +89,9 @@ class Help(commands.Cog, name="help"):
             "invite": "owner",
             "logs": "owner",
             
+            # Utilities Commands
+            "translate": "utilities",
+            
             # Miscellaneous Commands
             "keanu": "miscellaneous",
             "labubu": "miscellaneous",
@@ -104,6 +107,7 @@ class Help(commands.Cog, name="help"):
             "owner": "Owner commands",
             "sidestore": "SideStore troubleshooting commands",
             "idevice": "idevice troubleshooting commands",
+            "utilities": "Utility commands",
             "miscellaneous": "Miscellaneous commands"
         }
         

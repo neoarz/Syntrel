@@ -41,7 +41,7 @@ class Ban(commands.Cog, name="ban"):
                             title="Ban",
                             description=f"**{user}** was banned by **{context.author}**!",
                             color=0x7289DA,
-                        ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+                        ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
                         embed.add_field(name="Reason:", value=reason)
                         await context.send(embed=embed)
                         return
@@ -50,7 +50,7 @@ class Ban(commands.Cog, name="ban"):
                             title="Error!",
                             description="I don't have permission to ban this user.",
                             color=0xE02B2B,
-                        ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                        ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                         await context.send(embed=embed, ephemeral=True)
                         return
                     except Exception:
@@ -58,7 +58,7 @@ class Ban(commands.Cog, name="ban"):
                             title="Error!",
                             description="An error occurred while trying to ban the user.",
                             color=0xE02B2B,
-                        ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                        ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                         await context.send(embed=embed, ephemeral=True)
                         return
             
@@ -67,7 +67,7 @@ class Ban(commands.Cog, name="ban"):
                     title="Missing Permissions!",
                     description="You don't have the `Ban Members` permission to use this command.",
                     color=0xE02B2B,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                 await context.send(embed=embed, ephemeral=True)
                 return
             
@@ -76,7 +76,7 @@ class Ban(commands.Cog, name="ban"):
                     title="Cannot Ban User",
                     description="This user has a higher or equal role to me. Make sure my role is above theirs.",
                     color=0xE02B2B,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                 await context.send(embed=embed, ephemeral=True)
                 return
             
@@ -86,7 +86,7 @@ class Ban(commands.Cog, name="ban"):
                         title="Cannot Ban User", 
                         description="You cannot ban this user as they have a higher or equal role to you.",
                         color=0xE02B2B,
-                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                     await context.send(embed=embed, ephemeral=True)
                     return
             
@@ -111,7 +111,7 @@ class Ban(commands.Cog, name="ban"):
                             title="Ban",
                             description=f"You were banned by **{context.author}** from **{context.guild.name}**!\nReason: {reason}",
                             color=0xE02B2B,
-                        ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+                        ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
                         await member.send(embed=dm_embed)
                     except (discord.Forbidden, discord.HTTPException):
                         pass
@@ -128,7 +128,7 @@ class Ban(commands.Cog, name="ban"):
                     title="Ban",
                     description=f"**{user}** was banned by **{context.author}**!",
                     color=0x7289DA,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                 embed.add_field(name="Reason:", value=reason)
                 
                 if delete_messages != "none":
@@ -145,7 +145,7 @@ class Ban(commands.Cog, name="ban"):
                     title="Error!",
                     description="I don't have permission to ban this user. Make sure my role is above theirs.",
                     color=0xE02B2B,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                 await context.send(embed=embed, ephemeral=True)
             except discord.HTTPException as e:
                 if "Cannot ban the owner of a guild" in str(e):
@@ -153,20 +153,20 @@ class Ban(commands.Cog, name="ban"):
                         title="Cannot Ban User",
                         description="You cannot ban the server owner.",
                         color=0xE02B2B,
-                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                 else:
                     embed = discord.Embed(
                         title="Error!",
                         description=f"Discord API error: {str(e)}",
                         color=0xE02B2B,
-                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                 await context.send(embed=embed, ephemeral=True)
             except Exception as e:
                 embed = discord.Embed(
                     title="Debug Error!",
                     description=f"Error type: {type(e).__name__}\nError message: {str(e)}",
                     color=0xE02B2B,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
                 await context.send(embed=embed, ephemeral=True)
                 
         except Exception as e:
@@ -174,7 +174,7 @@ class Ban(commands.Cog, name="ban"):
                 title="Error!",
                 description="An unexpected error occurred.",
                 color=0xE02B2B,
-            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")    
+            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
             await context.send(embed=embed, ephemeral=True)
 
     async def delete_all_user_messages(self, guild: discord.Guild, user_id: int) -> None:

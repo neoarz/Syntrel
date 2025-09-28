@@ -29,7 +29,7 @@ class Purge(commands.Cog, name="purge"):
             description=f"**{context.author}** cleared **{len(purged_messages)-1}** messages!",
             color=0x7289DA,
         )
-        embed.set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+        embed.set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
         await context.channel.send(embed=embed)
 
 
