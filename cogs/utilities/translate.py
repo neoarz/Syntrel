@@ -136,15 +136,15 @@ class Translate(commands.Cog, name="translate"):
             "lv": "Latvian",
         }
 
-    async def send_embed(self, context: Context, embed: discord.Embed, *, ephemeral: bool = False, view: discord.ui.View = None) -> None:
+    async def send_embed(self, context: Context, embed: discord.Embed, *, ephemeral: bool = False) -> None:
         interaction = getattr(context, "interaction", None)
         if interaction is not None:
             if interaction.response.is_done():
-                await interaction.followup.send(embed=embed, ephemeral=ephemeral, view=view)
+                await interaction.followup.send(embed=embed, ephemeral=ephemeral)
             else:
-                await interaction.response.send_message(embed=embed, ephemeral=ephemeral, view=view)
+                await interaction.response.send_message(embed=embed, ephemeral=ephemeral)
         else:
-            await context.send(embed=embed, view=view)
+            await context.send(embed=embed)
 
     async def _translate_with_google_web(self, text: str, from_lang: str = "auto", to_lang: str = "en") -> dict:
         try:
@@ -229,24 +229,35 @@ class Translate(commands.Cog, name="translate"):
     )
     @app_commands.autocomplete(to_lang=language_autocomplete)
     @app_commands.autocomplete(from_lang=language_autocomplete)
-    async def translate(self, context: Context, text: str, to_lang: str = "en", from_lang: str = None):
-        if not text.strip():
-            embed = discord.Embed(
-                title="Error",
-                description="Please provide text to translate.",
-                color=0xE02B2B,
-            )
-            embed.set_author(name="Translate", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
-            await self.send_embed(context, embed, ephemeral=True)
-            return
+    async def translate(self, context: Context, text: str = None, to_lang: str = "en", from_lang: str = None):
+        if not text or not text.strip():
+            if context.message and context.message.reference and context.message.reference.resolved:
+                replied_message = context.message.reference.resolved
+                if hasattr(replied_message, 'content') and replied_message.content:
+                    text = replied_message.content
+                else:
+                    embed = discord.Embed(
+                        title="Error",
+                        description="The replied message has no text content to translate.",
+                        color=0xE02B2B,
+                    ).set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+                    await self.send_embed(context, embed, ephemeral=True)
+                    return
+            else:
+                embed = discord.Embed(
+                    title="Error",
+                    description="Please provide text to translate or reply to a message with text.",
+                    color=0xE02B2B,
+                ).set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+                await self.send_embed(context, embed, ephemeral=True)
+                return
         
         if to_lang not in self.languages:
             embed = discord.Embed(
                 title="Error",
                 description=f"Invalid target language code: `{to_lang}`. Use the autocomplete feature to see available languages.",
                 color=0xE02B2B,
-            )
-            embed.set_author(name="Translate", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+            ).set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
             await self.send_embed(context, embed, ephemeral=True)
             return
         
@@ -255,8 +266,7 @@ class Translate(commands.Cog, name="translate"):
                 title="Error",
                 description=f"Invalid source language code: `{from_lang}`. Use the autocomplete feature to see available languages.",
                 color=0xE02B2B,
-            )
-            embed.set_author(name="Translate", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+            ).set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
             await self.send_embed(context, embed, ephemeral=True)
             return
         
@@ -270,87 +280,23 @@ class Translate(commands.Cog, name="translate"):
             
             embed = discord.Embed(
                 title="Translation",
+                description=f"**Original:** {text}\n**Translated:** {result['translatedText']}",
                 color=0x7289DA,
             )
-            embed.set_author(name="Translate", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
-            embed.add_field(name="Original", value=text, inline=False)
-            embed.add_field(name="Translated", value=result["translatedText"], inline=False)
-            embed.add_field(name="From", value=f"{detected_lang} ({from_lang_name})", inline=True)
-            embed.add_field(name="To", value=f"{to_lang} ({to_lang_name})", inline=True)
+            embed.set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+            embed.set_footer(text=f"{from_lang_name} » {to_lang_name}")
             
-            view = TranslateView(text, result["translatedText"], detected_lang, to_lang, self)
-            await self.send_embed(context, embed, view=view)
+            await self.send_embed(context, embed)
         else:
             embed = discord.Embed(
                 title="Error",
                 description="Translation failed. Please try again later.",
                 color=0xE02B2B,
-            )
-            embed.set_author(name="Translate", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+            ).set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
             await self.send_embed(context, embed, ephemeral=True)
 
 
 
-class TranslateView(discord.ui.View):
-    def __init__(self, original_text: str, translated_text: str, from_lang: str, to_lang: str, translate_cog):
-        super().__init__(timeout=300)
-        self.original_text = original_text
-        self.translated_text = translated_text
-        self.from_lang = from_lang
-        self.to_lang = to_lang
-        self.translate_cog = translate_cog
-
-    @discord.ui.button(label="Swap Languages", style=discord.ButtonStyle.secondary)
-    async def swap_languages(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if self.from_lang == "auto":
-            embed = discord.Embed(
-                title="Cannot Swap",
-                description="Cannot swap when source language is auto-detected. Please specify a source language first.",
-                color=0xE02B2B,
-            )
-            embed.set_author(name="Translate", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
-            await interaction.response.send_message(embed=embed, ephemeral=True)
-            return
-        
-        result = await self.translate_cog._translate_with_google_web(
-            self.translated_text, self.from_lang, "en"
-        )
-        
-        if result and result.get("translatedText"):
-            from_lang_name = self.translate_cog.languages.get(self.from_lang, self.from_lang)
-            to_lang_name = self.translate_cog.languages.get("en", "English")
-            
-            embed = discord.Embed(
-                title="Translation (Swapped)",
-                color=0x7289DA,
-            )
-            embed.set_author(name="Translate", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
-            embed.add_field(name="Original", value=self.translated_text, inline=False)
-            embed.add_field(name="Translated", value=result["translatedText"], inline=False)
-            embed.add_field(name="From", value=f"{self.from_lang} ({from_lang_name})", inline=True)
-            embed.add_field(name="To", value=f"en ({to_lang_name})", inline=True)
-            
-            new_view = TranslateView(
-                self.translated_text, 
-                result["translatedText"], 
-                self.from_lang, 
-                "en", 
-                self.translate_cog
-            )
-            
-            await interaction.response.edit_message(embed=embed, view=new_view)
-        else:
-            embed = discord.Embed(
-                title="Error",
-                description="Failed to swap translation. Please try again later.",
-                color=0xE02B2B,
-            )
-            embed.set_author(name="Translate", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
-            await interaction.response.send_message(embed=embed, ephemeral=True)
-
-    async def on_timeout(self):
-        for item in self.children:
-            item.disabled = True
 
 
 async def setup(bot):
