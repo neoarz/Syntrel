@@ -79,11 +79,7 @@ class Help(commands.Cog, name="help"):
             "translate": "utilities",
             
             # Miscellaneous Commands
-            "keanu": "miscellaneous",
-            "labubu": "miscellaneous",
-            "piracy": "miscellaneous",
-            "tryitandsee": "miscellaneous",
-            "rr": "miscellaneous",
+            "miscellaneous": "miscellaneous",
         }
         
         category_descriptions = {
@@ -170,7 +166,7 @@ class Help(commands.Cog, name="help"):
             commands_in_category.append((app_command.name, description))
             seen_names.add(app_command.name)
             
-            if hasattr(app_command, 'commands') and category in ["fun", "general", "idevice"]:
+            if hasattr(app_command, 'commands') and category in ["fun", "general", "idevice", "miscellaneous", "moderation"]:
                 for subcommand in app_command.commands:
                     if subcommand.name in seen_names:
                         continue

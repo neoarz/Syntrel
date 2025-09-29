@@ -6,10 +6,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 
-class Archive(commands.Cog, name="archive"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def archive_command():
     @commands.hybrid_command(
         name="archive",
         description="Archives in a text file the last messages with a chosen limit of messages.",
@@ -18,7 +15,7 @@ class Archive(commands.Cog, name="archive"):
     @app_commands.describe(
         limit="The limit of messages that should be archived.",
     )
-    async def archive(self, context: Context, limit: int = 10) -> None:
+    async def archive(self, context, limit: int = 10):
         """
         Archives in a text file the last messages with a chosen limit of messages. This command requires the MESSAGE_CONTENT intent to work properly.
 
@@ -54,7 +51,5 @@ class Archive(commands.Cog, name="archive"):
         f = discord.File(log_file)
         await context.send(file=f)
         os.remove(log_file)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Archive(bot))
+    
+    return archive

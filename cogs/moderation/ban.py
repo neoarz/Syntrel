@@ -4,10 +4,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 
-class Ban(commands.Cog, name="ban"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def ban_command():
     @commands.hybrid_command(
         name="ban",
         description="Bans a user from the server.",
@@ -27,8 +24,8 @@ class Ban(commands.Cog, name="ban"):
         app_commands.Choice(name="Last 7 days", value="7d"),
     ])
     async def ban(
-        self, context: Context, user: discord.User, *, reason: str = "Not specified", delete_messages: str = "none"
-    ) -> None:
+        self, context, user: discord.User, *, reason: str = "Not specified", delete_messages: str = "none"
+    ):
         try:
             member = context.guild.get_member(user.id)
             if not member:
@@ -211,7 +208,5 @@ class Ban(commands.Cog, name="ban"):
             "7d": "Last 7 days"
         }
         return time_formats.get(delete_option, "Unknown time period")
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Ban(bot))
+    
+    return ban

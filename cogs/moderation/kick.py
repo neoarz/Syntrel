@@ -4,10 +4,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 
-class Kick(commands.Cog, name="kick"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def kick_command():
     @commands.hybrid_command(
         name="kick",
         description="Kicks a user from the server.",
@@ -17,8 +14,8 @@ class Kick(commands.Cog, name="kick"):
         reason="The reason why the user should be kicked.",
     )
     async def kick(
-        self, context: Context, user: discord.User, *, reason: str = "Not specified"
-    ) -> None:
+        self, context, user: discord.User, *, reason: str = "Not specified"
+    ):
         try:
             member = context.guild.get_member(user.id)
             if not member:
@@ -122,7 +119,5 @@ class Kick(commands.Cog, name="kick"):
                 color=0xE02B2B,
             ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
             await context.send(embed=embed, ephemeral=True)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Kick(bot))
+    
+    return kick

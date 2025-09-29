@@ -4,10 +4,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 
-class Purge(commands.Cog, name="purge"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def purge_command():
     @commands.hybrid_command(
         name="purge",
         description="Delete a number of messages.",
@@ -15,13 +12,7 @@ class Purge(commands.Cog, name="purge"):
     @commands.has_guild_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
     @app_commands.describe(amount="The amount of messages that should be deleted.")
-    async def purge(self, context: Context, amount: int) -> None:
-        """
-        Delete a number of messages.
-
-        :param context: The hybrid command context.
-        :param amount: The number of messages that should be deleted.
-        """
+    async def purge(self, context, amount: int):
         await context.send("Deleting messages...")
         purged_messages = await context.channel.purge(limit=amount + 1)
         embed = discord.Embed(
@@ -31,7 +22,5 @@ class Purge(commands.Cog, name="purge"):
         )
         embed.set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
         await context.channel.send(embed=embed)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Purge(bot))
+    
+    return purge
