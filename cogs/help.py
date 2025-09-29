@@ -37,49 +37,24 @@ class Help(commands.Cog, name="help"):
     async def help(self, context: Context, category: str = None) -> None:
         
         category_mapping = {
-            # General Commands
+            # Command Groups (using __init__.py structure)
             "general": "general",
-            
-            # Fun Commands
             "fun": "fun",
-            
-            # idevice Commands
             "idevice": "idevice",
-            
-            # Moderation Commands
-            "kick": "moderation",
-            "ban": "moderation",
-            "nick": "moderation",
-            "purge": "moderation",
-            "hackban": "moderation",
-            "warnings": "moderation",
-            "archive": "moderation",
-            
-            # SideStore Commands
+            "miscellaneous": "miscellaneous",
+            "moderation": "moderation",
             "sidestore": "sidestore",
-            "refresh": "sidestore",
-            "code": "sidestore",
-            "crash": "sidestore",
-            "pairing": "sidestore",
-            "server": "sidestore",
-            "half": "sidestore",
-            "sparse": "sidestore",
-            "afc": "sidestore",
-            "udid": "sidestore",
+            "utilities": "utilities",
             
-            # Owner Commands
+            # Individual Owner Commands (exception)
             "sync": "owner",
-            "cog_management": "owner",
+            "logs": "owner",
+            "invite": "owner",
+            "load": "owner",
+            "unload": "owner",
+            "reload": "owner",
             "shutdown": "owner",
             "say": "owner",
-            "invite": "owner",
-            "logs": "owner",
-            
-            # Utilities Commands
-            "translate": "utilities",
-            
-            # Miscellaneous Commands
-            "miscellaneous": "miscellaneous",
         }
         
         category_descriptions = {
@@ -166,7 +141,7 @@ class Help(commands.Cog, name="help"):
             commands_in_category.append((app_command.name, description))
             seen_names.add(app_command.name)
             
-            if hasattr(app_command, 'commands') and category in ["fun", "general", "idevice", "miscellaneous", "moderation", "owner", "sidestore", "utilities"]:
+            if hasattr(app_command, 'commands') and category not in ["owner"]:
                 for subcommand in app_command.commands:
                     if subcommand.name in seen_names:
                         continue
