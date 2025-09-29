@@ -1,8 +1,9 @@
 import discord
+from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 
-from .sidestore import sidestore_command
+from .sidestore import SidestoreView
 from .refresh import refresh_command
 from .code import code_command
 from .crash import crash_command
@@ -18,12 +19,86 @@ class Sidestore(commands.GroupCog, name="sidestore"):
         self.bot = bot
         super().__init__()
 
-    @commands.hybrid_command(
-        name="sidestore",
+    @commands.group(name="sidestore", invoke_without_command=True)
+    async def sidestore_group(self, context: Context):
+        embed = discord.Embed(
+            title="SideStore Commands",
+            description="Choose a command from the dropdown below to get help with specific issues:",
+            color=0x8e82f9
+        )
+        embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
+        view = SidestoreView(self.bot)
+        await context.send(embed=embed, view=view)
+
+    @sidestore_group.command(name="help")
+    async def sidestore_group_help(self, context: Context):
+        embed = discord.Embed(
+            title="SideStore Commands",
+            description="Choose a command from the dropdown below to get help with specific issues:",
+            color=0x8e82f9
+        )
+        embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
+        view = SidestoreView(self.bot)
+        await context.send(embed=embed, view=view)
+
+    async def _invoke_hybrid(self, context: Context, name: str):
+        command = self.bot.get_command(name)
+        if command is not None:
+            await context.invoke(command)
+        else:
+            await context.send(f"Unknown SideStore command: {name}")
+
+    @sidestore_group.command(name="refresh")
+    async def sidestore_group_refresh(self, context: Context):
+        await self._invoke_hybrid(context, "refresh")
+
+    @sidestore_group.command(name="code")
+    async def sidestore_group_code(self, context: Context):
+        await self._invoke_hybrid(context, "code")
+
+    @sidestore_group.command(name="crash")
+    async def sidestore_group_crash(self, context: Context):
+        await self._invoke_hybrid(context, "crash")
+
+    @sidestore_group.command(name="pairing")
+    async def sidestore_group_pairing(self, context: Context):
+        await self._invoke_hybrid(context, "pairing")
+
+    @sidestore_group.command(name="server")
+    async def sidestore_group_server(self, context: Context):
+        await self._invoke_hybrid(context, "server")
+
+    @sidestore_group.command(name="afc")
+    async def sidestore_group_afc(self, context: Context):
+        await self._invoke_hybrid(context, "afc")
+
+    @sidestore_group.command(name="udid")
+    async def sidestore_group_udid(self, context: Context):
+        await self._invoke_hybrid(context, "udid")
+
+    @sidestore_group.command(name="half")
+    async def sidestore_group_half(self, context: Context):
+        await self._invoke_hybrid(context, "half")
+
+    @sidestore_group.command(name="sparse")
+    async def sidestore_group_sparse(self, context: Context):
+        await self._invoke_hybrid(context, "sparse")
+
+    @app_commands.command(
+        name="help",
         description="SideStore troubleshooting help"
     )
-    async def sidestore(self, context):
-        return await sidestore_command()(self, context)
+    async def help(self, interaction: discord.Interaction):
+        embed = discord.Embed(
+            title="SideStore Commands",
+            description="Choose a command from the dropdown below to get help with specific issues:",
+            color=0x8e82f9
+        )
+        embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
+
+        view = SidestoreView(self.bot)
+
+        await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
 
     @commands.hybrid_command(
         name="refresh",
@@ -92,7 +167,7 @@ async def setup(bot) -> None:
     cog = Sidestore(bot)
     await bot.add_cog(cog)
     
-    bot.logger.info("Loaded extension 'sidestore.sidestore'")
+    bot.logger.info("Loaded extension 'sidestore.help'")
     bot.logger.info("Loaded extension 'sidestore.refresh'")
     bot.logger.info("Loaded extension 'sidestore.code'")
     bot.logger.info("Loaded extension 'sidestore.crash'")

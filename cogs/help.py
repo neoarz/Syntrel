@@ -37,7 +37,6 @@ class Help(commands.Cog, name="help"):
     async def help(self, context: Context, category: str = None) -> None:
         
         category_mapping = {
-            # Command Groups (using __init__.py structure)
             "general": "general",
             "fun": "fun",
             "idevice": "idevice",
@@ -46,7 +45,6 @@ class Help(commands.Cog, name="help"):
             "sidestore": "sidestore",
             "utilities": "utilities",
             
-            # Individual Owner Commands (exception)
             "sync": "owner",
             "logs": "owner",
             "invite": "owner",

@@ -109,7 +109,7 @@ class SidestoreView(discord.ui.View):
 
 def sidestore_command():
     @commands.hybrid_command(
-        name="sidestore", description="SideStore troubleshooting and help"
+        name="help", description="SideStore troubleshooting and help"
     )
     async def sidestore(self, context):
         embed = discord.Embed(
