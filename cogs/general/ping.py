@@ -1,22 +1,12 @@
 import discord
 from discord.ext import commands
-from discord.ext.commands import Context
 
-
-class Ping(commands.Cog, name="ping"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def ping_command():
     @commands.hybrid_command(
         name="ping",
         description="Check if the bot is alive.",
     )
-    async def ping(self, context: Context) -> None:
-        """
-        Check if the bot is alive.
-
-        :param context: The hybrid command context.
-        """
+    async def ping(self, context):
         embed = discord.Embed(
             title="🏓 Pong!",
             description=f"The bot latency is {round(self.bot.latency * 1000)}ms.",
@@ -31,7 +21,5 @@ class Ping(commands.Cog, name="ping"):
                 await inter.followup.send(embed=embed, ephemeral=True)
         else:
             await context.send(embed=embed)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Ping(bot))
+    
+    return ping
