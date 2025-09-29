@@ -13,6 +13,44 @@ class General(commands.GroupCog, name="general"):
         self.bot = bot
         super().__init__()
 
+    @commands.group(name="general", invoke_without_command=True)
+    async def general_group(self, context: Context):
+        embed = discord.Embed(
+            title="General Commands",
+            description="Use `.general <subcommand>` or `/general <subcommand>`.",
+            color=0x7289DA
+        )
+        embed.set_author(name="General", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+        embed.add_field(name="Available", value="ping, uptime, botinfo, serverinfo, feedback", inline=False)
+        await context.send(embed=embed)
+
+    async def _invoke_hybrid(self, context: Context, name: str):
+        command = self.bot.get_command(name)
+        if command is not None:
+            await context.invoke(command)
+        else:
+            await context.send(f"Unknown general command: {name}")
+
+    @general_group.command(name="ping")
+    async def general_group_ping(self, context: Context):
+        await self._invoke_hybrid(context, "ping")
+
+    @general_group.command(name="uptime")
+    async def general_group_uptime(self, context: Context):
+        await self._invoke_hybrid(context, "uptime")
+
+    @general_group.command(name="botinfo")
+    async def general_group_botinfo(self, context: Context):
+        await self._invoke_hybrid(context, "botinfo")
+
+    @general_group.command(name="serverinfo")
+    async def general_group_serverinfo(self, context: Context):
+        await self._invoke_hybrid(context, "serverinfo")
+
+    @general_group.command(name="feedback")
+    async def general_group_feedback(self, context: Context):
+        await self._invoke_hybrid(context, "feedback")
+
     @commands.hybrid_command(
         name="ping",
         description="Check if the bot is alive.",
