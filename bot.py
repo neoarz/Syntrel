@@ -60,14 +60,6 @@ class DiscordBot(commands.Bot):
             intents=intents,
             help_command=None,
         )
-        """
-        This creates custom bot variables so that we can access these variables in cogs more easily.
-
-        For example, The logger is available using the following code:
-        - self.logger # In this class
-        - bot.logger # In this file
-        - self.bot.logger # In cogs
-        """
         self.logger = logger
         self.database = None
         self.bot_prefix = os.getenv("PREFIX")
@@ -87,9 +79,6 @@ class DiscordBot(commands.Bot):
             await db.commit()
 
     async def load_cogs(self) -> None:
-        """
-        The code in this function is executed whenever the bot will start.
-        """
         cogs_path = f"{os.path.realpath(os.path.dirname(__file__))}/cogs"
         disabled_env = os.getenv("DISABLED_COGS", "")
         disabled_cogs = {entry.strip().lower() for entry in disabled_env.split(",") if entry.strip()}
@@ -130,23 +119,14 @@ class DiscordBot(commands.Bot):
 
     @tasks.loop(minutes=1.0)
     async def status_task(self) -> None:
-        """
-        Setup the game status task of the bot.
-        """
         statuses = ["SideStore", "MeloNX", "ARMSX2", "StikDebug", "Feather"]
         await self.change_presence(activity=discord.Game(random.choice(statuses)))
 
     @status_task.before_loop
     async def before_status_task(self) -> None:
-        """
-        Before starting the status changing task, we make sure the bot is ready
-        """
         await self.wait_until_ready()
 
     async def setup_hook(self) -> None:
-        """
-        This will just be executed when the bot starts the first time.
-        """
         self.logger.info(f"Logged in as {self.user.name}")
         self.logger.info(f"discord.py API version: {discord.__version__}")
         self.logger.info(f"Python version: {platform.python_version()}")
@@ -203,15 +183,9 @@ class DiscordBot(commands.Bot):
             self.logger.error(f"Error during bot shutdown: {e}")
 
     async def on_message(self, message: discord.Message) -> None:
-        """
-        The code in this event is executed every time someone sends a message, with or without the prefix
-
-        :param message: The message that was sent.
-        """
         if message.author == self.user or message.author.bot:
             return
         
-        # Reacts to messages which mention the bot
         if self.user in message.mentions:
             try:
                 emoji_string = "<a:PandaPing:1417550314260926575>"
@@ -229,16 +203,10 @@ class DiscordBot(commands.Bot):
         await self.process_commands(message)
 
     async def on_command_completion(self, context: Context) -> None:
-        """
-        The code in this event is executed every time a normal command has been *successfully* executed.
-
-        :param context: The context of the command that has been executed.
-        """
         full_command_name = context.command.qualified_name
         split = full_command_name.split(" ")
         executed_command = str(split[0])
         
-        # Skip logging for shutdown command as it logs manually before shutdown
         if executed_command.lower() == "shutdown":
             return
             
@@ -252,12 +220,6 @@ class DiscordBot(commands.Bot):
             )
 
     async def on_command_error(self, context: Context, error) -> None:
-        """
-        The code in this event is executed every time a normal valid command catches an error.
-
-        :param context: The context of the normal command that failed executing.
-        :param error: The error that has been faced.
-        """
         if isinstance(error, commands.CommandNotFound):
             if context.guild is not None:
                 self.logger.info(
@@ -305,7 +267,6 @@ class DiscordBot(commands.Bot):
         elif isinstance(error, commands.MissingRequiredArgument):
             embed = discord.Embed(
                 title="Error!",
-                # We need to capitalize because the command arguments have no capital letter in the code and they are the first word in the error message.
                 description=str(error).capitalize(),
                 color=0xE02B2B,
             )

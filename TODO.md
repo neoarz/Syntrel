@@ -28,7 +28,7 @@
 
 - [ ] Add random color command
 
-- [ ] Add translate command
+- [x] Add translate command
 
 - [ ] Clean tag system from [tags branch](https://github.com/neoarz/Syntrel/tree/tags) (make sure db is persistent)
 
