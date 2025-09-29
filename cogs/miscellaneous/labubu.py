@@ -3,15 +3,12 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 
-class Labubu(commands.Cog, name="labubu"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def labubu_command():
     @commands.hybrid_command(
         name="labubu",
         description="Labubu ASCII art",
     )
-    async def labubu(self, context: Context) -> None:
+    async def labubu(self, context):
         labubu_art = """⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠀⠙⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠗⠀⠀⣀⣄⠀⢿⣿⣿⣿⠟⠁⢠⡆⠉⠙⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀⣴⣿⡟⠀⠘⣿⣿⠋⠀⠀⠀⢠⣶⡀⠈⢻⣿⣿⣿⣿⣿⣿⣿⣿
@@ -63,7 +60,5 @@ class Labubu(commands.Cog, name="labubu"):
                 await inter.followup.send(embed=embed, ephemeral=True)
         else:
             await context.send(embed=embed)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Labubu(bot))
+    
+    return labubu

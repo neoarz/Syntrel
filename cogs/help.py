@@ -37,67 +37,22 @@ class Help(commands.Cog, name="help"):
     async def help(self, context: Context, category: str = None) -> None:
         
         category_mapping = {
-            # General Commands
-            "help": "general",
-            "botinfo": "general", 
-            "serverinfo": "general",
-            "ping": "general",
-            "feedback": "general",
-            "uptime": "general",
-        #   "context_menus": "general",
-        
-            # Fun Commands
-            "randomfact": "fun",
-            "coinflip": "fun", 
-            "rps": "fun",
-            "8ball": "fun",
-            "minesweeper": "fun",
-            
-            # Moderation Commands
-            "kick": "moderation",
-            "ban": "moderation",
-            "nick": "moderation",
-            "purge": "moderation",
-            "hackban": "moderation",
-            "warnings": "moderation",
-            "archive": "moderation",
-            
-            # SideStore Commands
-            "sidestore": "sidestore",
-            "refresh": "sidestore",
-            "code": "sidestore",
-            "crash": "sidestore",
-            "pairing": "sidestore",
-            "server": "sidestore",
-            "half": "sidestore",
-            "sparse": "sidestore",
-            "afc": "sidestore",
-            "udid": "sidestore",
-            
-            # idevice Commands
+            "general": "general",
+            "fun": "fun",
             "idevice": "idevice",
-            "noapps": "idevice",
-            "errorcodes": "idevice",
-            "developermode": "idevice",
-            "mountddi": "idevice",
+            "miscellaneous": "miscellaneous",
+            "moderation": "moderation",
+            "sidestore": "sidestore",
+            "utilities": "utilities",
             
-            # Owner Commands
             "sync": "owner",
-            "cog_management": "owner",
+            "logs": "owner",
+            "invite": "owner",
+            "load": "owner",
+            "unload": "owner",
+            "reload": "owner",
             "shutdown": "owner",
             "say": "owner",
-            "invite": "owner",
-            "logs": "owner",
-            
-            # Utilities Commands
-            "translate": "utilities",
-            
-            # Miscellaneous Commands
-            "keanu": "miscellaneous",
-            "labubu": "miscellaneous",
-            "piracy": "miscellaneous",
-            "tryitandsee": "miscellaneous",
-            "rr": "miscellaneous",
         }
         
         category_descriptions = {
@@ -183,6 +138,14 @@ class Help(commands.Cog, name="help"):
             description = app_command.description.partition("\n")[0] if getattr(app_command, "description", None) else "No description available"
             commands_in_category.append((app_command.name, description))
             seen_names.add(app_command.name)
+            
+            if hasattr(app_command, 'commands') and category not in ["owner"]:
+                for subcommand in app_command.commands:
+                    if subcommand.name in seen_names:
+                        continue
+                    sub_desc = subcommand.description.partition("\n")[0] if getattr(subcommand, "description", None) else "No description available"
+                    commands_in_category.append((f"{app_command.name} {subcommand.name}", sub_desc))
+                    seen_names.add(f"{app_command.name} {subcommand.name}")
         
         if not commands_in_category:
             embed = discord.Embed(

@@ -4,10 +4,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 
-class Nick(commands.Cog, name="nick"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def nick_command():
     @commands.hybrid_command(
         name="nick",
         description="Change the nickname of a user on a server.",
@@ -17,8 +14,8 @@ class Nick(commands.Cog, name="nick"):
         nickname="The new nickname that should be set.",
     )
     async def nick(
-        self, context: Context, user: discord.User, *, nickname: str = None
-    ) -> None:
+        self, context, user: discord.User, *, nickname: str = None
+    ):
         """
         Change the nickname of a user on a server.
 
@@ -60,7 +57,5 @@ class Nick(commands.Cog, name="nick"):
                 color=0xE02B2B,
             ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
             await context.send(embed=embed, ephemeral=True)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Nick(bot))
+    
+    return nick

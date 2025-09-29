@@ -5,14 +5,11 @@ from discord.ext.commands import Context
 import time
 
 
-class Afc(commands.Cog, name="afc"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def afc_command():
     @commands.hybrid_command(
         name="afc", description="Help with AFC Connection Failure issues"
     )
-    async def afc(self, context: Context) -> None:
+    async def afc(self, context):
         embed = discord.Embed(
             color=0x8e82f9,
             description=(
@@ -45,5 +42,4 @@ class Afc(commands.Cog, name="afc"):
             await context.send(embed=embed, view=view)
 
 
-async def setup(bot) -> None:
-    await bot.add_cog(Afc(bot))
+    return afc

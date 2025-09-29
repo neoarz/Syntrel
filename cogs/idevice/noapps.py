@@ -5,14 +5,11 @@ from discord.ext.commands import Context
 import time
 
 
-class Noapps(commands.Cog, name="noapps"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def noapps_command():
     @commands.hybrid_command(
         name="noapps", description="Help when apps aren't showing in installed apps view"
     )
-    async def noapps(self, context: Context) -> None:
+    async def noapps(self, context):
         embed = discord.Embed(
             color=0xfa8c4a,
             description=(
@@ -41,7 +38,5 @@ class Noapps(commands.Cog, name="noapps"):
             await context.interaction.response.send_message(embed=embed, view=view)
         else:
             await context.send(embed=embed, view=view)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Noapps(bot))
+    
+    return noapps

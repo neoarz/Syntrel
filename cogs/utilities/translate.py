@@ -9,10 +9,8 @@ import json
 import urllib.parse
 
 
-class Translate(commands.Cog, name="translate"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-        self.languages = {
+def translate_command():
+    languages = {
             "auto": "Auto-detect",
             "en": "English",
             "es": "Spanish", 
@@ -136,7 +134,7 @@ class Translate(commands.Cog, name="translate"):
             "lv": "Latvian",
         }
 
-    async def send_embed(self, context: Context, embed: discord.Embed, *, ephemeral: bool = False) -> None:
+    async def send_embed(context, embed: discord.Embed, *, ephemeral: bool = False) -> None:
         interaction = getattr(context, "interaction", None)
         if interaction is not None:
             if interaction.response.is_done():
@@ -146,7 +144,7 @@ class Translate(commands.Cog, name="translate"):
         else:
             await context.send(embed=embed)
 
-    async def _translate_with_google_web(self, text: str, from_lang: str = "auto", to_lang: str = "en") -> dict:
+    async def _translate_with_google_web(text: str, from_lang: str = "auto", to_lang: str = "en") -> dict:
         try:
             base_url = "https://translate.googleapis.com/translate_a/single"
             
@@ -196,11 +194,11 @@ class Translate(commands.Cog, name="translate"):
         except Exception:
             return None
 
-    async def language_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    async def language_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
         current = current.lower()
         choices = []
         
-        for code, name in self.languages.items():
+        for code, name in languages.items():
             if current in code.lower() or current in name.lower():
                 display_name = f"{code} - {name}"
                 if len(display_name) > 100:
@@ -213,7 +211,7 @@ class Translate(commands.Cog, name="translate"):
         if not choices:
             popular = ["en", "es", "fr", "de", "it", "pt", "ru", "ja", "ko", "zh-CN"]
             for code in popular:
-                name = self.languages.get(code, code)
+                name = languages.get(code, code)
                 choices.append(app_commands.Choice(name=f"{code} - {name}", value=code))
         
         return choices
@@ -229,7 +227,7 @@ class Translate(commands.Cog, name="translate"):
     )
     @app_commands.autocomplete(to_lang=language_autocomplete)
     @app_commands.autocomplete(from_lang=language_autocomplete)
-    async def translate(self, context: Context, text: str = None, to_lang: str = "en", from_lang: str = None):
+    async def translate(self, context, text: str = None, to_lang: str = "en", from_lang: str = None):
         if not text or not text.strip():
             if context.message and context.message.reference and context.message.reference.resolved:
                 replied_message = context.message.reference.resolved
@@ -241,7 +239,7 @@ class Translate(commands.Cog, name="translate"):
                         description="The replied message has no text content to translate.",
                         color=0xE02B2B,
                     ).set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
-                    await self.send_embed(context, embed, ephemeral=True)
+                    await send_embed(context, embed, ephemeral=True)
                     return
             else:
                 embed = discord.Embed(
@@ -249,34 +247,34 @@ class Translate(commands.Cog, name="translate"):
                     description="Please provide text to translate or reply to a message with text.",
                     color=0xE02B2B,
                 ).set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
-                await self.send_embed(context, embed, ephemeral=True)
+                await send_embed(context, embed, ephemeral=True)
                 return
         
-        if to_lang not in self.languages:
+        if to_lang not in languages:
             embed = discord.Embed(
                 title="Error",
                 description=f"Invalid target language code: `{to_lang}`. Use the autocomplete feature to see available languages.",
                 color=0xE02B2B,
             ).set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
-            await self.send_embed(context, embed, ephemeral=True)
+            await send_embed(context, embed, ephemeral=True)
             return
         
-        if from_lang and from_lang not in self.languages:
+        if from_lang and from_lang not in languages:
             embed = discord.Embed(
                 title="Error",
                 description=f"Invalid source language code: `{from_lang}`. Use the autocomplete feature to see available languages.",
                 color=0xE02B2B,
             ).set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
-            await self.send_embed(context, embed, ephemeral=True)
+            await send_embed(context, embed, ephemeral=True)
             return
         
-        result = await self._translate_with_google_web(text, from_lang or "auto", to_lang)
+        result = await _translate_with_google_web(text, from_lang or "auto", to_lang)
         
         if result and result.get("translatedText"):
             detected_lang = result.get("detectedSourceLanguage", from_lang or "auto")
             
-            from_lang_name = self.languages.get(detected_lang, detected_lang)
-            to_lang_name = self.languages.get(to_lang, to_lang)
+            from_lang_name = languages.get(detected_lang, detected_lang)
+            to_lang_name = languages.get(to_lang, to_lang)
             
             embed = discord.Embed(
                 title="Translation",
@@ -286,18 +284,17 @@ class Translate(commands.Cog, name="translate"):
             embed.set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
             embed.set_footer(text=f"{from_lang_name} » {to_lang_name}")
             
-            await self.send_embed(context, embed)
+            await send_embed(context, embed)
         else:
             embed = discord.Embed(
                 title="Error",
                 description="Translation failed. Please try again later.",
                 color=0xE02B2B,
             ).set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
-            await self.send_embed(context, embed, ephemeral=True)
+            await send_embed(context, embed, ephemeral=True)
 
 
 
 
 
-async def setup(bot):
-    await bot.add_cog(Translate(bot))
+    return translate

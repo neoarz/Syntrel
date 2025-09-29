@@ -1,15 +1,10 @@
 import aiohttp
 import discord
 from discord.ext import commands
-from discord.ext.commands import Context
 
-
-class RandomFact(commands.Cog, name="randomfact"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def randomfact_command():
     @commands.hybrid_command(name="randomfact", description="Get a random fact.")
-    async def randomfact(self, context: Context) -> None:
+    async def randomfact(self, context):
         async with aiohttp.ClientSession() as session:
             async with session.get(
                 "https://uselessfacts.jsph.pl/random.json?language=en"
@@ -30,7 +25,5 @@ class RandomFact(commands.Cog, name="randomfact"):
                     )
                     embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
                 await context.send(embed=embed)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(RandomFact(bot))
+    
+    return randomfact

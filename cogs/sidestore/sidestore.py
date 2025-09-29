@@ -107,14 +107,11 @@ class SidestoreView(discord.ui.View):
         self.add_item(SidestoreSelect(bot))
 
 
-class Sidestore(commands.Cog, name="sidestore"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def sidestore_command():
     @commands.hybrid_command(
-        name="sidestore", description="SideStore troubleshooting and help"
+        name="help", description="SideStore troubleshooting and help"
     )
-    async def sidestore(self, context: Context) -> None:
+    async def sidestore(self, context):
         embed = discord.Embed(
             title="SideStore Commands",
             description="Choose a command from the dropdown below to get help with specific issues:",
@@ -128,7 +125,5 @@ class Sidestore(commands.Cog, name="sidestore"):
             await context.interaction.response.send_message(embed=embed, view=view, ephemeral=True)
         else:
             await context.send(embed=embed, view=view)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Sidestore(bot))
+    
+    return sidestore

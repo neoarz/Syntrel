@@ -5,14 +5,11 @@ from discord.ext.commands import Context
 import time
 
 
-class Code(commands.Cog, name="code"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def code_command():
     @commands.hybrid_command(
         name="code", description="No code received when signing in with Apple ID"
     )
-    async def code(self, context: Context) -> None:
+    async def code(self, context):
         embed = discord.Embed(
             color=0x8e82f9,
             description=(
@@ -59,5 +56,4 @@ class Code(commands.Cog, name="code"):
             await context.send(embed=embed, view=view)
 
 
-async def setup(bot) -> None:
-    await bot.add_cog(Code(bot))
+    return code

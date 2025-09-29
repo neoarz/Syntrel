@@ -1,7 +1,6 @@
 import random
 import discord
 from discord.ext import commands
-from discord.ext.commands import Context
 
 class RockPaperScissors(discord.ui.Select):
     def __init__(self) -> None:
@@ -39,7 +38,6 @@ class RockPaperScissors(discord.ui.Select):
 
         winner = (3 + user_choice_index - bot_choice_index) % 3
         
-        # Get the user mention
         user_mention = interaction.user.mention
         
         if winner == 0:
@@ -61,14 +59,11 @@ class RockPaperScissorsView(discord.ui.View):
         super().__init__()
         self.add_item(RockPaperScissors())
 
-class RPS(commands.Cog, name="rps"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def rps_command():
     @commands.hybrid_command(
         name="rps", description="Play the rock paper scissors game against the bot."
     )
-    async def rock_paper_scissors(self, context: Context) -> None:
+    async def rock_paper_scissors(self, context):
         view = RockPaperScissorsView()
         embed = discord.Embed(
             title="Rock Paper Scissors",
@@ -77,6 +72,5 @@ class RPS(commands.Cog, name="rps"):
         )
         embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
         await context.send(embed=embed, view=view)
-
-async def setup(bot) -> None:
-    await bot.add_cog(RPS(bot))
+    
+    return rock_paper_scissors

@@ -4,10 +4,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 
-class HackBan(commands.Cog, name="hackban"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def hackban_command():
     @commands.hybrid_command(
         name="hackban",
         description="Bans a user without the user having to be in the server.",
@@ -19,8 +16,8 @@ class HackBan(commands.Cog, name="hackban"):
         reason="The reason why the user should be banned.",
     )
     async def hackban(
-        self, context: Context, user_id: str, *, reason: str = "Not specified"
-    ) -> None:
+        self, context, user_id: str, *, reason: str = "Not specified"
+    ):
         """
         Bans a user without the user having to be in the server.
 
@@ -47,7 +44,5 @@ class HackBan(commands.Cog, name="hackban"):
                 color=0xE02B2B,
             ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
             await context.send(embed=embed)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(HackBan(bot))
+    
+    return hackban

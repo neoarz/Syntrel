@@ -5,14 +5,11 @@ from discord.ext.commands import Context
 import time
 
 
-class Half(commands.Cog, name="half"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def half_command():
     @commands.hybrid_command(
         name="half", description="Help when apps get stuck installing"
     )
-    async def half(self, context: Context) -> None:
+    async def half(self, context):
         embed = discord.Embed(
             color=0x8e82f9,
             description=(
@@ -52,5 +49,4 @@ class Half(commands.Cog, name="half"):
             await context.send(embed=embed, view=view)
 
 
-async def setup(bot) -> None:
-    await bot.add_cog(Half(bot))
+    return half

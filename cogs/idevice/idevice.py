@@ -253,14 +253,11 @@ class ideviceView(discord.ui.View):
         self.add_item(ideviceSelect(bot))
 
 
-class idevice(commands.Cog, name="idevice"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def idevice_command():
     @commands.hybrid_command(
         name="idevice", description="idevice troubleshooting and help"
     )
-    async def idevice(self, context: Context) -> None:
+    async def idevice(self, context):
         embed = discord.Embed(
             title="idevice Commands",
             description="Choose a command from the dropdown below to get help with specific issues:",
@@ -274,8 +271,5 @@ class idevice(commands.Cog, name="idevice"):
             await context.interaction.response.send_message(embed=embed, view=view, ephemeral=True)
         else:
             await context.send(embed=embed, view=view)
-
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(idevice(bot))
+    
+    return idevice

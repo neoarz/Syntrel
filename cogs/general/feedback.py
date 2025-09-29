@@ -2,7 +2,6 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-
 class FeedbackForm(discord.ui.Modal, title="Feeedback"):
     feedback = discord.ui.TextInput(
         label="What do you think about this bot?",
@@ -17,20 +16,11 @@ class FeedbackForm(discord.ui.Modal, title="Feeedback"):
         self.answer = str(self.feedback)
         self.stop()
 
-
-class Feedback(commands.Cog, name="feedback"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def feedback_command():
     @app_commands.command(
         name="feedback", description="Submit a feedback for the owners of the bot"
     )
-    async def feedback(self, interaction: discord.Interaction) -> None:
-        """
-        Submit a feedback for the owners of the bot.
-
-        :param interaction: The application command interaction.
-        """
+    async def feedback(self, interaction: discord.Interaction):
         feedback_form = FeedbackForm()
         await interaction.response.send_modal(feedback_form)
 
@@ -53,7 +43,5 @@ class Feedback(commands.Cog, name="feedback"):
                 color=0x7289DA,
             ).set_author(name="Feedback System", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
         )
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Feedback(bot))
+    
+    return feedback

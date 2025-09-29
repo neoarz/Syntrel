@@ -5,14 +5,11 @@ from discord.ext.commands import Context
 import time
 
 
-class Refresh(commands.Cog, name="refresh"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def refresh_command():
     @commands.hybrid_command(
         name="refresh", description="Help with refreshing or installing apps"
     )
-    async def refresh(self, context: Context) -> None:
+    async def refresh(self, context):
         embed = discord.Embed(
             color=0x8e82f9,
             description=(
@@ -47,5 +44,4 @@ class Refresh(commands.Cog, name="refresh"):
             await context.send(embed=embed, view=view)
 
 
-async def setup(bot) -> None:
-    await bot.add_cog(Refresh(bot))
+    return refresh

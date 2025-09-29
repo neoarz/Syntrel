@@ -1,22 +1,13 @@
 import discord
 from discord.ext import commands
-from discord.ext.commands import Context
 
-class ServerInfo(commands.Cog, name="serverinfo"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def serverinfo_command():
     @commands.hybrid_command(
         name="serverinfo",
         description="Get some useful (or not) information about the server.",
     )
-    @commands.guild_only()  # This decorator ensures the command only works in servers
-    async def serverinfo(self, context: Context) -> None:
-        """
-        Get some useful (or not) information about the server.
-        :param context: The hybrid command context.
-        """
-        # Additional check (though @commands.guild_only() should handle this)
+    @commands.guild_only()
+    async def serverinfo(self, context):
         if context.guild is None:
             await context.send("This command can only be used in a server, not in DMs!")
             return
@@ -53,6 +44,5 @@ class ServerInfo(commands.Cog, name="serverinfo"):
             await context.interaction.response.send_message(embed=embed, ephemeral=True)
         else:
             await context.send(embed=embed)
-
-async def setup(bot) -> None:
-    await bot.add_cog(ServerInfo(bot))
+    
+    return serverinfo

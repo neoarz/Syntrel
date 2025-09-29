@@ -4,11 +4,8 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 
-class Warnings(commands.Cog, name="warnings"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
-    async def send_embed(self, context: Context, embed: discord.Embed, *, ephemeral: bool = False) -> None:
+def warnings_command():
+    async def send_embed(context, embed: discord.Embed, *, ephemeral: bool = False) -> None:
         interaction = getattr(context, "interaction", None)
         if interaction is not None:
             if interaction.response.is_done():
@@ -22,7 +19,7 @@ class Warnings(commands.Cog, name="warnings"):
         name="warning",
         description="Manage warnings of a user on a server.",
     )
-    async def warning(self, context: Context) -> None:
+    async def warning(self, context) -> None:
         """
         Manage warnings of a user on a server.
 
@@ -170,5 +167,4 @@ class Warnings(commands.Cog, name="warnings"):
 
 
 
-async def setup(bot) -> None:
-    await bot.add_cog(Warnings(bot))
+    return warning

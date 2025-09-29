@@ -1,7 +1,6 @@
 import random
 import discord
 from discord.ext import commands
-from discord.ext.commands import Context
 
 class Choice(discord.ui.View):
     def __init__(self) -> None:
@@ -22,18 +21,12 @@ class Choice(discord.ui.View):
         self.value = "tails"
         self.stop()
 
-class CoinFlip(commands.Cog, name="coinflip"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def coinflip_command():
     @commands.hybrid_command(
-        name="coinflip", description="Make a coin flip, but give your bet before."
+        name="coinflip",
+        description="Make a coin flip, but give your bet before."
     )
-    async def coinflip(self, context: Context) -> None:
-        """
-        Make a coin flip, but give your bet before.
-        :param context: The hybrid command context.
-        """
+    async def coinflip(self, context):
         buttons = Choice()
         embed = discord.Embed(
             title="Coinflip",
@@ -59,6 +52,5 @@ class CoinFlip(commands.Cog, name="coinflip"):
             )
             embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
         await message.edit(embed=embed, view=None, content=None)
-
-async def setup(bot) -> None:
-    await bot.add_cog(CoinFlip(bot))
+    
+    return coinflip

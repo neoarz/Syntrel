@@ -3,15 +3,12 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 
-class Rr(commands.Cog, name="rr"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def rr_command():
     @commands.hybrid_command(
         name="rr",
         description="Rickroll",
     )
-    async def rr(self, context: Context) -> None:
+    async def rr(self, context):
         gif_url = "https://yes.nighty.works/raw/JzjMcs.gif"
         
         embed = discord.Embed(
@@ -28,7 +25,5 @@ class Rr(commands.Cog, name="rr"):
                 await inter.followup.send(embed=embed, ephemeral=True)
         else:
             await context.send(embed=embed)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Rr(bot))
+    
+    return rr

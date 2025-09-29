@@ -4,16 +4,13 @@ from discord.ext.commands import Context
 import os
 
 
-class Mountddi(commands.Cog, name="mountddi"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def mountddi_command():
     @commands.hybrid_command(
         name="mountddi",
         description="How to manually mount DDI"
     )
-    async def mountddi(self, ctx: Context) -> None:
-        await ctx.defer()
+    async def mountddi(self, context):
+        await context.defer()
 
         embed = discord.Embed(
             color=0xfa8c4a,
@@ -46,15 +43,12 @@ class Mountddi(commands.Cog, name="mountddi"):
             emoji="<:githubicon:1417717356846776340>"
         ))
 
-
         ddi_file_path = os.path.join(os.path.dirname(__file__), 'files/DDI.zip')
         file = discord.File(ddi_file_path, filename='DDI.zip') if os.path.exists(ddi_file_path) else None
 
         if file:
-            await ctx.send(embed=embed, view=view, file=file)
+            await context.send(embed=embed, view=view, file=file)
         else:
-            await ctx.send(embed=embed, view=view)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Mountddi(bot))
+            await context.send(embed=embed, view=view)
+    
+    return mountddi
