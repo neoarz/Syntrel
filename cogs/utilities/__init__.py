@@ -4,18 +4,19 @@ from discord.ext.commands import Context
 
 from .translate import translate_command
 
-class Utilities(commands.GroupCog, name="utilities"):
+class Utilities(commands.GroupCog, name="utils"):
     def __init__(self, bot) -> None:
         self.bot = bot
         super().__init__()
 
-    @commands.group(name="utilities", invoke_without_command=True)
+    @commands.group(name="utilities", aliases=["utils"], invoke_without_command=True)
     async def utilities_group(self, context: Context):
         embed = discord.Embed(
             title="Utilities Commands",
-            description="Use `.utilities <subcommand>` or `/utilities <subcommand>`.",
+            description="Use `.utils <subcommand>` or `/utils <subcommand>`.",
             color=0x7289DA
         )
+        embed.set_author(name="Utilities", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
         embed.add_field(name="Available", value="translate", inline=False)
         await context.send(embed=embed)
 

@@ -8,16 +8,16 @@ from .tryitandsee import tryitandsee_command
 from .piracy import piracy_command
 from .keanu import keanu_command
 
-class Miscellaneous(commands.GroupCog, name="miscellaneous"):
+class Miscellaneous(commands.GroupCog, name="misc"):
     def __init__(self, bot) -> None:
         self.bot = bot
         super().__init__()
 
-    @commands.group(name="miscellaneous", invoke_without_command=True)
+    @commands.group(name="miscellaneous", aliases=["misc"], invoke_without_command=True)
     async def miscellaneous_group(self, context: Context):
         embed = discord.Embed(
             title="Miscellaneous Commands",
-            description="Use `.miscellaneous <subcommand>` or `/miscellaneous <subcommand>`.",
+            description="Use `.misc <subcommand>` or `/misc <subcommand>`.",
             color=0x7289DA
         )
         embed.set_author(name="Miscellaneous", icon_url="https://yes.nighty.works/raw/YxMC0r.png")
