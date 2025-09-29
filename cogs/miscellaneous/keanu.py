@@ -4,15 +4,12 @@ from discord.ext.commands import Context
 import random
 
 
-class Keanu(commands.Cog, name="keanu"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def keanu_command():
     @commands.hybrid_command(
         name="keanu",
         description="Reeves",
     )
-    async def keanu(self, context: Context) -> None:
+    async def keanu(self, context):
         images = [
             "https://yes.nighty.works/raw/z0HqUM.png",
             "https://yes.nighty.works/raw/1Jc0j6.avif",
@@ -48,7 +45,5 @@ class Keanu(commands.Cog, name="keanu"):
                 await inter.followup.send(embed=embed, ephemeral=True)
         else:
             await context.send(embed=embed)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Keanu(bot))
+    
+    return keanu

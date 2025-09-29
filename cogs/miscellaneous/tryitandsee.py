@@ -3,15 +3,12 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 
-class TryItAndSee(commands.Cog, name="tryitandsee"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def tryitandsee_command():
     @commands.hybrid_command(
         name="tryitandsee",
         description="Try it and see",
     )
-    async def tryitandsee(self, context: Context) -> None:
+    async def tryitandsee(self, context):
         gif_url = "https://yes.nighty.works/raw/1BQP8c.gif"
         
         embed = discord.Embed(
@@ -28,7 +25,5 @@ class TryItAndSee(commands.Cog, name="tryitandsee"):
                 await inter.followup.send(embed=embed, ephemeral=True)
         else:
             await context.send(embed=embed)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(TryItAndSee(bot))
+    
+    return tryitandsee

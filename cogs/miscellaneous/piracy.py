@@ -3,15 +3,12 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 
-class Piracy(commands.Cog, name="piracy"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def piracy_command():
     @commands.hybrid_command(
         name="piracy",
         description="FBI Anti Piracy Warning",
     )
-    async def piracy(self, context: Context) -> None:
+    async def piracy(self, context):
         embed = discord.Embed(
             color=0xE02B2B,
         )
@@ -27,7 +24,5 @@ class Piracy(commands.Cog, name="piracy"):
                 await inter.followup.send(embed=embed, ephemeral=True)
         else:
             await context.send(embed=embed)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Piracy(bot))
+    
+    return piracy
