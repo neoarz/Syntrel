@@ -48,6 +48,16 @@ class Sidestore(commands.GroupCog, name="sidestore"):
         else:
             await context.send(f"Unknown SideStore command: {name}")
 
+    def _require_group_prefix(context: Context) -> bool:
+        if getattr(context, "interaction", None):
+            return True
+        group = getattr(getattr(context, "cog", None), "qualified_name", "").lower()
+        if not group:
+            return True
+        prefix = context.prefix or ""
+        content = context.message.content.strip().lower()
+        return content.startswith(f"{prefix}{group} ")
+
     @sidestore_group.command(name="refresh")
     async def sidestore_group_refresh(self, context: Context):
         await self._invoke_hybrid(context, "refresh")
@@ -100,6 +110,7 @@ class Sidestore(commands.GroupCog, name="sidestore"):
 
         await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="refresh",
         description="Help with refreshing or installing apps"
@@ -107,6 +118,7 @@ class Sidestore(commands.GroupCog, name="sidestore"):
     async def refresh(self, context):
         return await refresh_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="code",
         description="No code received when signing in with Apple ID"
@@ -114,6 +126,7 @@ class Sidestore(commands.GroupCog, name="sidestore"):
     async def code(self, context):
         return await code_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="crash",
         description="Help with SideStore crashing issues"
@@ -121,6 +134,7 @@ class Sidestore(commands.GroupCog, name="sidestore"):
     async def crash(self, context):
         return await crash_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="pairing",
         description="Help with pairing file issues"
@@ -128,6 +142,7 @@ class Sidestore(commands.GroupCog, name="sidestore"):
     async def pairing(self, context):
         return await pairing_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="server",
         description="Help with anisette server issues"
@@ -135,6 +150,7 @@ class Sidestore(commands.GroupCog, name="sidestore"):
     async def server(self, context):
         return await server_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="afc",
         description="Help with AFC Connection Failure issues"
@@ -142,6 +158,7 @@ class Sidestore(commands.GroupCog, name="sidestore"):
     async def afc(self, context):
         return await afc_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="udid",
         description="SideStore could not determine device UDID"
@@ -149,6 +166,7 @@ class Sidestore(commands.GroupCog, name="sidestore"):
     async def udid(self, context):
         return await udid_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="half",
         description="Help with half-installed apps"
@@ -156,6 +174,7 @@ class Sidestore(commands.GroupCog, name="sidestore"):
     async def half(self, context):
         return await half_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="sparse",
         description="Help with sparse bundle issues"

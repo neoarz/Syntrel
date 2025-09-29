@@ -43,6 +43,16 @@ class Idevice(commands.GroupCog, name="idevice"):
         else:
             await context.send(f"Unknown idevice command: {name}")
 
+    def _require_group_prefix(context: Context) -> bool:
+        if getattr(context, "interaction", None):
+            return True
+        group = getattr(getattr(context, "cog", None), "qualified_name", "").lower()
+        if not group:
+            return True
+        prefix = context.prefix or ""
+        content = context.message.content.strip().lower()
+        return content.startswith(f"{prefix}{group} ")
+
     @idevice_group.command(name="errorcodes")
     async def idevice_group_errorcodes(self, context: Context):
         await self._invoke_hybrid(context, "errorcodes")
@@ -73,6 +83,7 @@ class Idevice(commands.GroupCog, name="idevice"):
         view = ideviceView(self.bot)
         await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="errorcodes",
         description="Look up error codes and their meanings."
@@ -80,6 +91,7 @@ class Idevice(commands.GroupCog, name="idevice"):
     async def errorcodes(self, context, *, error_code: str = None):
         return await errorcodes_command()(self, context, error_code=error_code)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="developermode",
         description="How to turn on developer mode"
@@ -87,6 +99,7 @@ class Idevice(commands.GroupCog, name="idevice"):
     async def developermode(self, context):
         return await developermode_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="noapps",
         description="Help when apps aren't showing in installed apps view"
@@ -94,6 +107,7 @@ class Idevice(commands.GroupCog, name="idevice"):
     async def noapps(self, context):
         return await noapps_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="mountddi",
         description="How to manually mount DDI"

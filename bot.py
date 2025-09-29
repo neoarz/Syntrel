@@ -283,6 +283,8 @@ class DiscordBot(commands.Bot):
                 color=0xE02B2B,
             )
             await context.send(embed=embed)
+        elif isinstance(error, commands.CheckFailure):
+            return
         else:
             raise error
 

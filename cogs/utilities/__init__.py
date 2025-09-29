@@ -27,10 +27,21 @@ class Utilities(commands.GroupCog, name="utils"):
         else:
             await context.send(f"Unknown utilities command: {name}")
 
+    def _require_group_prefix(context: Context) -> bool:
+        if getattr(context, "interaction", None):
+            return True
+        group = getattr(getattr(context, "cog", None), "qualified_name", "").lower()
+        if not group:
+            return True
+        prefix = context.prefix or ""
+        content = context.message.content.strip().lower()
+        return content.startswith(f"{prefix}{group} ")
+
     @utilities_group.command(name="translate")
     async def utilities_group_translate(self, context: Context, text: str = None, to_lang: str = "en", from_lang: str = None):
         await self._invoke_hybrid(context, "translate", text=text, to_lang=to_lang, from_lang=from_lang)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="translate",
         description="Translate text to another language"

@@ -31,6 +31,16 @@ class Miscellaneous(commands.GroupCog, name="misc"):
         else:
             await context.send(f"Unknown miscellaneous command: {name}")
 
+    def _require_group_prefix(context: Context) -> bool:
+        if getattr(context, "interaction", None):
+            return True
+        group = getattr(getattr(context, "cog", None), "qualified_name", "").lower()
+        if not group:
+            return True
+        prefix = context.prefix or ""
+        content = context.message.content.strip().lower()
+        return content.startswith(f"{prefix}{group} ")
+
     @miscellaneous_group.command(name="rr")
     async def miscellaneous_group_rr(self, context: Context):
         await self._invoke_hybrid(context, "rr")
@@ -51,6 +61,7 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     async def miscellaneous_group_keanu(self, context: Context):
         await self._invoke_hybrid(context, "keanu")
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="rr",
         description="Rickroll"
@@ -58,6 +69,7 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     async def rr(self, context):
         return await rr_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="labubu",
         description="Labubu ASCII art"
@@ -65,6 +77,7 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     async def labubu(self, context):
         return await labubu_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="tryitandsee",
         description="Try it and see"
@@ -72,6 +85,7 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     async def tryitandsee(self, context):
         return await tryitandsee_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="piracy",
         description="FBI Anti Piracy Warning"
@@ -79,6 +93,7 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     async def piracy(self, context):
         return await piracy_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="keanu",
         description="Reeves"

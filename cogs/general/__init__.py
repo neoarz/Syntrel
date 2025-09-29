@@ -8,6 +8,17 @@ from .botinfo import botinfo_command
 from .serverinfo import serverinfo_command
 from .feedback import feedback_command
 
+
+def _require_group_prefix(context: Context) -> bool:
+    if getattr(context, "interaction", None):
+        return True
+    group = getattr(getattr(context, "cog", None), "qualified_name", "").lower()
+    if not group:
+        return True
+    prefix = context.prefix or ""
+    content = context.message.content.strip().lower()
+    return content.startswith(f"{prefix}{group} ")
+
 class General(commands.GroupCog, name="general"):
     def __init__(self, bot) -> None:
         self.bot = bot
@@ -51,6 +62,7 @@ class General(commands.GroupCog, name="general"):
     async def general_group_feedback(self, context: Context):
         await self._invoke_hybrid(context, "feedback")
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="ping",
         description="Check if the bot is alive.",
@@ -58,6 +70,7 @@ class General(commands.GroupCog, name="general"):
     async def ping(self, context):
         return await ping_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="uptime",
         description="Check how long the bot has been running.",
@@ -65,6 +78,7 @@ class General(commands.GroupCog, name="general"):
     async def uptime(self, context):
         return await uptime_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="botinfo",
         description="Get some useful (or not) information about the bot.",
@@ -72,6 +86,7 @@ class General(commands.GroupCog, name="general"):
     async def botinfo(self, context):
         return await botinfo_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="serverinfo",
         description="Get some useful (or not) information about the server.",
@@ -79,6 +94,7 @@ class General(commands.GroupCog, name="general"):
     async def serverinfo(self, context):
         return await serverinfo_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="feedback",
         description="Submit a feedback for the owners of the bot"

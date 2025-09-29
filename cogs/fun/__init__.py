@@ -31,6 +31,16 @@ class Fun(commands.GroupCog, name="fun"):
         else:
             await context.send(f"Unknown fun command: {name}")
 
+    def _require_group_prefix(context: Context) -> bool:
+        if getattr(context, "interaction", None):
+            return True
+        group = getattr(getattr(context, "cog", None), "qualified_name", "").lower()
+        if not group:
+            return True
+        prefix = context.prefix or ""
+        content = context.message.content.strip().lower()
+        return content.startswith(f"{prefix}{group} ")
+
     @fun_group.command(name="coinflip")
     async def fun_group_coinflip(self, context: Context):
         await self._invoke_hybrid(context, "coinflip")
@@ -51,6 +61,7 @@ class Fun(commands.GroupCog, name="fun"):
     async def fun_group_rps(self, context: Context):
         await self._invoke_hybrid(context, "rps")
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="coinflip",
         description="Make a coin flip, but give your bet before."
@@ -58,6 +69,7 @@ class Fun(commands.GroupCog, name="fun"):
     async def coinflip(self, context):
         return await coinflip_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="8ball",
         description="Ask any question to the bot.",
@@ -65,6 +77,7 @@ class Fun(commands.GroupCog, name="fun"):
     async def eight_ball(self, context, *, question: str):
         return await eightball_command()(self, context, question=question)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="minesweeper", 
         description="Play a buttoned minesweeper mini-game."
@@ -72,10 +85,12 @@ class Fun(commands.GroupCog, name="fun"):
     async def minesweeper(self, context):
         return await minesweeper_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(name="randomfact", description="Get a random fact.")
     async def randomfact(self, context):
         return await randomfact_command()(self, context)
 
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="rps", description="Play the rock paper scissors game against the bot."
     )
