@@ -86,21 +86,33 @@ class DiscordBot(commands.Bot):
         for folder in os.listdir(cogs_path):
             folder_path = os.path.join(cogs_path, folder)
             if os.path.isdir(folder_path) and not folder.startswith('__'):
-                for file in os.listdir(folder_path):
-                    if file.endswith(".py") and not file.startswith('__'):
-                        extension = file[:-3]
-                        full_name = f"{folder}.{extension}".lower()
-                        if extension.lower() in disabled_cogs or full_name in disabled_cogs:
-                            self.logger.info(f"Skipped disabled extension '{full_name}'")
-                            continue
-                        try:
-                            await self.load_extension(f"cogs.{folder}.{extension}")
-                            self.logger.info(f"Loaded extension '{folder}.{extension}'")
-                        except Exception as e:
-                            exception = f"{type(e).__name__}: {e}"
-                            self.logger.error(
-                                f"Failed to load extension {folder}.{extension}\n{exception}"
-                            )
+                init_file = os.path.join(folder_path, "__init__.py")
+                if os.path.exists(init_file):
+                    try:
+                        await self.load_extension(f"cogs.{folder}")
+                        if folder != "fun":
+                            self.logger.info(f"Loaded extension '{folder}'")
+                    except Exception as e:
+                        exception = f"{type(e).__name__}: {e}"
+                        self.logger.error(
+                            f"Failed to load extension {folder}\n{exception}"
+                        )
+                else:
+                    for file in os.listdir(folder_path):
+                        if file.endswith(".py") and not file.startswith('__'):
+                            extension = file[:-3]
+                            full_name = f"{folder}.{extension}".lower()
+                            if extension.lower() in disabled_cogs or full_name in disabled_cogs:
+                                self.logger.info(f"Skipped disabled extension '{full_name}'")
+                                continue
+                            try:
+                                await self.load_extension(f"cogs.{folder}.{extension}")
+                                self.logger.info(f"Loaded extension '{folder}.{extension}'")
+                            except Exception as e:
+                                exception = f"{type(e).__name__}: {e}"
+                                self.logger.error(
+                                    f"Failed to load extension {folder}.{extension}\n{exception}"
+                                )
         
         for file in os.listdir(cogs_path):
             if file.endswith(".py") and not file.startswith('__'):

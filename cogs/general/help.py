@@ -47,11 +47,7 @@ class Help(commands.Cog, name="help"):
         #   "context_menus": "general",
         
             # Fun Commands
-            "randomfact": "fun",
-            "coinflip": "fun", 
-            "rps": "fun",
-            "8ball": "fun",
-            "minesweeper": "fun",
+            "fun": "fun",
             
             # Moderation Commands
             "kick": "moderation",
@@ -183,6 +179,14 @@ class Help(commands.Cog, name="help"):
             description = app_command.description.partition("\n")[0] if getattr(app_command, "description", None) else "No description available"
             commands_in_category.append((app_command.name, description))
             seen_names.add(app_command.name)
+            
+            if hasattr(app_command, 'commands') and category == "fun":
+                for subcommand in app_command.commands:
+                    if subcommand.name in seen_names:
+                        continue
+                    sub_desc = subcommand.description.partition("\n")[0] if getattr(subcommand, "description", None) else "No description available"
+                    commands_in_category.append((f"{app_command.name} {subcommand.name}", sub_desc))
+                    seen_names.add(f"{app_command.name} {subcommand.name}")
         
         if not commands_in_category:
             embed = discord.Embed(

@@ -2,8 +2,6 @@ import random
 from itertools import repeat
 import discord
 from discord.ext import commands
-from discord.ext.commands import Context
-
 
 class RowButton(discord.ui.Button):
     def __init__(self, ctx, label, custom_id, bombs, board):
@@ -65,7 +63,6 @@ class RowButton(discord.ui.Button):
                 await view.EndGame()
 
         await interaction.edit_original_response(view=view)
-
 
 class MsView(discord.ui.View):
     def __init__(self, ctx, options, bombs, board):
@@ -155,21 +152,13 @@ class MsView(discord.ui.View):
                     self.GetBoardPos(pos)
                 ] = bombemo
 
-
-class Minesweeper(commands.Cog, name="minesweeper"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def minesweeper_command():
     @commands.hybrid_command(
         name="minesweeper", 
         description="Play a buttoned minesweeper mini-game."
     )
-    async def minesweeper(self, context: Context) -> None:
-        """
-        Play a buttoned minesweeper mini-game.
-        :param context: The hybrid command context.
-        """
-        board = [["឵឵ "] * 5 for _ in range(5)] # Unicode block character, usually doesnt show up in Discord or github, search up invisible character on google
+    async def minesweeper(self, context):
+        board = [["឵឵ "] * 5 for _ in range(5)]
         bombs = 0
         bombpositions = []
         for x in repeat(None, random.randint(4, 11)):
@@ -197,7 +186,5 @@ class Minesweeper(commands.Cog, name="minesweeper"):
         view = MsView(context, ExtractBlocks(), bombpositions, board)
         message = await context.send(embed=embed, view=view)
         view.message = message
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Minesweeper(bot))
+    
+    return minesweeper
