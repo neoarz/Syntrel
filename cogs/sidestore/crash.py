@@ -5,14 +5,11 @@ from discord.ext.commands import Context
 import time
 
 
-class Crash(commands.Cog, name="crash"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def crash_command():
     @commands.hybrid_command(
         name="crash", description="Help with SideStore crashing issues"
     )
-    async def crash(self, context: Context) -> None:
+    async def crash(self, context):
         embed = discord.Embed(
             color=0x8e82f9,
             description=(
@@ -43,5 +40,4 @@ class Crash(commands.Cog, name="crash"):
             await context.send(embed=embed, view=view)
 
 
-async def setup(bot) -> None:
-    await bot.add_cog(Crash(bot))
+    return crash

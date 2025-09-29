@@ -166,7 +166,7 @@ class Help(commands.Cog, name="help"):
             commands_in_category.append((app_command.name, description))
             seen_names.add(app_command.name)
             
-            if hasattr(app_command, 'commands') and category in ["fun", "general", "idevice", "miscellaneous", "moderation"]:
+            if hasattr(app_command, 'commands') and category in ["fun", "general", "idevice", "miscellaneous", "moderation", "owner", "sidestore"]:
                 for subcommand in app_command.commands:
                     if subcommand.name in seen_names:
                         continue

@@ -5,14 +5,11 @@ from discord.ext.commands import Context
 import time
 
 
-class Pairing(commands.Cog, name="pairing"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def pairing_command():
     @commands.hybrid_command(
         name="pairing", description="Help with pairing file issues"
     )
-    async def pairing(self, context: Context) -> None:
+    async def pairing(self, context):
         embed = discord.Embed(
             color=0x8e82f9,
             description=(
@@ -57,5 +54,4 @@ class Pairing(commands.Cog, name="pairing"):
             await context.send(embed=embed, view=view)
 
 
-async def setup(bot) -> None:
-    await bot.add_cog(Pairing(bot))
+    return pairing

@@ -5,14 +5,11 @@ from discord.ext.commands import Context
 import time
 
 
-class Server(commands.Cog, name="server"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def server_command():
     @commands.hybrid_command(
         name="server", description="Help with anisette server issues"
     )
-    async def server(self, context: Context) -> None:
+    async def server(self, context):
         embed = discord.Embed(
             color=0x8e82f9,
             description=(
@@ -51,5 +48,4 @@ class Server(commands.Cog, name="server"):
             await context.send(embed=embed, view=view)
 
 
-async def setup(bot) -> None:
-    await bot.add_cog(Server(bot))
+    return server

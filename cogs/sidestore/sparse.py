@@ -5,14 +5,11 @@ from discord.ext.commands import Context
 import time
 
 
-class Sparse(commands.Cog, name="sparse"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def sparse_command():
     @commands.hybrid_command(
         name="sparse", description="Information about SparseRestore exploit"
     )
-    async def sparse(self, context: Context) -> None:
+    async def sparse(self, context):
         embed = discord.Embed(
             color=0x8e82f9,
             description=(
@@ -46,5 +43,4 @@ class Sparse(commands.Cog, name="sparse"):
             await context.send(embed=embed, view=view)
 
 
-async def setup(bot) -> None:
-    await bot.add_cog(Sparse(bot))
+    return sparse

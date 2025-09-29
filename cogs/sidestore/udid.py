@@ -5,14 +5,11 @@ from discord.ext.commands import Context
 import time
 
 
-class Udid(commands.Cog, name="udid"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def udid_command():
     @commands.hybrid_command(
         name="udid", description="SideStore could not determine device UDID"
     )
-    async def udid(self, context: Context) -> None:
+    async def udid(self, context):
         embed = discord.Embed(
             color=0x8e82f9,
             description=(
@@ -45,5 +42,4 @@ class Udid(commands.Cog, name="udid"):
             await context.send(embed=embed, view=view)
 
 
-async def setup(bot) -> None:
-    await bot.add_cog(Udid(bot))
+    return udid
