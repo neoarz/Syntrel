@@ -13,6 +13,44 @@ class Miscellaneous(commands.GroupCog, name="miscellaneous"):
         self.bot = bot
         super().__init__()
 
+    @commands.group(name="miscellaneous", invoke_without_command=True)
+    async def miscellaneous_group(self, context: Context):
+        embed = discord.Embed(
+            title="Miscellaneous Commands",
+            description="Use `.miscellaneous <subcommand>` or `/miscellaneous <subcommand>`.",
+            color=0x7289DA
+        )
+        embed.set_author(name="Miscellaneous", icon_url="https://yes.nighty.works/raw/YxMC0r.png")
+        embed.add_field(name="Available", value="rr, labubu, tryitandsee, piracy, keanu", inline=False)
+        await context.send(embed=embed)
+
+    async def _invoke_hybrid(self, context: Context, name: str):
+        command = self.bot.get_command(name)
+        if command is not None:
+            await context.invoke(command)
+        else:
+            await context.send(f"Unknown miscellaneous command: {name}")
+
+    @miscellaneous_group.command(name="rr")
+    async def miscellaneous_group_rr(self, context: Context):
+        await self._invoke_hybrid(context, "rr")
+
+    @miscellaneous_group.command(name="labubu")
+    async def miscellaneous_group_labubu(self, context: Context):
+        await self._invoke_hybrid(context, "labubu")
+
+    @miscellaneous_group.command(name="tryitandsee")
+    async def miscellaneous_group_tryitandsee(self, context: Context):
+        await self._invoke_hybrid(context, "tryitandsee")
+
+    @miscellaneous_group.command(name="piracy")
+    async def miscellaneous_group_piracy(self, context: Context):
+        await self._invoke_hybrid(context, "piracy")
+
+    @miscellaneous_group.command(name="keanu")
+    async def miscellaneous_group_keanu(self, context: Context):
+        await self._invoke_hybrid(context, "keanu")
+
     @commands.hybrid_command(
         name="rr",
         description="Rickroll"
