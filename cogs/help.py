@@ -38,16 +38,13 @@ class Help(commands.Cog, name="help"):
         
         category_mapping = {
             # General Commands
-            "help": "general",
-            "botinfo": "general", 
-            "serverinfo": "general",
-            "ping": "general",
-            "feedback": "general",
-            "uptime": "general",
-        #   "context_menus": "general",
-        
+            "general": "general",
+            
             # Fun Commands
             "fun": "fun",
+            
+            # idevice Commands
+            "idevice": "idevice",
             
             # Moderation Commands
             "kick": "moderation",
@@ -69,13 +66,6 @@ class Help(commands.Cog, name="help"):
             "sparse": "sidestore",
             "afc": "sidestore",
             "udid": "sidestore",
-            
-            # idevice Commands
-            "idevice": "idevice",
-            "noapps": "idevice",
-            "errorcodes": "idevice",
-            "developermode": "idevice",
-            "mountddi": "idevice",
             
             # Owner Commands
             "sync": "owner",
@@ -180,7 +170,7 @@ class Help(commands.Cog, name="help"):
             commands_in_category.append((app_command.name, description))
             seen_names.add(app_command.name)
             
-            if hasattr(app_command, 'commands') and category == "fun":
+            if hasattr(app_command, 'commands') and category in ["fun", "general", "idevice"]:
                 for subcommand in app_command.commands:
                     if subcommand.name in seen_names:
                         continue

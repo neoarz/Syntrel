@@ -5,14 +5,11 @@ from discord.ext.commands import Context
 import time
 
 
-class Developermode(commands.Cog, name="developermode"):
-    def __init__(self, bot) -> None:
-        self.bot = bot
-
+def developermode_command():
     @commands.hybrid_command(
         name="developermode", description="How to turn on developer mode"
     )
-    async def developermode(self, context: Context) -> None:
+    async def developermode(self, context):
         embed = discord.Embed(
             color=0xfa8c4a,
             description=(
@@ -40,7 +37,5 @@ class Developermode(commands.Cog, name="developermode"):
             await context.interaction.response.send_message(embed=embed, view=view)
         else:
             await context.send(embed=embed, view=view)
-
-
-async def setup(bot) -> None:
-    await bot.add_cog(Developermode(bot))
+    
+    return developermode
