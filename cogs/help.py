@@ -40,9 +40,11 @@ class Help(commands.Cog, name="help"):
             "general": "general",
             "fun": "fun",
             "idevice": "idevice",
+            "misc": "miscellaneous",
             "miscellaneous": "miscellaneous",
             "moderation": "moderation",
             "sidestore": "sidestore",
+            "utils": "utilities",
             "utilities": "utilities",
             
             "sync": "owner",

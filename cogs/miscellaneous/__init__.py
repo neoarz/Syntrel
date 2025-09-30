@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import Context
 
+from .dontasktoask import dontasktoask_command
 from .rickroll import rr_command
 from .labubu import labubu_command
 from .tryitandsee import tryitandsee_command
@@ -21,7 +22,7 @@ class Miscellaneous(commands.GroupCog, name="misc"):
             color=0x7289DA
         )
         embed.set_author(name="Miscellaneous", icon_url="https://yes.nighty.works/raw/YxMC0r.png")
-        embed.add_field(name="Available", value="rr, labubu, tryitandsee, piracy, keanu", inline=False)
+        embed.add_field(name="Available", value="dontasktoask, rr, labubu, tryitandsee, piracy, keanu", inline=False)
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str):
@@ -40,6 +41,10 @@ class Miscellaneous(commands.GroupCog, name="misc"):
         prefix = context.prefix or ""
         content = context.message.content.strip().lower()
         return content.startswith(f"{prefix}{group} ")
+
+    @miscellaneous_group.command(name="dontasktoask")
+    async def miscellaneous_group_dontasktoask(self, context: Context):
+        await self._invoke_hybrid(context, "dontasktoask")
 
     @miscellaneous_group.command(name="rr")
     async def miscellaneous_group_rr(self, context: Context):
@@ -60,6 +65,14 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     @miscellaneous_group.command(name="keanu")
     async def miscellaneous_group_keanu(self, context: Context):
         await self._invoke_hybrid(context, "keanu")
+
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="dontasktoask",
+        description="Shows the 'Don't Ask to Ask' image."
+    )
+    async def dontasktoask(self, context):
+        return await dontasktoask_command()(self, context)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
@@ -105,6 +118,7 @@ async def setup(bot) -> None:
     cog = Miscellaneous(bot)
     await bot.add_cog(cog)
     
+    bot.logger.info("Loaded extension 'miscellaneous.dontasktoask'")
     bot.logger.info("Loaded extension 'miscellaneous.rr'")
     bot.logger.info("Loaded extension 'miscellaneous.labubu'")
     bot.logger.info("Loaded extension 'miscellaneous.tryitandsee'")
