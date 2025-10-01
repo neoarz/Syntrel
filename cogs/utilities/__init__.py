@@ -3,6 +3,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 from .translate import translate_command
+from .codepreview import codepreview_command
 
 class Utilities(commands.GroupCog, name="utils"):
     def __init__(self, bot) -> None:
@@ -17,7 +18,7 @@ class Utilities(commands.GroupCog, name="utils"):
             color=0x7289DA
         )
         embed.set_author(name="Utilities", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
-        embed.add_field(name="Available", value="translate", inline=False)
+        embed.add_field(name="Available", value="translate, codepreview", inline=False)
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str, **kwargs):
@@ -41,6 +42,10 @@ class Utilities(commands.GroupCog, name="utils"):
     async def utilities_group_translate(self, context: Context, text: str = None, to_lang: str = "en", from_lang: str = None):
         await self._invoke_hybrid(context, "translate", text=text, to_lang=to_lang, from_lang=from_lang)
 
+    @utilities_group.command(name="codepreview")
+    async def utilities_group_codepreview(self, context: Context, url: str = None):
+        await self._invoke_hybrid(context, "codepreview", url=url)
+
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="translate",
@@ -49,8 +54,17 @@ class Utilities(commands.GroupCog, name="utils"):
     async def translate(self, context, text: str = None, to_lang: str = "en", from_lang: str = None):
         return await translate_command()(self, context, text=text, to_lang=to_lang, from_lang=from_lang)
 
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="codepreview",
+        description="Preview code from GitHub URLs"
+    )
+    async def codepreview(self, context, url: str = None):
+        return await codepreview_command()(self, context, url=url)
+
 async def setup(bot) -> None:
     cog = Utilities(bot)
     await bot.add_cog(cog)
     
     bot.logger.info("Loaded extension 'utilities.translate'")
+    bot.logger.info("Loaded extension 'utilities.codepreview'")

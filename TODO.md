@@ -16,8 +16,6 @@
 
 - [ ] Add video commands
 
-- [ ] Add whois command
-
 - [ ] Add git log to info 
 
 - [x] Add try it and see command
