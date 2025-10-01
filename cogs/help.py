@@ -121,6 +121,9 @@ class Help(commands.Cog, name="help"):
                 if cog:
                     commands_list = cog.get_commands()
                     for command in commands_list:
+                        has_prefix_subcommands = hasattr(command, 'commands') and len(getattr(command, 'commands', [])) > 0
+                        if has_prefix_subcommands:
+                            continue
                         name = command.name
                         if name in seen_names:
                             continue
@@ -135,19 +138,21 @@ class Help(commands.Cog, name="help"):
             bound_cog_name = getattr(bound_cog, "qualified_name", "").lower()
             if category_mapping.get(bound_cog_name) != category:
                 continue
-            if app_command.name in seen_names:
-                continue
-            description = app_command.description.partition("\n")[0] if getattr(app_command, "description", None) else "No description available"
-            commands_in_category.append((app_command.name, description))
-            seen_names.add(app_command.name)
-            
-            if hasattr(app_command, 'commands') and category not in ["owner"]:
+            has_subcommands = hasattr(app_command, 'commands') and len(getattr(app_command, 'commands', [])) > 0
+
+            if has_subcommands and category not in ["owner"]:
                 for subcommand in app_command.commands:
                     if subcommand.name in seen_names:
                         continue
                     sub_desc = subcommand.description.partition("\n")[0] if getattr(subcommand, "description", None) else "No description available"
                     commands_in_category.append((f"{app_command.name} {subcommand.name}", sub_desc))
                     seen_names.add(f"{app_command.name} {subcommand.name}")
+            else:
+                if app_command.name in seen_names:
+                    continue
+                description = app_command.description.partition("\n")[0] if getattr(app_command, "description", None) else "No description available"
+                commands_in_category.append((app_command.name, description))
+                seen_names.add(app_command.name)
         
         if not commands_in_category:
             embed = discord.Embed(
