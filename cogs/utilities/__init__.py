@@ -1,8 +1,9 @@
 import discord
+from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 
-from .translate import translate_command
+from .translate import translate_command, language_autocomplete
 from .codepreview import codepreview_command
 
 class Utilities(commands.GroupCog, name="utils"):
@@ -39,6 +40,13 @@ class Utilities(commands.GroupCog, name="utils"):
         return content.startswith(f"{prefix}{group} ")
 
     @utilities_group.command(name="translate")
+    @app_commands.describe(
+        text="The text to translate",
+        to_lang="Target language (e.g., 'en', 'es', 'fr')",
+        from_lang="Source language (leave empty for auto-detect)"
+    )
+    @app_commands.autocomplete(to_lang=language_autocomplete)
+    @app_commands.autocomplete(from_lang=language_autocomplete)
     async def utilities_group_translate(self, context: Context, text: str = None, to_lang: str = "en", from_lang: str = None):
         await self._invoke_hybrid(context, "translate", text=text, to_lang=to_lang, from_lang=from_lang)
 
@@ -51,6 +59,13 @@ class Utilities(commands.GroupCog, name="utils"):
         name="translate",
         description="Translate text to another language"
     )
+    @app_commands.describe(
+        text="The text to translate",
+        to_lang="Target language (e.g., 'en', 'es', 'fr')",
+        from_lang="Source language (leave empty for auto-detect)"
+    )
+    @app_commands.autocomplete(to_lang=language_autocomplete)
+    @app_commands.autocomplete(from_lang=language_autocomplete)
     async def translate(self, context, text: str = None, to_lang: str = "en", from_lang: str = None):
         return await translate_command()(self, context, text=text, to_lang=to_lang, from_lang=from_lang)
 

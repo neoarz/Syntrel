@@ -9,8 +9,7 @@ import json
 import urllib.parse
 
 
-def translate_command():
-    languages = {
+languages = {
             "auto": "Auto-detect",
             "en": "English",
             "es": "Spanish", 
@@ -134,6 +133,30 @@ def translate_command():
             "lv": "Latvian",
         }
 
+async def language_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
+    current = current.lower()
+    choices = []
+    
+    for code, name in languages.items():
+        if current in code.lower() or current in name.lower():
+            display_name = f"{code} - {name}"
+            if len(display_name) > 100:
+                display_name = f"{code} - {name[:90]}..."
+            choices.append(app_commands.Choice(name=display_name, value=code))
+            
+        if len(choices) >= 25:
+            break
+    
+    if not choices:
+        popular = ["en", "es", "fr", "de", "it", "pt", "ru", "ja", "ko", "zh-CN"]
+        for code in popular:
+            name = languages.get(code, code)
+            choices.append(app_commands.Choice(name=f"{code} - {name}", value=code))
+    
+    return choices
+
+def translate_command():
+
     async def send_embed(context, embed: discord.Embed, *, ephemeral: bool = False) -> None:
         interaction = getattr(context, "interaction", None)
         if interaction is not None:
@@ -194,27 +217,6 @@ def translate_command():
         except Exception:
             return None
 
-    async def language_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-        current = current.lower()
-        choices = []
-        
-        for code, name in languages.items():
-            if current in code.lower() or current in name.lower():
-                display_name = f"{code} - {name}"
-                if len(display_name) > 100:
-                    display_name = f"{code} - {name[:90]}..."
-                choices.append(app_commands.Choice(name=display_name, value=code))
-                
-            if len(choices) >= 25:
-                break
-        
-        if not choices:
-            popular = ["en", "es", "fr", "de", "it", "pt", "ru", "ja", "ko", "zh-CN"]
-            for code in popular:
-                name = languages.get(code, code)
-                choices.append(app_commands.Choice(name=f"{code} - {name}", value=code))
-        
-        return choices
 
     @commands.hybrid_command(
         name="translate",
