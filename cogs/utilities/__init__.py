@@ -5,6 +5,7 @@ from discord.ext.commands import Context
 
 from .translate import translate_command, language_autocomplete
 from .codepreview import codepreview_command
+from .dictionary import dictionary_command
 
 class Utilities(commands.GroupCog, name="utils"):
     def __init__(self, bot) -> None:
@@ -19,7 +20,7 @@ class Utilities(commands.GroupCog, name="utils"):
             color=0x7289DA
         )
         embed.set_author(name="Utilities", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
-        embed.add_field(name="Available", value="translate, codepreview", inline=False)
+        embed.add_field(name="Available", value="translate, codepreview, dictionary", inline=False)
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str, **kwargs):
@@ -54,6 +55,13 @@ class Utilities(commands.GroupCog, name="utils"):
     async def utilities_group_codepreview(self, context: Context, url: str = None):
         await self._invoke_hybrid(context, "codepreview", url=url)
 
+    @utilities_group.command(name="dictionary")
+    @app_commands.describe(
+        word="The word to look up"
+    )
+    async def utilities_group_dictionary(self, context: Context, word: str = None):
+        await self._invoke_hybrid(context, "dictionary", word=word)
+
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="translate",
@@ -77,9 +85,21 @@ class Utilities(commands.GroupCog, name="utils"):
     async def codepreview(self, context, url: str = None):
         return await codepreview_command()(self, context, url=url)
 
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="dictionary",
+        description="Get the definition of a word"
+    )
+    @app_commands.describe(
+        word="The word to look up"
+    )
+    async def dictionary(self, context, word: str = None):
+        return await dictionary_command()(self, context, word=word)
+
 async def setup(bot) -> None:
     cog = Utilities(bot)
     await bot.add_cog(cog)
     
     bot.logger.info("Loaded extension 'utilities.translate'")
     bot.logger.info("Loaded extension 'utilities.codepreview'")
+    bot.logger.info("Loaded extension 'utilities.dictionary'")
