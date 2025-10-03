@@ -13,7 +13,7 @@ class UptimeView(discord.ui.View):
             description=f"The bot has been running for {self.bot.get_uptime()}",
             color=0x7289DA,
         )
-        embed.set_author(name="Uptime", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+        embed.set_author(name="Uptime", icon_url="https://yes.nighty.works/raw/gSxqzV.png")
         await interaction.response.edit_message(embed=embed, view=self)
 
 def uptime_command():
@@ -27,7 +27,7 @@ def uptime_command():
             description=f"The bot has been running for **{self.bot.get_uptime()}**",
             color=0x7289DA,
         )
-        embed.set_author(name="Uptime", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+        embed.set_author(name="Uptime", icon_url="https://yes.nighty.works/raw/gSxqzV.png")
         view = UptimeView(self.bot)
         if getattr(context, "interaction", None):
             inter = context.interaction

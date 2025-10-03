@@ -12,7 +12,7 @@ def botinfo_command():
             title="Syntrel Discord Bot",
             color=0x7289DA,
         )
-        embed.set_author(name="Bot Information", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+        embed.set_author(name="Bot Information", icon_url="https://yes.nighty.works/raw/gSxqzV.png")
         embed.add_field(name="Owner:", value="[neoarz](https://discordapp.com/users/1015372540937502851)", inline=True)
         embed.add_field(
             name="Python Version:", value=f"{platform.python_version()}", inline=True

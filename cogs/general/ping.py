@@ -12,7 +12,7 @@ def ping_command():
             description=f"The bot latency is {round(self.bot.latency * 1000)}ms.",
             color=0x7289DA,
         )
-        embed.set_author(name="Ping", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+        embed.set_author(name="Ping", icon_url="https://yes.nighty.works/raw/gSxqzV.png")
         if getattr(context, "interaction", None):
             inter = context.interaction
             if not inter.response.is_done():

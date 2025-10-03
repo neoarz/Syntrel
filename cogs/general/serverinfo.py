@@ -23,7 +23,7 @@ def serverinfo_command():
             title="**Server Name:**", 
             description=f"{context.guild}", 
             color=0x7289DA
-        ).set_author(name="Server Information", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+        ).set_author(name="Server Information", icon_url="https://yes.nighty.works/raw/gSxqzV.png")
         
         if context.guild.icon is not None:
             embed.set_thumbnail(url=context.guild.icon.url)

@@ -31,7 +31,7 @@ def feedback_command():
                 title="Thank You!",
                 description="Your feedback has been submitted, the owners have been notified about it.",
                 color=0x7289DA,
-            ).set_author(name="Feedback System", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"),
+            ).set_author(name="Feedback System", icon_url="https://yes.nighty.works/raw/gSxqzV.png"),
             ephemeral=True,
         )
 
@@ -41,7 +41,7 @@ def feedback_command():
                 title="New Feedback",
                 description=f"{interaction.user} (<@{interaction.user.id}>) has submitted a new feedback:\n```\n{feedback_form.answer}\n```",
                 color=0x7289DA,
-            ).set_author(name="Feedback System", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            ).set_author(name="Feedback System", icon_url="https://yes.nighty.works/raw/gSxqzV.png")
         )
     
     return feedback
