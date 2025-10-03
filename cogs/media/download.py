@@ -74,7 +74,7 @@ def download_command():
 
         processing_embed = discord.Embed(
             title="Download (Processing)",
-            description="Downloading video... This may take a moment.",
+            description="<a:mariospin:1423677027013103709> Downloading video... This may take a moment.",
             color=0x7289DA,
         )
         processing_embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
@@ -90,6 +90,11 @@ def download_command():
 
         temp_dir = tempfile.mkdtemp()
         
+        # Try Docker path first, fallback to local path for development
+        cookie_path = '/bot/cogs/media/files/cookies.txt'
+        if not os.path.exists(cookie_path):
+            cookie_path = os.path.join(os.path.dirname(__file__), 'files', 'cookies.txt')
+        
         ydl_opts = {
             'format': 'bestvideo[filesize<200M]+bestaudio[filesize<200M]/best[filesize<200M]/bestvideo+bestaudio/best',
             'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
@@ -100,7 +105,7 @@ def download_command():
             'writethumbnail': False,
             'ignoreerrors': False,
             'merge_output_format': 'mp4',
-            'cookiefile': '/bot/cogs/media/files/cookies.txt',
+            'cookiefile': cookie_path,
         }
 
         try:
