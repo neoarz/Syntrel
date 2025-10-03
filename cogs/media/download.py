@@ -89,7 +89,6 @@ def download_command():
             processing_msg = await context.send(embed=processing_embed)
 
         temp_dir = tempfile.mkdtemp()
-        temp_cookie_file = None
         
         ydl_opts = {
             'format': 'bestvideo[filesize<200M]+bestaudio[filesize<200M]/best[filesize<200M]/bestvideo+bestaudio/best',
@@ -101,46 +100,8 @@ def download_command():
             'writethumbnail': False,
             'ignoreerrors': False,
             'merge_output_format': 'mp4',
+            'cookiefile': '/bot/cogs/media/files/cookies.txt',
         }
-
-        cookie_file_env = os.getenv('YTDLP_COOKIE_FILE') or os.getenv('YT_DLP_COOKIE_FILE')
-        cookies_text_env = os.getenv('YTDLP_COOKIES') or os.getenv('YT_DLP_COOKIES')
-
-        resolved_cookie_path = None
-        if cookie_file_env:
-            resolved_cookie_path = cookie_file_env
-        elif cookies_text_env:
-            try:
-                fd, temp_cookie_file = tempfile.mkstemp(prefix='yt_cookies_', text=True)
-                with os.fdopen(fd, 'w') as tmpf:
-                    tmpf.write(cookies_text_env)
-                resolved_cookie_path = temp_cookie_file
-            except Exception:
-                temp_cookie_file = None
-        else:
-            default_local_cookie = os.path.join(os.path.dirname(__file__), 'files', 'cookies.txt')
-            resolved_cookie_path = default_local_cookie
-
-        if not (resolved_cookie_path and os.path.exists(resolved_cookie_path)):
-            embed = discord.Embed(
-                title="Error",
-                description=(
-                    "Cookies file not found. Provide one via `YTDLP_COOKIE_FILE` or place a file at "
-                    "`cogs/media/files/cookies.txt`."
-                ),
-                color=0xE02B2B,
-            )
-            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-            if interaction is not None:
-                if not interaction.response.is_done():
-                    await interaction.response.send_message(embed=embed, ephemeral=True)
-                else:
-                    await interaction.followup.send(embed=embed, ephemeral=True)
-            else:
-                await context.send(embed=embed, ephemeral=True)
-            return
-
-        ydl_opts['cookiefile'] = resolved_cookie_path
 
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -272,15 +233,9 @@ def download_command():
                         await context.channel.send(file=file)
                         
         except Exception as e:
-            err_text = str(e)
-            needs_cookies = ('Sign in to confirm' in err_text) or ('cookies' in err_text.lower()) or ('consent' in err_text.lower())
-            if needs_cookies:
-                extra = "\n\nThis source may require authentication. Provide cookies via env: `YTDLP_COOKIE_FILE` (path) or `YTDLP_COOKIES` (contents). See: https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp"
-            else:
-                extra = ""
             embed = discord.Embed(
                 title="Error",
-                description=f"Failed to download video: {err_text}{extra}",
+                description=f"Failed to download video: {str(e)}",
                 color=0xE02B2B,
             )
             embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
@@ -308,10 +263,5 @@ def download_command():
                 os.rmdir(temp_dir)
             except:
                 pass
-            if temp_cookie_file:
-                try:
-                    os.remove(temp_cookie_file)
-                except:
-                    pass
     
     return download
