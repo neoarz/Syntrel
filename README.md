@@ -27,7 +27,7 @@
 | sidestore | `sidestore`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
 | idevice | `idevice`, `noapps`, `errorcode`, `developermode`, `mountddi` |
 | miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`|
-| utilities | `translate`, `codepreview` |
+| utilities | `translate`, `codepreview`, `dictionary` |
 
 ## Download
 

@@ -122,8 +122,9 @@ def dictionary_command():
             definitions = meaning.get("definitions", [])
             
             if definitions:
-
                 def_text = ""
+                examples = []
+                
                 for def_idx, definition in enumerate(definitions[:2], 1):
                     def_line = definition.get("definition", "")
                     example = definition.get("example", "")
@@ -131,15 +132,37 @@ def dictionary_command():
                     if def_line:
                         def_text += f"{def_idx}. {def_line}\n"
                         if example:
-                            def_text += f"   *Example: {example}*\n"
+                            examples.append(f"{def_idx}. {example}")
                 
                 if def_text:
                     field_name = f"{part_of_speech}" if part_of_speech else f"Definition {idx + 1}"
                     embed.add_field(name=field_name, value=def_text.strip(), inline=False)
+                    
+                    if examples:
+                        example_text = "\n".join(examples)
+                        embed.add_field(name="Examples", value=example_text, inline=False)
+                        
+                        if idx < len(meanings[:max_meanings]) - 1:
+                            embed.add_field(name="────────", value="", inline=False)
         
         if origin and len(origin) < 1000:
             embed.add_field(name="Origin", value=origin, inline=False)
         
+        synonyms = []
+        antonyms = []
+        
+        for meaning in meanings:
+            for definition in meaning.get("definitions", []):
+                synonyms.extend(definition.get("synonyms", []))
+                antonyms.extend(definition.get("antonyms", []))
+        
+        if synonyms:
+            synonym_text = ", ".join(synonyms[:10])
+            embed.add_field(name="Synonyms", value=synonym_text, inline=True)
+        
+        if antonyms:
+            antonym_text = ", ".join(antonyms[:10])
+            embed.add_field(name="Antonyms", value=antonym_text, inline=True)
 
         
         await send_embed(context, embed)
