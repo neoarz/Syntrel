@@ -40,11 +40,7 @@ class Invite(commands.Cog, name="invite"):
         embed = discord.Embed(title="Install", description=f"Install me by clicking [here]({invite_link}).", color=0x7289DA)
         embed.set_author(name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp")
         
-        try:
-            await context.author.send(embed=embed)
-            await self.send_embed(context, discord.Embed(description="I sent you a private message!", color=0x7289DA), ephemeral=True)
-        except discord.Forbidden:
-            await self.send_embed(context, embed, ephemeral=True)
+        await self.send_embed(context, embed, ephemeral=False)
 
     async def cog_command_error(self, context: Context, error) -> None:
         if isinstance(error, commands.NotOwner):
