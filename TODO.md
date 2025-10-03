@@ -6,6 +6,12 @@
   - [x] Add rest of the errors yikes
   - [x] Add ddi mounting command
 
+- [ ] Add melonx commands
+
+- [ ] Add ai commands
+
+- [ ] Add leaderboard command
+
 - [ ] Add unit tests
 
 - [ ] Add documentation to readme

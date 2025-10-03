@@ -24,6 +24,7 @@
 | general | `help`, `botinfo`, `serverinfo`, `ping`, `feedback`, `uptime` |
 | fun | `randomfact`, `coinflip`, `rps`, `8ball`, `minesweeper` |
 | moderation | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive` |
+| media | `download` |
 | sidestore | `sidestore`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
 | idevice | `idevice`, `noapps`, `errorcode`, `developermode`, `mountddi` |
 | miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`|
