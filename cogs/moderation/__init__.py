@@ -51,8 +51,8 @@ class Moderation(commands.GroupCog, name="moderation"):
         await self._invoke_hybrid(context, "kick", user=user, reason=reason)
 
     @moderation_group.command(name="purge")
-    async def moderation_group_purge(self, context: Context, amount: int):
-        await self._invoke_hybrid(context, "purge", amount=amount)
+    async def moderation_group_purge(self, context: Context, amount: int, user: discord.Member = None):
+        await self._invoke_hybrid(context, "purge", amount=amount, user=user)
 
     @moderation_group.command(name="warnings")
     async def moderation_group_warnings(self, context: Context):
@@ -91,8 +91,8 @@ class Moderation(commands.GroupCog, name="moderation"):
         name="purge",
         description="Delete a number of messages."
     )
-    async def purge(self, context, amount: int):
-        return await purge_command()(self, context, amount=amount)
+    async def purge(self, context, amount: int, user: discord.Member = None):
+        return await purge_command()(self, context, amount=amount, user=user)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
