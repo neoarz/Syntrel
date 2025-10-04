@@ -9,21 +9,15 @@ def tryitandsee_command():
         description="Try it and see",
     )
     async def tryitandsee(self, context):
-        gif_url = "https://yes.nighty.works/raw/1BQP8c.gif"
-        
-        embed = discord.Embed(
-            color=0x7289DA,
-        )
-        embed.set_author(name="Try It And See", icon_url="https://yes.nighty.works/raw/YxMC0r.png")
-        embed.set_image(url=gif_url)
+        link = "https://tryitands.ee/"
         
         if getattr(context, "interaction", None):
             inter = context.interaction
             if not inter.response.is_done():
-                await inter.response.send_message(embed=embed, ephemeral=False)
+                await inter.response.send_message(link, ephemeral=False)
             else:
-                await inter.followup.send(embed=embed, ephemeral=True)
+                await inter.followup.send(link, ephemeral=True)
         else:
-            await context.send(embed=embed)
+            await context.send(link)
     
     return tryitandsee
