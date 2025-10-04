@@ -3,7 +3,7 @@ import os
 import tempfile
 import discord
 from discord.ext import commands
-import requests
+import aiohttp
 import random
 
 def mcquote_command():
@@ -70,11 +70,13 @@ def mcquote_command():
         mc_quote_url = f'https://skinmc.net/achievement/{random_number}/Achievement+Unlocked!/{quote_text}'
 
         try:
-            response = requests.get(mc_quote_url)
-            response.raise_for_status()
+            async with aiohttp.ClientSession() as session:
+                async with session.get(mc_quote_url) as response:
+                    response.raise_for_status()
+                    content = await response.read()
 
             with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_file:
-                temp_file.write(response.content)
+                temp_file.write(content)
                 temp_file_path = temp_file.name
 
             embed = discord.Embed(
@@ -101,7 +103,7 @@ def mcquote_command():
                     await context.channel.send(file=file)
 
             os.remove(temp_file_path)
-        except requests.exceptions.RequestException:
+        except aiohttp.ClientError:
             embed = discord.Embed(
                 title="Error",
                 description="Failed to generate Minecraft quote. Please try again later.",
