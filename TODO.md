@@ -24,6 +24,8 @@
 
 - [ ] Add git log to info 
 
+- [ ] Add codepreview for pull requests
+
 - [x] Add try it and see command
 
 - [x] ~~Add rickroll command~~
