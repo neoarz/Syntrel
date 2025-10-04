@@ -13,6 +13,31 @@ class MelonxSelect(discord.ui.Select):
                 value="transfer",
                 description="How to transfer save files from other emulators or platforms",
             ),
+            discord.SelectOption(
+                label="Mods",
+                value="mods",
+                description="How to install mods within MeloNX (Limited Support)",
+            ),
+            discord.SelectOption(
+                label="Game Crash",
+                value="gamecrash",
+                description="Why does my game crash?",
+            ),
+            discord.SelectOption(
+                label="Requirements",
+                value="requirements",
+                description="What does MeloNX require?",
+            ),
+            discord.SelectOption(
+                label="Error",
+                value="error",
+                description="What does this error message mean?",
+            ),
+            discord.SelectOption(
+                label="iOS 26",
+                value="26",
+                description="How can I run MeloNX on iOS 26?",
+            ),
         ]
         super().__init__(placeholder="Choose a MeloNX command...", options=options)
 

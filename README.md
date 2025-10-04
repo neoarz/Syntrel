@@ -26,7 +26,7 @@
 | moderation | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive` |
 | sidestore | `sidestore`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
 | idevice | `idevice`, `noapps`, `errorcode`, `developermode`, `mountddi` |
-| melonx | `melonx`, `transfer` |
+| melonx | `melonx`, `transfer`, `mods`, `gamecrash`, `requirements`, `error`, `26` |
 | miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`|
 | utilities | `translate`, `codepreview`, `dictionary` |
 | media | `download` |
