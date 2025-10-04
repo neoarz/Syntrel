@@ -10,7 +10,7 @@
 
 <div align="center">
 
-**All in one discord bot for helping with [SideStore](https://discord.gg/3DwCwpBHfv), [idevice](https://discord.gg/ZnNcrRT3M8), and more.**
+**All in one discord bot for helping with [SideStore](https://discord.gg/3DwCwpBHfv), [idevice](https://discord.gg/ZnNcrRT3M8), [MeloNX](https://discord.gg/Q4VkbkYfmk), and more.**
 
 </div>
 

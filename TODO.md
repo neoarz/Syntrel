@@ -6,7 +6,14 @@
   - [x] Add rest of the errors yikes
   - [x] Add ddi mounting command
 
-- [ ] Add melonx commands
+- [x] Add melonx commands
+  - [x] Add /melonx command
+  - [x] Add /transfer command
+  - [x] Add /mods command
+  - [x] Add /gamecrash command
+  - [x] Add /requirements command
+  - [x] Add /error command
+  - [x] Add /26 command
 
 - [ ] Add ai commands
 
