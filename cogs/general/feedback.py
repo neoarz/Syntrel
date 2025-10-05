@@ -47,6 +47,12 @@ def feedback_command():
                 ).set_author(name="Feedback System", icon_url="https://yes.nighty.works/raw/gSxqzV.png")
             )
         else:
-            await context.send("This command can only be used as a slash command. Please use `/general feedback` instead.")
+            embed = discord.Embed(
+                title="Error!",
+                description="This command can only be used as a slash command. Please use `/general feedback` instead.",
+                color=0xE02B2B,
+            )
+            embed.set_author(name="Feedback System", icon_url="https://yes.nighty.works/raw/gSxqzV.png")
+            await context.send(embed=embed)
     
     return feedback

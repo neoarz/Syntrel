@@ -63,7 +63,7 @@ class Moderation(commands.GroupCog, name="moderation"):
         await self._invoke_hybrid(context, "archive", limit=limit)
 
     @moderation_group.command(name="hackban")
-    async def moderation_group_hackban(self, context: Context, user_id: int, *, reason: str = "Not specified"):
+    async def moderation_group_hackban(self, context: Context, user_id: str, *, reason: str = "Not specified"):
         await self._invoke_hybrid(context, "hackban", user_id=user_id, reason=reason)
 
     @moderation_group.command(name="nick")
@@ -115,7 +115,7 @@ class Moderation(commands.GroupCog, name="moderation"):
         name="hackban",
         description="Bans a user without the user having to be in the server."
     )
-    async def hackban(self, context, user_id: int, *, reason: str = "Not specified"):
+    async def hackban(self, context, user_id: str, *, reason: str = "Not specified"):
         return await hackban_command()(self, context, user_id=user_id, reason=reason)
 
     @commands.check(_require_group_prefix)
