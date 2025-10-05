@@ -1,4 +1,5 @@
 import discord
+from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 
@@ -9,6 +10,7 @@ from .warnings import warnings_command
 from .archive import archive_command
 from .hackban import hackban_command
 from .nick import nick_command
+from .timeout import timeout_command
 
 class Moderation(commands.GroupCog, name="moderation"):
     def __init__(self, bot) -> None:
@@ -22,7 +24,7 @@ class Moderation(commands.GroupCog, name="moderation"):
             description="Use `.moderation <subcommand>` or `/moderation <subcommand>`.",
             color=0x7289DA
         )
-        embed.add_field(name="Available", value="ban, kick, purge, warnings, archive, hackban, nick", inline=False)
+        embed.add_field(name="Available", value="ban, kick, purge, warnings, archive, hackban, nick, timeout", inline=False)
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str, **kwargs):
@@ -41,6 +43,26 @@ class Moderation(commands.GroupCog, name="moderation"):
         prefix = context.prefix or ""
         content = context.message.content.strip().lower()
         return content.startswith(f"{prefix}{group} ")
+
+    async def timeout_duration_autocomplete(
+        self,
+        interaction: discord.Interaction,
+        current: str,
+    ) -> list[app_commands.Choice[str]]:
+        options = [
+            ("60 secs", "60s"),
+            ("5 mins", "5m"),
+            ("10 mins", "10m"),
+            ("1 hour", "1h"),
+            ("1 day", "1d"),
+            ("1 week", "1w"),
+        ]
+        q = (current or "").lower()
+        results: list[app_commands.Choice[str]] = []
+        for name, value in options:
+            if q in name.lower() or q in value.lower():
+                results.append(app_commands.Choice(name=name, value=value))
+        return results[:25]
 
     @moderation_group.command(name="ban")
     async def moderation_group_ban(self, context: Context, user: discord.User, *, reason: str = "Not specified", delete_messages: str = "none"):
@@ -69,6 +91,10 @@ class Moderation(commands.GroupCog, name="moderation"):
     @moderation_group.command(name="nick")
     async def moderation_group_nick(self, context: Context, user: discord.User, *, nickname: str = None):
         await self._invoke_hybrid(context, "nick", user=user, nickname=nickname)
+
+    @moderation_group.command(name="timeout")
+    async def moderation_group_timeout(self, context: Context, user: discord.User, duration: str, *, reason: str = "Not specified"):
+        await self._invoke_hybrid(context, "timeout", user=user, duration=duration, reason=reason)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
@@ -126,6 +152,20 @@ class Moderation(commands.GroupCog, name="moderation"):
     async def nick(self, context, user: discord.User, *, nickname: str = None):
         return await nick_command()(self, context, user=user, nickname=nickname)
 
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="timeout",
+        description="Timeout a user for a specified duration."
+    )
+    @app_commands.describe(
+        user="The user that should be timed out.",
+        duration="Duration",
+        reason="The reason why the user should be timed out.",
+    )
+    @app_commands.autocomplete(duration=timeout_duration_autocomplete)
+    async def timeout(self, context, user: discord.User, duration: str, *, reason: str = "Not specified"):
+        return await timeout_command()(self, context, user=user, duration=duration, reason=reason)
+
 async def setup(bot) -> None:
     cog = Moderation(bot)
     await bot.add_cog(cog)
@@ -137,3 +177,4 @@ async def setup(bot) -> None:
     bot.logger.info("Loaded extension 'moderation.archive'")
     bot.logger.info("Loaded extension 'moderation.hackban'")
     bot.logger.info("Loaded extension 'moderation.nick'")
+    bot.logger.info("Loaded extension 'moderation.timeout'")

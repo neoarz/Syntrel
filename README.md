@@ -23,7 +23,7 @@
 | owner | `sync`, `cog_management`, `shutdown`, `say`, `invite`, `logs` |
 | general | `help`, `botinfo`, `serverinfo`, `ping`, `feedback`, `uptime` |
 | fun | `randomfact`, `coinflip`, `rps`, `8ball`, `minesweeper` |
-| moderation | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive` |
+| moderation | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive`, `timeout` |
 | sidestore | `sidestore`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
 | idevice | `idevice`, `noapps`, `errorcode`, `developermode`, `mountddi` |
 | melonx | `melonx`, `transfer`, `mods`, `gamecrash`, `requirements`, `error`, `26` |

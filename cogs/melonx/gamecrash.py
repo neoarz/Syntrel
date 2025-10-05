@@ -33,7 +33,7 @@ def crash_command():
         view.add_item(discord.ui.Button(
             label="Edit Command",
             style=discord.ButtonStyle.secondary,
-            url="https://github.com/neoarz/Syntrel/blob/main/cogs/melonx/crash.py",
+            url="https://github.com/neoarz/Syntrel/blob/main/cogs/melonx/gamecrash.py",
             emoji="<:githubicon:1417717356846776340>"
         ))
 
