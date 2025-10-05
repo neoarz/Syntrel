@@ -3,3 +3,5 @@ aiosqlite
 discord.py==2.6.3
 python-dotenv
 yt-dlp
+Pillow
+pillow-heif

@@ -1,9 +1,11 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import Context
+from typing import Optional
 
 from .download import download_command
 from .mcquote import mcquote_command
+from .img2gif import img2gif_command
 
 
 def _require_group_prefix(context: Context) -> bool:
@@ -29,15 +31,20 @@ class Media(commands.GroupCog, name="media"):
             color=0x7289DA
         )
         embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-        embed.add_field(name="Available", value="download, mcquote", inline=False)
+        embed.add_field(name="Available", value="download, mcquote, img2gif", inline=False)
         await context.send(embed=embed)
 
-    async def _invoke_hybrid(self, context: Context, name: str):
-        command = self.bot.get_command(name)
-        if command is not None:
-            await context.invoke(command)
-        else:
-            await context.send(f"Unknown media command: {name}")
+    async def _invoke_hybrid(self, context: Context, name: str, *args, **kwargs):
+        if name == "download":
+            await self.download(context, url=kwargs.get('url', ''))
+            return
+        if name == "mcquote":
+            await self.mcquote(context, text=kwargs.get('text', ''))
+            return
+        if name == "img2gif":
+            await self.img2gif(context, attachment=kwargs.get('attachment'))
+            return
+        await context.send(f"Unknown media command: {name}")
 
     @media_group.command(name="download")
     async def media_group_download(self, context: Context, *, url: str):
@@ -46,6 +53,10 @@ class Media(commands.GroupCog, name="media"):
     @media_group.command(name="mcquote")
     async def media_group_mcquote(self, context: Context, *, text: str):
         await self._invoke_hybrid(context, "mcquote", text=text)
+
+    @media_group.command(name="img2gif")
+    async def media_group_img2gif(self, context: Context, attachment: Optional[discord.Attachment] = None):
+        await self._invoke_hybrid(context, "img2gif", attachment=attachment)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
@@ -63,9 +74,18 @@ class Media(commands.GroupCog, name="media"):
     async def mcquote(self, context, *, text: str):
         return await mcquote_command()(self, context, text=text)
 
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="img2gif",
+        description="Convert an uploaded image to a GIF.",
+    )
+    async def img2gif(self, context, attachment: Optional[discord.Attachment] = None):
+        return await img2gif_command()(self, context, attachment=attachment)
+
 async def setup(bot) -> None:
     cog = Media(bot)
     await bot.add_cog(cog)
     
     bot.logger.info("Loaded extension 'media.download'")
     bot.logger.info("Loaded extension 'media.mcquote'")
+    bot.logger.info("Loaded extension 'media.img2gif'")

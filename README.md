@@ -29,7 +29,7 @@
 | melonx | `melonx`, `transfer`, `mods`, `gamecrash`, `requirements`, `error`, `26` |
 | miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`|
 | utilities | `translate`, `codepreview`, `dictionary` |
-| media | `download`, `mcquote` |
+| media | `download`, `mcquote`, `img2gif` |
 
 ## Download
 
