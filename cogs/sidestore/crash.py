@@ -13,7 +13,7 @@ def crash_command():
         embed = discord.Embed(
             color=0x8e82f9,
             description=(
-                '# Sidestore Crashing After Refresh\n\n---\n\n' +
+                '# SideStore Crashing After Refresh\n\n---\n\n' +
                 '1. Delete your current SideStore.\n' +
                 '2. Reinstall with AltServer.\n' +
                 '3. Select the pairing file and sign into SideStore.\n' +
