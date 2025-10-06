@@ -15,8 +15,9 @@ def crash_command():
             description=(
                 '# SideStore Crashing After Refresh\n\n---\n\n' +
                 'First, to try and save your data:\n' +
-                '1. DON'T DELETE SIDESTORE, reinstall with AltServer's `Sideload .ipa`.\n' +
-                'If that doesn't work:\n' +
+                "1. DON'T DELETE SIDESTORE, reinstall with AltServer's `Sideload .ipa`.\n" +
+                "If that doesn't work:\n" +
+
                 '1. Delete your current SideStore. Reinstall with AltServer.\n' +
                 '2. Import your pairing file and sign into SideStore.\n' +
                 '3. Download the SideStore .ipa file, and save it to your Files app.\n' +
@@ -25,7 +26,7 @@ def crash_command():
             )
         )
         embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
-        embed.set_footer(text=f'Last Edited by neoarz')
+        embed.set_footer(text=f'Last Edited by CelloSerenity')
         embed.timestamp = discord.utils.utcnow()
 
         view = discord.ui.View()

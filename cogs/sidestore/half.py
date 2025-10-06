@@ -26,7 +26,7 @@ def half_command():
             )
         )
         embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
-        embed.set_footer(text=f'Last Edited by neoarz')
+        embed.set_footer(text=f'Last Edited by CelloSerenity')
         embed.timestamp = discord.utils.utcnow()
 
         view = discord.ui.View()
