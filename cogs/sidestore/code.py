@@ -24,11 +24,11 @@ def code_command():
                 '2. **For iOS versions 18.1 and above:**\n' +
                 '   - Visit [iCloud](https://www.icloud.com) on a web browser\n' +
                 '   - Click "Sign In"\n' +
-                '   - When prompted, you will see two options: "Sign In" and "Use Different Apple Account"\n' +
+                '   - On an Apple device, you may see two options: "Sign In" and "Use Different Apple Account"\n' +
                 '   - Select the bottom option, "Use Different Apple Account"\n' +
-                '   - Enter your Apple ID and password\n' +
+                '   - Enter your Apple ID and password, DO NOT USE A PASSKEY\n' +
                 '   - Apple will send you a verification code\n' +
-                '   - Use this code in Sidestore to complete the sign-in process\n' 
+                '   - Use this code in SideStore to complete the sign-in process\n' 
             )
         )
         embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
