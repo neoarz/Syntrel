@@ -14,7 +14,7 @@ def half_command():
             color=0x8e82f9,
             description=(
                 '# Sidestore/IPAs Stuck Halfway Through Installing or Refreshing\n\n---\n' +
-                '### Make Sure You are on the Latest Version of SideStore\n\n' +
+                '- Make sure you are on the latest version of SideStore\n' +
                 '- Restart SideStore\n' +
                 '- Restart device\n' +
                 '- Clear Cache\n' +
