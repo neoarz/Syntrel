@@ -13,8 +13,8 @@ def half_command():
         embed = discord.Embed(
             color=0x8e82f9,
             description=(
-                '# Sidestore/IPAs Stuck Halfway Through Installing or Refreshing\n\n---\n' +
-                '### Make Sure You are on the Latest Version of SideStore\n\n' +
+                '# SideStore/IPAs Stuck Halfway Through Installing or Refreshing\n\n---\n' +
+                '- Make sure you are on the latest version of SideStore\n' +
                 '- Restart SideStore\n' +
                 '- Restart device\n' +
                 '- Clear Cache\n' +
@@ -26,7 +26,7 @@ def half_command():
             )
         )
         embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
-        embed.set_footer(text=f'Last Edited by neoarz')
+        embed.set_footer(text=f'Last Edited by CelloSerenity')
         embed.timestamp = discord.utils.utcnow()
 
         view = discord.ui.View()

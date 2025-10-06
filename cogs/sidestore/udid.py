@@ -14,12 +14,12 @@ def udid_command():
             color=0x8e82f9,
             description=(
                 '# SideStore Could Not Determine Device UDID\n\n---\n\n' +
-                'This error usually occurs when the pairing file is corrupted. Please generate a new pairing file and try again.\n\n' +
+                'This error usually occurs when the pairing file is corrupted. Please create a new pairing file using `idevice_pair` and try again.\n\n' +
                 'If you forgot how to generate a new pairing file, you can refer to the documentation below.'
             )
         )
         embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
-        embed.set_footer(text=f'Last Edited by neoarz')
+        embed.set_footer(text=f'Last Edited by CelloSerenity')
         embed.timestamp = discord.utils.utcnow()
 
         view = discord.ui.View()

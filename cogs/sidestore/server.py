@@ -13,7 +13,7 @@ def server_command():
         embed = discord.Embed(
             color=0x8e82f9,
             description=(
-                '# Sidestore Freezing or Displaying an Error Code During Sign-In\n\n---\n\n' +
+                '# SideStore Freezing or Displaying an Error Code During Sign-In\n\n---\n\n' +
                 '1. **Change the Anisette Server:**\n' +
                 '   The most common solution is to switch to a different Anisette server. Do this:\n' +
                 '   - Open Sidestore settings\n' +
@@ -25,7 +25,7 @@ def server_command():
             )
         )
         embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
-        embed.set_footer(text=f'Last Edited by neoarz')
+        embed.set_footer(text=f'Last Edited by CelloSerenity')
         embed.timestamp = discord.utils.utcnow()
 
         view = discord.ui.View()
