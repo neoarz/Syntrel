@@ -14,11 +14,13 @@ def crash_command():
             color=0x8e82f9,
             description=(
                 '# SideStore Crashing After Refresh\n\n---\n\n' +
-                '1. Delete your current SideStore.\n' +
-                '2. Reinstall with AltServer.\n' +
-                '3. Select the pairing file and sign into SideStore.\n' +
-                '4. Download the SideStore .ipa file, and save it to your Files app.\n' +
-                '5. Import the "Sidestore.ipa" file into SideStore, just like how you import any other IPA.\n\n' +
+                'First, to try and save your data:\n' +
+                '1. DON'T DELETE SIDESTORE, reinstall with AltServer's `Sideload .ipa`.\n' +
+                'If that doesn't work:\n' +
+                '1. Delete your current SideStore. Reinstall with AltServer.\n' +
+                '2. Import your pairing file and sign into SideStore.\n' +
+                '3. Download the SideStore .ipa file, and save it to your Files app.\n' +
+                '4. Import the "Sidestore.ipa" file into SideStore, just like how you import any other IPA.\n\n' +
                 'This process ensures SideStore is refreshed without issues.'
             )
         )
