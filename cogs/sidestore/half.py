@@ -13,7 +13,7 @@ def half_command():
         embed = discord.Embed(
             color=0x8e82f9,
             description=(
-                '# Sidestore/IPAs Stuck Halfway Through Installing or Refreshing\n\n---\n' +
+                '# SideStore/IPAs Stuck Halfway Through Installing or Refreshing\n\n---\n' +
                 '- Make sure you are on the latest version of SideStore\n' +
                 '- Restart SideStore\n' +
                 '- Restart device\n' +
