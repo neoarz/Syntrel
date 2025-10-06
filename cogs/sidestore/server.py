@@ -13,7 +13,7 @@ def server_command():
         embed = discord.Embed(
             color=0x8e82f9,
             description=(
-                '# Sidestore Freezing or Displaying an Error Code During Sign-In\n\n---\n\n' +
+                '# SideStore Freezing or Displaying an Error Code During Sign-In\n\n---\n\n' +
                 '1. **Change the Anisette Server:**\n' +
                 '   The most common solution is to switch to a different Anisette server. Do this:\n' +
                 '   - Open Sidestore settings\n' +
