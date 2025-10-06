@@ -14,8 +14,9 @@ def afc_command():
             color=0x8e82f9,
             description=(
                 '# AFC Connection Failure\n\n---\n\n' +
-                '1. Make sure StosVPN is connected\n' +
-                '2. If issue still persists, generate and import a new pairing file using `idevice_pair`. See [Pairing File instructions](https://docs.sidestore.io/docs/installation/pairing-file) for details'
+                '1. Make sure Wi-Fi is connected to a stable network\n' +
+                '2. Make sure StosVPN is connected and updated\n' +
+                '3. If issue still persists, generate and import a new pairing file using `idevice_pair`. See [Pairing File instructions](https://docs.sidestore.io/docs/installation/pairing-file) for details'
             )
         )
         embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
