@@ -170,50 +170,70 @@ def translate_command():
     async def _translate_with_google_web(text: str, from_lang: str = "auto", to_lang: str = "en") -> dict:
         try:
             base_url = "https://translate.googleapis.com/translate_a/single"
-            
-            params = {
-                "client": "gtx",
-                "sl": from_lang,
-                "tl": to_lang,
-                "dt": ["t", "bd"],
-                "q": text
-            }
-            
-            param_string = "&".join([f"{k}={'&'.join(v) if isinstance(v, list) else v}" for k, v in params.items()])
-            url = f"{base_url}?{param_string}"
-            
+
+            def chunk_text(t: str, max_len: int = 900) -> list[str]:
+                t = t.strip()
+                if len(t) <= max_len:
+                    return [t]
+                chunks = []
+                current = []
+                current_len = 0
+                for part in re.split(r"(\n+|\s+)", t):
+                    if not part:
+                        continue
+                    add_len = len(part)
+                    if current_len + add_len > max_len and current:
+                        chunks.append("".join(current))
+                        current = [part]
+                        current_len = add_len
+                    else:
+                        current.append(part)
+                        current_len += add_len
+                if current:
+                    chunks.append("".join(current))
+                return chunks
+
             headers = {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
             }
-            
+
+            chunks = chunk_text(text)
+            translated_parts: list[str] = []
+            detected_lang_overall = from_lang
+
             async with aiohttp.ClientSession() as session:
-                async with session.get(url, headers=headers) as response:
-                    if response.status == 200:
-                        result_text = await response.text()
-                        
+                for idx, chunk in enumerate(chunks):
+                    params = {
+                        "client": "gtx",
+                        "sl": from_lang,
+                        "tl": to_lang,
+                        "dt": ["t", "bd"],
+                        "q": chunk
+                    }
+                    async with session.get(base_url, headers=headers, params=params) as response:
+                        if response.status != 200:
+                            return None
+                        result_text = (await response.text()).strip()
                         try:
-                            result_text = result_text.strip()
-                            if result_text.startswith('[['):
+                            if result_text.startswith("[["):
                                 data = json.loads(result_text)
-                                
-                                translated_text = ""
+                                part_text = ""
                                 if data and len(data) > 0 and data[0]:
                                     for item in data[0]:
                                         if item and len(item) > 0:
-                                            translated_text += item[0] if item[0] else ""
-                                
-                                detected_lang = from_lang
-                                if len(data) > 2 and data[2]:
-                                    detected_lang = data[2]
-                                
-                                return {
-                                    "translatedText": translated_text.strip(),
-                                    "detectedSourceLanguage": detected_lang
-                                }
-                        except:
-                            pass
-                    
-            return None
+                                            part_text += item[0] if item[0] else ""
+                                translated_parts.append(part_text)
+                                if idx == 0 and len(data) > 2 and data[2]:
+                                    detected_lang_overall = data[2]
+                            else:
+                                return None
+                        except Exception:
+                            return None
+
+            return {
+                "translatedText": "".join(translated_parts).strip(),
+                "detectedSourceLanguage": detected_lang_overall
+            }
         except Exception:
             return None
 
@@ -280,7 +300,7 @@ def translate_command():
             
             embed = discord.Embed(
                 title="Translation",
-                description=f"**Original:** {text}\n**Translated:** {result['translatedText']}",
+                description=f"**Original:** {text}\n\n**Translated:** {result['translatedText']}",
                 color=0x7289DA,
             )
             embed.set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
