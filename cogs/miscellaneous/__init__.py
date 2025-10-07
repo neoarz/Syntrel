@@ -4,6 +4,7 @@ from discord.ext.commands import Context
 
 from .dontasktoask import dontasktoask_command
 from .rickroll import rr_command
+from .depart import depart_command
 from .labubu import labubu_command
 from .tryitandsee import tryitandsee_command
 from .piracy import piracy_command
@@ -23,7 +24,7 @@ class Miscellaneous(commands.GroupCog, name="misc"):
             color=0x7289DA
         )
         embed.set_author(name="Miscellaneous", icon_url="https://yes.nighty.works/raw/YxMC0r.png")
-        embed.add_field(name="Available", value="dontasktoask, rr, labubu, tryitandsee, piracy, keanu, support", inline=False)
+        embed.add_field(name="Available", value="dontasktoask, rr, depart, labubu, tryitandsee, piracy, keanu, support", inline=False)
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str):
@@ -50,6 +51,10 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     @miscellaneous_group.command(name="rr")
     async def miscellaneous_group_rr(self, context: Context):
         await self._invoke_hybrid(context, "rr")
+
+    @miscellaneous_group.command(name="depart")
+    async def miscellaneous_group_depart(self, context: Context):
+        await self._invoke_hybrid(context, "depart")
 
     @miscellaneous_group.command(name="labubu")
     async def miscellaneous_group_labubu(self, context: Context):
@@ -86,6 +91,14 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     )
     async def rr(self, context):
         return await rr_command()(self, context)
+
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="depart",
+        description="Show the departure meme"
+    )
+    async def depart(self, context):
+        return await depart_command()(self, context)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
@@ -133,6 +146,7 @@ async def setup(bot) -> None:
     
     bot.logger.info("Loaded extension 'miscellaneous.dontasktoask'")
     bot.logger.info("Loaded extension 'miscellaneous.rr'")
+    bot.logger.info("Loaded extension 'miscellaneous.depart'")
     bot.logger.info("Loaded extension 'miscellaneous.labubu'")
     bot.logger.info("Loaded extension 'miscellaneous.tryitandsee'")
     bot.logger.info("Loaded extension 'miscellaneous.piracy'")
