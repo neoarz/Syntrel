@@ -166,7 +166,7 @@ def tweety_command():
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def tweety(self, context, verified: Optional[str] = "false", theme: Optional[str] = "light"):
         interaction = getattr(context, "interaction", None)
-        if interaction is not None and not isinstance(context.message, discord.Message):
+        if interaction is not None:
             try:
                 embed = discord.Embed(
                     title="Tweety",
