@@ -109,8 +109,6 @@ class TweetyHelpView(discord.ui.View):
 
 
 class TweetyView(discord.ui.View):
-    """API for Tweety is hosted on Vercel and made by me :) github can be found here: https://github.com/neoarz/tweety-api"""
-
     def __init__(self, author_id: int, original_message, tweet_data: dict, api_url: str, image_message: Optional[discord.Message] = None):
         super().__init__(timeout=300)
         self.author_id = author_id
@@ -282,6 +280,16 @@ def tweety_command():
             username = f"@{author.name}"
             avatar_url = str(author.avatar.url) if author.avatar else str(author.default_avatar.url)
             message_text = original_message.content
+            
+            for mention in original_message.mentions:
+                message_text = message_text.replace(f'<@{mention.id}>', f'@{mention.name}')
+                message_text = message_text.replace(f'<@!{mention.id}>', f'@{mention.name}')
+            
+            for role in original_message.role_mentions:
+                message_text = message_text.replace(f'<@&{role.id}>', f'@{role.name}')
+            
+            for channel in original_message.channel_mentions:
+                message_text = message_text.replace(f'<#{channel.id}>', f'#{channel.name}')
             
             image_url = None
             if original_message.attachments:
