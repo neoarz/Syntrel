@@ -13,6 +13,20 @@ from typing import Optional
 import pytz
 
 
+def break_long_words(text: str, max_word_length: int = 50) -> str:
+    words = text.split(' ')
+    result = []
+    
+    for word in words:
+        if len(word) > max_word_length:
+            chunks = [word[i:i+max_word_length] for i in range(0, len(word), max_word_length)]
+            result.append(' '.join(chunks))
+        else:
+            result.append(word)
+    
+    return ' '.join(result)
+
+
 class TweetyHelpView(discord.ui.View):
     """This is the help view for the slash command cuz only the pinging and prefix versions can use this command"""
     
@@ -292,6 +306,19 @@ def tweety_command():
                 await context.send(embed=embed)
                 return
             
+            if len(message_text) > 300:
+                await processing_msg.delete()
+                embed = discord.Embed(
+                    title="Error",
+                    description=f"Message is too long! Maximum 300 characters allowed.\nYour message: {len(message_text)} characters",
+                    color=0xE02B2B,
+                )
+                embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+                await context.send(embed=embed)
+                return
+            
+            message_text = break_long_words(message_text, max_word_length=50)
+            
             ny_tz = pytz.timezone('America/New_York')
             msg_time_ny = original_message.created_at.astimezone(ny_tz)
             timestamp = msg_time_ny.strftime("%I:%M %p · %b %d, %Y").replace(" 0", " ")
@@ -339,6 +366,7 @@ def tweety_command():
                             file = discord.File(f, filename=f"tweet_{author.name}_{int(datetime.now().timestamp())}.png")
                             embed = discord.Embed(
                                 title="Tweet Generated",
+                                description=f"<:error:1424007141768822824> Tweet sometimes may look a bit broken, im gonna rewrite the API another time... (it wasnt made for Syntrel in the first place)",
                                 color=0x7289DA,
                             )
                             embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
