@@ -10,6 +10,7 @@ from .tryitandsee import tryitandsee_command
 from .piracy import piracy_command
 from .keanu import keanu_command
 from .support import support_command
+from .docs import docs_command
 
 class Miscellaneous(commands.GroupCog, name="misc"):
     def __init__(self, bot) -> None:
@@ -24,7 +25,7 @@ class Miscellaneous(commands.GroupCog, name="misc"):
             color=0x7289DA
         )
         embed.set_author(name="Miscellaneous", icon_url="https://yes.nighty.works/raw/YxMC0r.png")
-        embed.add_field(name="Available", value="dontasktoask, rr, depart, labubu, tryitandsee, piracy, keanu, support", inline=False)
+        embed.add_field(name="Available", value="dontasktoask, rr, depart, labubu, tryitandsee, piracy, keanu, support, docs", inline=False)
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str):
@@ -75,6 +76,10 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     @miscellaneous_group.command(name="support")
     async def miscellaneous_group_support(self, context: Context):
         await self._invoke_hybrid(context, "support")
+
+    @miscellaneous_group.command(name="docs")
+    async def miscellaneous_group_docs(self, context: Context):
+        await self._invoke_hybrid(context, "docs")
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
@@ -140,6 +145,14 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     async def support(self, context):
         return await support_command()(self, context)
 
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="docs",
+        description="Shows the docs image."
+    )
+    async def docs(self, context):
+        return await docs_command()(self, context)
+
 async def setup(bot) -> None:
     cog = Miscellaneous(bot)
     await bot.add_cog(cog)
@@ -152,3 +165,4 @@ async def setup(bot) -> None:
     bot.logger.info("Loaded extension 'miscellaneous.piracy'")
     bot.logger.info("Loaded extension 'miscellaneous.keanu'")
     bot.logger.info("Loaded extension 'miscellaneous.support'")
+    bot.logger.info("Loaded extension 'miscellaneous.docs'")
