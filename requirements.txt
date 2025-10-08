@@ -5,3 +5,4 @@ python-dotenv
 yt-dlp
 Pillow
 pillow-heif
+pytz

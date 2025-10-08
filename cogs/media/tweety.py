@@ -1,3 +1,8 @@
+# The API used in the tweety command is made by me and can be found here:
+# https://github.com/neoarz/tweety-api
+# I made this out of spite since i couldnt find any free APIs for this
+# Its serverless and hosted on Vercel :)
+
 import os
 import tempfile
 import discord
@@ -5,10 +10,11 @@ from discord.ext import commands
 import aiohttp
 from datetime import datetime
 from typing import Optional
+import pytz
 
 
 class TweetyHelpView(discord.ui.View):
-    """Paginated help view for tweety command"""
+    """This is the help view for the slash command cuz only the pinging and prefix versions can use this command"""
     
     def __init__(self, user_id: int, bot):
         super().__init__(timeout=180)
@@ -36,7 +42,6 @@ class TweetyHelpView(discord.ui.View):
         self.update_buttons()
     
     def create_embed(self):
-        """Create embed for current page"""
         page = self.pages[self.current_page]
         embed = discord.Embed(
             title=page["title"],
@@ -54,7 +59,6 @@ class TweetyHelpView(discord.ui.View):
         return embed
     
     def update_buttons(self):
-        """Update button states based on current page"""
         self.clear_items()
         
         prev_button = discord.ui.Button(
@@ -76,7 +80,6 @@ class TweetyHelpView(discord.ui.View):
         self.add_item(next_button)
     
     async def previous_page(self, interaction: discord.Interaction):
-        """Go to previous page"""
         if interaction.user.id != self.user_id:
             await interaction.response.send_message("You can't control someone else's help menu!", ephemeral=True)
             return
@@ -89,7 +92,6 @@ class TweetyHelpView(discord.ui.View):
             await interaction.response.defer()
     
     async def next_page(self, interaction: discord.Interaction):
-        """Go to next page"""
         if interaction.user.id != self.user_id:
             await interaction.response.send_message("You can't control someone else's help menu!", ephemeral=True)
             return
@@ -102,7 +104,6 @@ class TweetyHelpView(discord.ui.View):
             await interaction.response.defer()
     
     async def on_timeout(self):
-        """Disable buttons when view times out"""
         for item in self.children:
             item.disabled = True
 
@@ -123,7 +124,6 @@ class TweetyView(discord.ui.View):
         self.update_button_styles()
     
     def update_button_styles(self):
-        """Update button styles to reflect current state"""
         self.clear_items()
         
         dark_button = discord.ui.Button(
@@ -310,7 +310,9 @@ def tweety_command():
                 await context.send(embed=embed)
                 return
             
-            timestamp = original_message.created_at.strftime("%I:%M %p · %b %d, %Y").replace(" 0", " ")
+            ny_tz = pytz.timezone('America/New_York')
+            msg_time_ny = original_message.created_at.astimezone(ny_tz)
+            timestamp = msg_time_ny.strftime("%I:%M %p · %b %d, %Y").replace(" 0", " ")
             tweet_data = {
                 "name": display_name[:50],
                 "handle": username[:20],
