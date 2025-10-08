@@ -2,6 +2,8 @@ import random
 from itertools import repeat
 import discord
 from discord.ext import commands
+import asyncio
+import time
 
 class RowButton(discord.ui.Button):
     def __init__(self, ctx, label, custom_id, bombs, board):
@@ -13,7 +15,24 @@ class RowButton(discord.ui.Button):
     async def callback(self, interaction):
         assert self.view is not None
         view: MsView = self.view
-        await interaction.response.defer()
+        
+        current_time = time.time()
+        if current_time - view.last_interaction < 0.5:
+            try:
+                return await interaction.response.send_message("Please wait before clicking again.", ephemeral=True)
+            except:
+                return
+        
+        view.last_interaction = current_time
+        
+        try:
+            await interaction.response.defer()
+        except discord.errors.HTTPException as e:
+            if e.status == 429:
+                await asyncio.sleep(1)
+                return
+            raise
+        
         if interaction.user.id != self.ctx.author.id:
             return await interaction.followup.send(
                 "You cannot interact with these buttons.", ephemeral=True
@@ -59,14 +78,19 @@ class RowButton(discord.ui.Button):
             ] = str(number) if number > 0 else "0"
             view.moves.append(pos)
             if len(view.moves) + len(self.bombs) == 25:
-                await interaction.edit_original_response(view=view)
                 await view.EndGame()
-
-        await interaction.edit_original_response(view=view)
+            else:
+                try:
+                    await interaction.edit_original_response(view=view)
+                except discord.errors.HTTPException as e:
+                    if e.status == 429:
+                        await asyncio.sleep(1)
+                    else:
+                        raise
 
 class MsView(discord.ui.View):
     def __init__(self, ctx, options, bombs, board):
-        super().__init__()
+        super().__init__(timeout=300)
         for i, op in enumerate(options):
             self.add_item(RowButton(ctx, op, f"block{i}", bombs, board))
         self.board = board
@@ -74,15 +98,23 @@ class MsView(discord.ui.View):
         self.moves = []
         self.ctx = ctx
         self.message = None
-
-    async def EndGame(self):
+        self.last_interaction = 0
+    
+    async def on_timeout(self):
+        for button in self.children:
+            button.disabled = True
         embed = discord.Embed(
-            title="Minesweeper",
-            description="Game Ended. You won!",
-            color=0x00FF00
+            title="Minesweeper", 
+            description="Game timed out!", 
+            color=0xFF0000
         )
         embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
-        await self.message.edit(embed=embed, view=self)
+        try:
+            await self.message.edit(embed=embed, view=self)
+        except:
+            pass
+
+    async def EndGame(self):
         for button in self.children:
             button.disabled = True
             pos = int(button.custom_id[5:])
@@ -90,6 +122,21 @@ class MsView(discord.ui.View):
                 button.label = "💣"
                 button.style = discord.ButtonStyle.red
                 self.board[self.GetBoardRow(pos)][self.GetBoardPos(pos)] = "💣"
+        
+        embed = discord.Embed(
+            title="Minesweeper",
+            description="Game Ended. You won!",
+            color=0x00FF00
+        )
+        embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+        
+        try:
+            await self.message.edit(embed=embed, view=self)
+        except discord.errors.HTTPException as e:
+            if e.status == 429:
+                await asyncio.sleep(1)
+            else:
+                raise
 
     def GetBoardRow(self, pos):
         if pos in [0, 1, 2, 3, 4]:
@@ -127,13 +174,6 @@ class MsView(discord.ui.View):
 
     async def RevealBombs(self, b_id, board):
         bombemo = "💣"
-        embed = discord.Embed(
-            title="Minesweeper",
-            description=f"💥 BOOM! You hit a bomb. Game Over!\n-# gg {self.ctx.author.mention}",
-            color=0xE02B2B
-        )
-        embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
-        await self.message.edit(embed=embed, view=self)
         
         for button in self.children:
             button.disabled = True
@@ -151,6 +191,21 @@ class MsView(discord.ui.View):
                 self.board[self.GetBoardRow(pos)][
                     self.GetBoardPos(pos)
                 ] = bombemo
+        
+        embed = discord.Embed(
+            title="Minesweeper",
+            description=f"💥 BOOM! You hit a bomb. Game Over!\n-# gg {self.ctx.author.mention}",
+            color=0xE02B2B
+        )
+        embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+        
+        try:
+            await self.message.edit(embed=embed, view=self)
+        except discord.errors.HTTPException as e:
+            if e.status == 429:
+                await asyncio.sleep(1)
+            else:
+                raise
 
 def minesweeper_command():
     @commands.hybrid_command(
