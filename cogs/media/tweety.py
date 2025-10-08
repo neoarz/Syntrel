@@ -256,16 +256,6 @@ def tweety_command():
         
         try:
             original_message = await context.channel.fetch_message(context.message.reference.message_id)
-            
-            if original_message.author.bot:
-                embed = discord.Embed(
-                    title="Error",
-                    description="Cannot convert bot messages to tweets!",
-                    color=0xE02B2B,
-                )
-                embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                await context.send(embed=embed)
-                return
 
             processing_embed = discord.Embed(
                 title="Tweet Generator (Processing)",
@@ -291,31 +281,15 @@ def tweety_command():
             for channel in original_message.channel_mentions:
                 message_text = message_text.replace(f'<#{channel.id}>', f'#{channel.name}')
             
-            image_url = None
-            if original_message.attachments:
-                for attachment in original_message.attachments:
-                    if any(attachment.filename.lower().endswith(ext) for ext in ['.png', '.jpg', '.jpeg', '.gif', '.webp']):
-                        raw_url = attachment.url
-                        if 'cdn.discordapp.com' in raw_url:
-                            media_url = raw_url.replace('cdn.discordapp.com', 'media.discordapp.net')
-                            if '?' not in media_url:
-                                media_url += f"?width={attachment.width}&height={attachment.height}"
-                            elif 'width=' not in media_url and attachment.width:
-                                media_url += f"&width={attachment.width}&height={attachment.height}"
-                            image_url = media_url
-                        else:
-                            image_url = raw_url
-                        break
-            
-            if not message_text.strip() and not image_url:
+            if not message_text.strip():
                 await processing_msg.delete()
                 embed = discord.Embed(
                     title="Error",
-                    description="Message must have either text content or an image/GIF to convert!",
+                    description="No text found! This command only works with text messages.",
                     color=0xE02B2B,
                 )
                 embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                await context.send(embed=embed)
+                await context.send(embed=embed, ephemeral=True)
                 return
             
             ny_tz = pytz.timezone('America/New_York')
@@ -330,9 +304,6 @@ def tweety_command():
                 "verified": False,
                 "dark": False
             }
-            
-            if image_url:
-                tweet_data["image"] = image_url
             
             API_BASE_URL = "https://tweety-api.vercel.app"
             
