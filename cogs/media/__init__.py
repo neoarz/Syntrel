@@ -34,7 +34,7 @@ class Media(commands.GroupCog, name="media"):
             content = message.content.lower()
             content_without_mention = content.replace(f'<@{self.bot.user.id}>', '').replace(f'<@!{self.bot.user.id}>', '').strip()
             
-            if 'tweety' in content_without_mention:
+            if content_without_mention.strip() == 'tweety':
                 ctx = await self.bot.get_context(message)
                 await self.tweety(ctx)
 

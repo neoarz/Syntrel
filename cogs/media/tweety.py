@@ -289,7 +289,7 @@ def tweety_command():
                     color=0xE02B2B,
                 )
                 embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                await context.send(embed=embed, ephemeral=True)
+                await context.send(embed=embed)
                 return
             
             ny_tz = pytz.timezone('America/New_York')
