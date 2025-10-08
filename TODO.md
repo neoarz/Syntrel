@@ -27,7 +27,7 @@
 
 - [ ] Create github action 
 
-- [ ] Add video commands
+- [x] Add video commands
 
 - [ ] Add git log to info 
 
