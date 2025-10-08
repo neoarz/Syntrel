@@ -7,8 +7,108 @@ from datetime import datetime
 from typing import Optional
 
 
+class TweetyHelpView(discord.ui.View):
+    """Paginated help view for tweety command"""
+    
+    def __init__(self, user_id: int, bot):
+        super().__init__(timeout=180)
+        self.user_id = user_id
+        self.bot = bot
+        self.current_page = 0
+        self.pages = [
+            {
+                "title": "Tweety (Method 1)",
+                "description": "Use the prefix command `.media tweety` while replying to a message.",
+                "gif_url": "https://yes.nighty.works/raw/VrKX1L.gif", 
+                "fields": [
+                    {"name": "How to use", "value": "1. Reply to any message\n2. Type `.media tweety`\n3. Use the buttons to customize!", "inline": False},
+                ]
+            },
+            {
+                "title": "Tweety (Method 2)",
+                "description": f"Mention <@{bot.user.id}> with `tweety` while replying to a message.",
+                "gif_url": "https://yes.nighty.works/raw/9XEe9j.gif", 
+                "fields": [
+                    {"name": "How to use", "value": f"1. Reply to any message\n2. Type `<@{bot.user.id}> tweety`\n3. Use the buttons to customize!", "inline": False},
+                ]
+            }
+        ]
+        self.update_buttons()
+    
+    def create_embed(self):
+        """Create embed for current page"""
+        page = self.pages[self.current_page]
+        embed = discord.Embed(
+            title=page["title"],
+            description=page["description"],
+            color=0x7289DA,
+        )
+        embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+        
+        for field in page["fields"]:
+            embed.add_field(name=field["name"], value=field["value"], inline=field["inline"])
+        
+        embed.set_image(url=page["gif_url"])
+        embed.set_footer(text=f"Page {self.current_page + 1}/{len(self.pages)}")
+        
+        return embed
+    
+    def update_buttons(self):
+        """Update button states based on current page"""
+        self.clear_items()
+        
+        prev_button = discord.ui.Button(
+            label="Prev",
+            style=discord.ButtonStyle.secondary,
+            emoji=discord.PartialEmoji(name="left", id=1420240344926126090),
+            disabled=self.current_page == 0
+        )
+        prev_button.callback = self.previous_page
+        self.add_item(prev_button)
+        
+        next_button = discord.ui.Button(
+            label="Next",
+            style=discord.ButtonStyle.secondary,
+            emoji=discord.PartialEmoji(name="right", id=1420240334100627456),
+            disabled=self.current_page == len(self.pages) - 1
+        )
+        next_button.callback = self.next_page
+        self.add_item(next_button)
+    
+    async def previous_page(self, interaction: discord.Interaction):
+        """Go to previous page"""
+        if interaction.user.id != self.user_id:
+            await interaction.response.send_message("You can't control someone else's help menu!", ephemeral=True)
+            return
+        
+        if self.current_page > 0:
+            self.current_page -= 1
+            self.update_buttons()
+            await interaction.response.edit_message(embed=self.create_embed(), view=self)
+        else:
+            await interaction.response.defer()
+    
+    async def next_page(self, interaction: discord.Interaction):
+        """Go to next page"""
+        if interaction.user.id != self.user_id:
+            await interaction.response.send_message("You can't control someone else's help menu!", ephemeral=True)
+            return
+        
+        if self.current_page < len(self.pages) - 1:
+            self.current_page += 1
+            self.update_buttons()
+            await interaction.response.edit_message(embed=self.create_embed(), view=self)
+        else:
+            await interaction.response.defer()
+    
+    async def on_timeout(self):
+        """Disable buttons when view times out"""
+        for item in self.children:
+            item.disabled = True
+
+
 class TweetyView(discord.ui.View):
-    """ API for Tweety is hosted on Vercel and made by me :) github can be found here: https://github.com/neoarz/tweety-api"""
+    """API for Tweety is hosted on Vercel and made by me :) github can be found here: https://github.com/neoarz/tweety-api"""
 
     def __init__(self, author_id: int, original_message, tweet_data: dict, api_url: str, image_message: Optional[discord.Message] = None):
         super().__init__(timeout=300)
@@ -140,21 +240,12 @@ def tweety_command():
     )
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def tweety(self, context):
-        # Slash commands show info message only
         if hasattr(context, "interaction") and context.interaction:
-            embed = discord.Embed(
-                title="Tweety",
-                description=(
-                    "Use the prefix command: `.media tweety`\n"
-                    f"Or reply to a message with: <@{self.bot.user.id}> tweety"
-                ),
-                color=0x7289DA,
-            )
-            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-            await context.send(embed=embed, ephemeral=True)
+            view = TweetyHelpView(user_id=context.author.id, bot=self.bot)
+            embed = view.create_embed()
+            await context.send(embed=embed, view=view, ephemeral=True)
             return
         
-        # Check if replying to a message
         if not context.message.reference or not context.message.reference.message_id:
             embed = discord.Embed(
                 title="Error",
@@ -168,7 +259,6 @@ def tweety_command():
         try:
             original_message = await context.channel.fetch_message(context.message.reference.message_id)
             
-            # Check if bot message
             if original_message.author.bot:
                 embed = discord.Embed(
                     title="Error",
@@ -179,7 +269,6 @@ def tweety_command():
                 await context.send(embed=embed)
                 return
 
-            # Show processing message
             processing_embed = discord.Embed(
                 title="Tweet Generator (Processing)",
                 description="<a:mariospin:1423677027013103709> Generating tweet... This may take a moment.",
@@ -221,7 +310,6 @@ def tweety_command():
                 await context.send(embed=embed)
                 return
             
-            # Prepare tweet data
             timestamp = original_message.created_at.strftime("%I:%M %p · %b %d, %Y").replace(" 0", " ")
             tweet_data = {
                 "name": display_name[:50],
