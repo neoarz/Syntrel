@@ -1,11 +1,8 @@
-import asyncio
 import os
 import tempfile
 import discord
 from discord.ext import commands
-from discord import app_commands
 import aiohttp
-import io
 from datetime import datetime
 from typing import Optional
 
@@ -102,8 +99,8 @@ class TweetyView(discord.ui.View):
             embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
             await interaction.followup.send(embed=embed, ephemeral=True)
     
-    async def toggle_dark_callback(self, interaction: discord.Interaction):
-        """Handle dark mode toggle button click"""
+    async def _check_author(self, interaction: discord.Interaction) -> bool:
+        """Check if user is authorized to modify the tweet"""
         if interaction.user.id != self.author_id:
             embed = discord.Embed(
                 title="Error",
@@ -112,39 +109,29 @@ class TweetyView(discord.ui.View):
             )
             embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
             await interaction.response.send_message(embed=embed, ephemeral=True)
+            return False
+        return True
+    
+    async def toggle_dark_callback(self, interaction: discord.Interaction):
+        """Handle dark mode toggle button click"""
+        if not await self._check_author(interaction):
             return
-        
         self.is_dark = not self.is_dark
         self.tweet_data["dark"] = self.is_dark
-        
         await self.regenerate_tweet(interaction)
     
     async def toggle_verified_callback(self, interaction: discord.Interaction):
         """Handle verified toggle button click"""
-        if interaction.user.id != self.author_id:
-            embed = discord.Embed(
-                title="Error",
-                description="You can't modify someone else's tweet!",
-                color=0xE02B2B,
-            )
-            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-            await interaction.response.send_message(embed=embed, ephemeral=True)
+        if not await self._check_author(interaction):
             return
-        
         self.is_verified = not self.is_verified
         self.tweet_data["verified"] = self.is_verified
-        
         await self.regenerate_tweet(interaction)
     
     async def on_timeout(self):
         """Disable buttons when view times out"""
         for item in self.children:
             item.disabled = True
-        
-        try:
-            pass
-        except:
-            pass
 
 def tweety_command():
     @commands.hybrid_command(
@@ -153,30 +140,21 @@ def tweety_command():
     )
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def tweety(self, context):
-        interaction = getattr(context, "interaction", None)
-        if interaction is not None:
-            try:
-                embed = discord.Embed(
-                    title="Tweety",
-                    description=(
-                        "Use the prefix command: `.media tweety`\n"
-                        f"Or reply to a message with: <@{self.bot.user.id}> tweety"
-                    ),
-                    color=0x7289DA,
-                )
-                embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                if not interaction.response.is_done():
-                    await interaction.response.send_message(embed=embed, ephemeral=True)
-                else:
-                    await interaction.followup.send(embed=embed, ephemeral=True)
-            except Exception:
-                pass
+        # Slash commands show info message only
+        if hasattr(context, "interaction") and context.interaction:
+            embed = discord.Embed(
+                title="Tweety",
+                description=(
+                    "Use the prefix command: `.media tweety`\n"
+                    f"Or reply to a message with: <@{self.bot.user.id}> tweety"
+                ),
+                color=0x7289DA,
+            )
+            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            await context.send(embed=embed, ephemeral=True)
             return
         
-        # Default to light mode, non-verified (buttons will allow toggling)
-        verified_bool = False
-        theme_bool = False
-        
+        # Check if replying to a message
         if not context.message.reference or not context.message.reference.message_id:
             embed = discord.Embed(
                 title="Error",
@@ -184,38 +162,13 @@ def tweety_command():
                 color=0xE02B2B,
             )
             embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-            
-            interaction = getattr(context, "interaction", None)
-            if interaction is not None:
-                if not interaction.response.is_done():
-                    await interaction.response.send_message(embed=embed, ephemeral=True)
-                else:
-                    await interaction.followup.send(embed=embed, ephemeral=True)
-            else:
-                await context.send(embed=embed, ephemeral=True)
+            await context.send(embed=embed)
             return
         
-        original_message = await context.channel.fetch_message(context.message.reference.message_id)
-        
         try:
-            if not original_message:
-                embed = discord.Embed(
-                    title="Error",
-                    description="Could not find the original message!",
-                    color=0xE02B2B,
-                )
-                embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                
-                interaction = getattr(context, "interaction", None)
-                if interaction is not None:
-                    if not interaction.response.is_done():
-                        await interaction.response.send_message(embed=embed, ephemeral=True)
-                    else:
-                        await interaction.followup.send(embed=embed, ephemeral=True)
-                else:
-                    await context.send(embed=embed, ephemeral=True)
-                return
+            original_message = await context.channel.fetch_message(context.message.reference.message_id)
             
+            # Check if bot message
             if original_message.author.bot:
                 embed = discord.Embed(
                     title="Error",
@@ -223,32 +176,17 @@ def tweety_command():
                     color=0xE02B2B,
                 )
                 embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                
-                interaction = getattr(context, "interaction", None)
-                if interaction is not None:
-                    if not interaction.response.is_done():
-                        await interaction.response.send_message(embed=embed, ephemeral=True)
-                    else:
-                        await interaction.followup.send(embed=embed, ephemeral=True)
-                else:
-                    await context.send(embed=embed, ephemeral=True)
+                await context.send(embed=embed)
                 return
 
+            # Show processing message
             processing_embed = discord.Embed(
                 title="Tweet Generator (Processing)",
                 description="<a:mariospin:1423677027013103709> Generating tweet... This may take a moment.",
                 color=0x7289DA,
             )
             processing_embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-            
-            interaction = getattr(context, "interaction", None)
-            if interaction is not None:
-                if not interaction.response.is_done():
-                    await interaction.response.send_message(embed=processing_embed, ephemeral=True)
-                else:
-                    await interaction.followup.send(embed=processing_embed, ephemeral=True)
-            else:
-                processing_msg = await context.send(embed=processing_embed)
+            processing_msg = await context.send(embed=processing_embed)
 
             author = original_message.author
             display_name = author.display_name or author.name
@@ -273,36 +211,26 @@ def tweety_command():
                         break
             
             if not message_text.strip() and not image_url:
+                await processing_msg.delete()
                 embed = discord.Embed(
                     title="Error",
                     description="Message must have either text content or an image/GIF to convert!",
                     color=0xE02B2B,
                 )
                 embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                
-                interaction = getattr(context, "interaction", None)
-                if interaction is not None:
-                    try:
-                        await interaction.delete_original_response()
-                    except:
-                        pass
-                    await interaction.followup.send(embed=embed, ephemeral=True)
-                else:
-                    await processing_msg.delete()
-                    await context.send(embed=embed, ephemeral=True)
+                await context.send(embed=embed)
                 return
             
-            msg_time = original_message.created_at
-            timestamp = msg_time.strftime("%I:%M %p · %b %d, %Y").replace(" 0", " ")
-            
+            # Prepare tweet data
+            timestamp = original_message.created_at.strftime("%I:%M %p · %b %d, %Y").replace(" 0", " ")
             tweet_data = {
                 "name": display_name[:50],
                 "handle": username[:20],
                 "text": message_text[:300],
                 "avatar": avatar_url,
                 "timestamp": timestamp,
-                "verified": verified_bool,
-                "dark": theme_bool
+                "verified": False,
+                "dark": False
             }
             
             if image_url:
@@ -319,6 +247,7 @@ def tweety_command():
                     ) as response:
                         
                         if response.status != 200:
+                            await processing_msg.delete()
                             error_text = await response.text()
                             embed = discord.Embed(
                                 title="Error",
@@ -326,17 +255,7 @@ def tweety_command():
                                 color=0xE02B2B,
                             )
                             embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                            
-                            interaction = getattr(context, "interaction", None)
-                            if interaction is not None:
-                                try:
-                                    await interaction.delete_original_response()
-                                except:
-                                    pass
-                                await interaction.followup.send(embed=embed, ephemeral=True)
-                            else:
-                                await processing_msg.delete()
-                                await context.send(embed=embed, ephemeral=True)
+                            await context.send(embed=embed)
                             return
                         
                         image_data = await response.read()
@@ -345,6 +264,8 @@ def tweety_command():
                             temp_file.write(image_data)
                             temp_file_path = temp_file.name
 
+                        await processing_msg.delete()
+                        
                         with open(temp_file_path, 'rb') as f:
                             file = discord.File(f, filename=f"tweet_{author.name}_{int(datetime.now().timestamp())}.png")
                             embed = discord.Embed(
@@ -364,75 +285,38 @@ def tweety_command():
                                 api_url=API_BASE_URL
                             )
 
-                            interaction = getattr(context, "interaction", None)
-                            if interaction is not None:
-                                embed_message = await context.channel.send(embed=embed)
-                                image_message = await context.channel.send(file=file, view=view)
-                                view.image_message = image_message
-                                try:
-                                    await interaction.delete_original_response()
-                                except:
-                                    pass
-                            else:
-                                await processing_msg.delete()
-                                embed_message = await context.channel.send(embed=embed)
-                                image_message = await context.channel.send(file=file, view=view)
-                                view.image_message = image_message
+                            await context.send(embed=embed)
+                            image_message = await context.send(file=file, view=view)
+                            view.image_message = image_message
 
                         os.remove(temp_file_path)
                         
-                except aiohttp.ClientError as e:
+                except aiohttp.ClientError:
+                    await processing_msg.delete()
                     embed = discord.Embed(
                         title="Error",
-                        description=f"Connection error: Could not reach tweet API at {API_BASE_URL}",
+                        description=f"Connection error: Could not reach tweet API",
                         color=0xE02B2B,
                     )
                     embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                    
-                    interaction = getattr(context, "interaction", None)
-                    if interaction is not None:
-                        try:
-                            await interaction.delete_original_response()
-                        except:
-                            pass
-                        await interaction.followup.send(embed=embed, ephemeral=True)
-                    else:
-                        await processing_msg.delete()
-                        await context.send(embed=embed, ephemeral=True)
-                except Exception as e:
+                    await context.send(embed=embed)
+                except Exception:
+                    await processing_msg.delete()
                     embed = discord.Embed(
                         title="Error",
                         description="Error generating tweet image",
                         color=0xE02B2B,
                     )
                     embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                    
-                    interaction = getattr(context, "interaction", None)
-                    if interaction is not None:
-                        try:
-                            await interaction.delete_original_response()
-                        except:
-                            pass
-                        await interaction.followup.send(embed=embed, ephemeral=True)
-                    else:
-                        await processing_msg.delete()
-                        await context.send(embed=embed, ephemeral=True)
-                   
-        except Exception as e:
+                    await context.send(embed=embed)
+
+        except Exception:
             embed = discord.Embed(
                 title="Error",
                 description="Error processing the message!",
                 color=0xE02B2B,
             )
             embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-            
-            interaction = getattr(context, "interaction", None)
-            if interaction is not None:
-                if not interaction.response.is_done():
-                    await interaction.response.send_message(embed=embed, ephemeral=True)
-                else:
-                    await interaction.followup.send(embed=embed, ephemeral=True)
-            else:
-                await context.send(embed=embed, ephemeral=True)
+            await context.send(embed=embed)
     
     return tweety
