@@ -35,22 +35,8 @@ class Media(commands.GroupCog, name="media"):
             content_without_mention = content.replace(f'<@{self.bot.user.id}>', '').replace(f'<@!{self.bot.user.id}>', '').strip()
             
             if 'tweety' in content_without_mention:
-                parts = content_without_mention.split()
-                verified = "false"
-                theme = "light"
-                
-                for i, part in enumerate(parts):
-                    if part == 'tweety':
-                        if i + 1 < len(parts):
-                            if parts[i + 1] in ['verified', 'true', 'yes']:
-                                verified = "true"
-                        if 'dark' in parts or 'night' in parts:
-                            theme = "dark"
-                        break
-                
                 ctx = await self.bot.get_context(message)
-                
-                await self.tweety(ctx, verified=verified, theme=theme)
+                await self.tweety(ctx)
 
     @commands.group(name="media", invoke_without_command=True)
     async def media_group(self, context: Context):
@@ -74,7 +60,7 @@ class Media(commands.GroupCog, name="media"):
             await self.img2gif(context, attachment=kwargs.get('attachment'))
             return
         if name == "tweety":
-            await self.tweety(context, verified=kwargs.get('verified', "false"), theme=kwargs.get('theme', "light"))
+            await self.tweety(context)
             return
         await context.send(f"Unknown media command: {name}")
 
@@ -91,8 +77,8 @@ class Media(commands.GroupCog, name="media"):
         await self._invoke_hybrid(context, "img2gif", attachment=attachment)
 
     @media_group.command(name="tweety")
-    async def media_group_tweety(self, context: Context, verified: str = "false", theme: str = "light"):
-        await self._invoke_hybrid(context, "tweety", verified=verified, theme=theme)
+    async def media_group_tweety(self, context: Context):
+        await self._invoke_hybrid(context, "tweety")
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
@@ -123,8 +109,8 @@ class Media(commands.GroupCog, name="media"):
         name="tweety",
         description="Convert a replied message to a tweet image.",
     )
-    async def tweety(self, context, verified: str = "false", theme: str = "light"):
-        return await tweety_command()(self, context, verified=verified, theme=theme)
+    async def tweety(self, context):
+        return await tweety_command()(self, context)
 
 async def setup(bot) -> None:
     cog = Media(bot)

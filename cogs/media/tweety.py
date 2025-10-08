@@ -151,20 +151,8 @@ def tweety_command():
         name="tweety",
         description="Convert a replied message to a tweet image."
     )
-    @app_commands.describe(
-        verified="Add a verified badge to the tweet",
-        theme="Choose the theme for the tweet"
-    )
-    @app_commands.choices(verified=[
-        app_commands.Choice(name="No", value="false"),
-        app_commands.Choice(name="Yes", value="true")
-    ])
-    @app_commands.choices(theme=[
-        app_commands.Choice(name="Light", value="light"),
-        app_commands.Choice(name="Dark", value="dark")
-    ])
     @commands.cooldown(1, 10, commands.BucketType.user)
-    async def tweety(self, context, verified: Optional[str] = "false", theme: Optional[str] = "light"):
+    async def tweety(self, context):
         interaction = getattr(context, "interaction", None)
         if interaction is not None:
             try:
@@ -184,8 +172,10 @@ def tweety_command():
             except Exception:
                 pass
             return
-        verified_bool = verified == "true"
-        theme_bool = theme == "dark"
+        
+        # Default to light mode, non-verified (buttons will allow toggling)
+        verified_bool = False
+        theme_bool = False
         
         if not context.message.reference or not context.message.reference.message_id:
             embed = discord.Embed(
