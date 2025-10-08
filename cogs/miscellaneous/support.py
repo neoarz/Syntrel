@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import Context
+import aiohttp
+import io
 
 def support_command():
     @commands.hybrid_command(
@@ -8,19 +10,20 @@ def support_command():
         description="Shows the support image."
     )
     async def support(self, context):
-        embed = discord.Embed(
-            color=0x7289DA
-        )
-        embed.set_author(name="Support", icon_url="https://yes.nighty.works/raw/YxMC0r.png")
-        embed.set_image(url="https://yes.nighty.works/raw/X8XeCV.png")
+        url = "https://yes.nighty.works/raw/wGzHIV.gif"
         
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as resp:
+                data = await resp.read()
+        file = discord.File(io.BytesIO(data), filename="support.gif")
+
         if getattr(context, "interaction", None):
             inter = context.interaction
             if not inter.response.is_done():
-                await inter.response.send_message(embed=embed, ephemeral=False)
+                await inter.response.send_message(file=file, ephemeral=False)
             else:
-                await inter.followup.send(embed=embed, ephemeral=True)
+                await inter.followup.send(file=file, ephemeral=True)
         else:
-            await context.send(embed=embed)
+            await context.send(file=file)
     
     return support
