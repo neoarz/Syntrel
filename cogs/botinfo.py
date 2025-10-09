@@ -81,6 +81,38 @@ class BotInfo(commands.Cog, name="botinfo"):
     def __init__(self, bot) -> None:
         self.bot = bot
 
+    @commands.Cog.listener()
+    async def on_guild_join(self, guild):
+        channel = guild.system_channel or next(
+            (c for c in guild.text_channels if c.permissions_for(guild.me).send_messages),
+            None
+        )
+
+        if channel:
+            current_time = datetime.now().strftime("%m/%d/%y, %I:%M %p")
+            
+            description_text = (
+                "Heyooo! Im Syntrel, a bot made to help with [SideStore](https://discord.gg/3DwCwpBHfv), [MeloNX](https://discord.gg/Q4VkbkYfmk), and [idevice](https://discord.gg/ZnNcrRT3M8). I even have some cool extras! If you encounter any issues, please file a bug report. If have any feedback or suggestions, simply select \"Feedback\"!\n\n"
+                f"**Owner:** [neoarz](https://discordapp.com/users/1015372540937502851)\n"
+                f"**Python Version:** {platform.python_version()}\n"
+                f"**Prefix:** / (Slash Commands) or {self.bot.bot_prefix} for normal commands"
+            )
+            
+            embed = discord.Embed(
+                title="Syntrel Discord Bot",
+                description=description_text,
+                color=0x7289DA,
+            )
+            embed.set_author(name="Syntrel", icon_url="https://github.com/neoarz/Syntrel/blob/main/assets/icon.png?raw=true")
+            embed.set_image(url="https://github.com/neoarz/Syntrel/raw/main/assets/bannerdark.png")
+            embed.set_footer(text=f"neoarz • {current_time}", icon_url="https://yes.nighty.works/raw/P1Us35.webp")
+            
+            view = BotInfoView(self.bot)
+            
+            await channel.send(embed=embed, view=view)
+        else:
+            self.bot.logger.warning(f"Couldn't find a suitable channel in {guild.name}")
+
     @commands.hybrid_command(
         name="botinfo",
         description="Get some useful (or not) information about the bot.",
@@ -91,7 +123,7 @@ class BotInfo(commands.Cog, name="botinfo"):
         current_time = datetime.now().strftime("%m/%d/%y, %I:%M %p")
         
         description_text = (
-            "Heyooo! Im Syntrel, a bot made to help with [SideStore](https://discord.gg/3DwCwpBHfv), [MeloNX](https://discord.gg/Q4VkbkYfmk), and [idevice](https://discord.gg/ZnNcrRT3M8). I even have some cool games and more! If you run into any issues, feel free to reach out. Or if you want a new command, feel free to send some feedback!\n\n"
+            "Heyooo! Im Syntrel, a bot made to help with [SideStore](https://discord.gg/3DwCwpBHfv), [MeloNX](https://discord.gg/Q4VkbkYfmk), and [idevice](https://discord.gg/ZnNcrRT3M8). I even have some cool extras! If you encounter any issues, please file a bug report. If have any feedback or suggestions, simply select “Feedback”!\n\n"
             f"**Owner:** [neoarz](https://discordapp.com/users/1015372540937502851)\n"
             f"**Python Version:** {platform.python_version()}\n"
             f"**Prefix:** / (Slash Commands) or {self.bot.bot_prefix} for normal commands"
