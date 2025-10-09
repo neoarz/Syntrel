@@ -90,7 +90,7 @@ class DiscordBot(commands.Bot):
                 if os.path.exists(init_file):
                     try:
                         await self.load_extension(f"cogs.{folder}")
-                        if folder in ["owner", "help"]:
+                        if folder in ["owner", "help", "botinfo"]:
                             self.logger.info(f"Loaded extension '{folder}'")
                     except Exception as e:
                         exception = f"{type(e).__name__}: {e}"
@@ -122,7 +122,8 @@ class DiscordBot(commands.Bot):
                     continue
                 try:
                     await self.load_extension(f"cogs.{extension}")
-                    self.logger.info(f"Loaded extension '{extension}'")
+                    if extension in ["owner", "help", "botinfo"]:
+                        self.logger.info(f"Loaded extension '{extension}'")
                 except Exception as e:
                     exception = f"{type(e).__name__}: {e}"
                     self.logger.error(

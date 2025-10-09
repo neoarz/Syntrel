@@ -4,7 +4,6 @@ from discord.ext.commands import Context
 
 from .ping import ping_command
 from .uptime import uptime_command
-from .botinfo import botinfo_command
 from .serverinfo import serverinfo_command
 from .feedback import feedback_command
 
@@ -32,7 +31,7 @@ class General(commands.GroupCog, name="general"):
             color=0x7289DA
         )
         embed.set_author(name="General", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-        embed.add_field(name="Available", value="ping, uptime, botinfo, serverinfo, feedback", inline=False)
+        embed.add_field(name="Available", value="ping, uptime, serverinfo, feedback", inline=False)
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str):
@@ -49,10 +48,6 @@ class General(commands.GroupCog, name="general"):
     @general_group.command(name="uptime")
     async def general_group_uptime(self, context: Context):
         await self._invoke_hybrid(context, "uptime")
-
-    @general_group.command(name="botinfo")
-    async def general_group_botinfo(self, context: Context):
-        await self._invoke_hybrid(context, "botinfo")
 
     @general_group.command(name="serverinfo")
     async def general_group_serverinfo(self, context: Context):
@@ -80,14 +75,6 @@ class General(commands.GroupCog, name="general"):
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="botinfo",
-        description="Get some useful (or not) information about the bot.",
-    )
-    async def botinfo(self, context):
-        return await botinfo_command()(self, context)
-
-    @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
         name="serverinfo",
         description="Get some useful (or not) information about the server.",
     )
@@ -108,6 +95,5 @@ async def setup(bot) -> None:
     
     bot.logger.info("Loaded extension 'general.ping'")
     bot.logger.info("Loaded extension 'general.uptime'")
-    bot.logger.info("Loaded extension 'general.botinfo'")
     bot.logger.info("Loaded extension 'general.serverinfo'")
     bot.logger.info("Loaded extension 'general.feedback'")

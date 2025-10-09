@@ -79,6 +79,18 @@ class Help(commands.Cog, name="help"):
             )
             embed.set_author(name="Help", icon_url="https://yes.nighty.works/raw/T9mnBO.png")
             
+            standalone_commands = []
+            botinfo_cmd = self.bot.tree.get_command("botinfo")
+            if botinfo_cmd:
+                standalone_commands.append("**/botinfo** » Get information about this bot")
+            
+            if standalone_commands:
+                embed.add_field(
+                    name="",
+                    value="".join(standalone_commands) + "\n",
+                    inline=False
+                )
+                
             available_categories = set()
             for cog_name in self.bot.cogs:
                 mapped_category = category_mapping.get(cog_name.lower())

@@ -1,13 +1,21 @@
 import platform
 import discord
+from discord import app_commands
 from discord.ext import commands
+from discord.ext.commands import Context
 
-def botinfo_command():
+
+class BotInfo(commands.Cog, name="botinfo"):
+    def __init__(self, bot) -> None:
+        self.bot = bot
+
     @commands.hybrid_command(
         name="botinfo",
         description="Get some useful (or not) information about the bot.",
     )
-    async def botinfo(self, context):
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.allowed_installs(guilds=True, users=True)
+    async def botinfo(self, context: Context) -> None:
         embed = discord.Embed(
             title="Syntrel Discord Bot",
             color=0x7289DA,
@@ -22,9 +30,11 @@ def botinfo_command():
             value=f"/ (Slash Commands) or {self.bot.bot_prefix} for normal commands",
             inline=False,
         )
-        if getattr(context, "interaction", None):
+        if context.interaction:
             await context.interaction.response.send_message(embed=embed, ephemeral=True)
         else:
             await context.send(embed=embed)
-    
-    return botinfo
+
+
+async def setup(bot) -> None:
+    await bot.add_cog(BotInfo(bot))
