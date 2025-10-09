@@ -62,7 +62,63 @@ def codepreview_command():
             pass
         return None
 
+    async def fetch_pr_diff(owner, repo, pr_number):
+        try:
+            api_url = f'https://api.github.com/repos/{owner}/{repo}/pulls/{pr_number}'
+            headers = {
+                'Accept': 'application/vnd.github.v3.diff',
+                'User-Agent': 'Discord-Bot'
+            }
+            
+            async with aiohttp.ClientSession() as session:
+                async with session.get(api_url, headers=headers) as response:
+                    if response.status == 200:
+                        diff_content = await response.text()
+                        return diff_content
+        except Exception:
+            pass
+        return None
+
+    async def fetch_pr_info(owner, repo, pr_number):
+        try:
+            api_url = f'https://api.github.com/repos/{owner}/{repo}/pulls/{pr_number}'
+            headers = {
+                'Accept': 'application/vnd.github.v3+json',
+                'User-Agent': 'Discord-Bot'
+            }
+            
+            async with aiohttp.ClientSession() as session:
+                async with session.get(api_url, headers=headers) as response:
+                    if response.status == 200:
+                        pr_data = await response.json()
+                        return {
+                            'title': pr_data.get('title', ''),
+                            'number': pr_data.get('number', pr_number),
+                            'state': pr_data.get('state', ''),
+                            'additions': pr_data.get('additions', 0),
+                            'deletions': pr_data.get('deletions', 0),
+                            'changed_files': pr_data.get('changed_files', 0),
+                            'user': pr_data.get('user', {}).get('login', ''),
+                            'base_branch': pr_data.get('base', {}).get('ref', ''),
+                            'head_branch': pr_data.get('head', {}).get('ref', '')
+                        }
+        except Exception:
+            pass
+        return None
+
     def parse_github_url(url):
+        pr_pattern = r'https://github\.com/([^/]+)/([^/]+)/pull/(\d+)(?:/files)?'
+        pr_match = re.match(pr_pattern, url)
+        
+        if pr_match:
+            owner, repo, pr_number = pr_match.groups()
+            return {
+                'type': 'pr',
+                'owner': owner,
+                'repo': repo,
+                'pr_number': pr_number
+            }
+        
         raw_pattern = r'https://raw\.githubusercontent\.com/([^/]+)/([^/]+)/([^/]+)/(.+?)$'
         raw_match = re.match(raw_pattern, url)
         
@@ -70,6 +126,7 @@ def codepreview_command():
             owner, repo, branch, filepath = raw_match.groups()
             
             return {
+                'type': 'file',
                 'owner': owner,
                 'repo': repo,
                 'branch': branch,
@@ -88,6 +145,7 @@ def codepreview_command():
             raw_url = f'https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{filepath}'
             
             return {
+                'type': 'file',
                 'owner': owner,
                 'repo': repo,
                 'branch': branch,
@@ -162,10 +220,75 @@ def codepreview_command():
         if not parsed:
             embed = discord.Embed(
                 title="Error",
-                description="Invalid GitHub URL format. Please provide a valid GitHub blob URL.",
+                description="Invalid GitHub URL format. Please provide a valid GitHub blob URL or PR URL.",
                 color=0xE02B2B,
             ).set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
             await send_embed(context, embed, ephemeral=True)
+            return
+        
+        if parsed.get('type') == 'pr':
+            pr_info = await fetch_pr_info(parsed['owner'], parsed['repo'], parsed['pr_number'])
+            diff_content = await fetch_pr_diff(parsed['owner'], parsed['repo'], parsed['pr_number'])
+            
+            if not pr_info or not diff_content:
+                embed = discord.Embed(
+                    title="Error",
+                    description="Failed to fetch pull request information. The PR might not exist or be accessible.",
+                    color=0xE02B2B,
+                ).set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+                await send_embed(context, embed, ephemeral=True)
+                return
+            
+            pr_url = f"https://github.com/{parsed['owner']}/{parsed['repo']}/pull/{parsed['pr_number']}"
+            embed = discord.Embed(
+                title=f"Pull Request #{pr_info['number']}: {pr_info['title'][:100]}",
+                description=f"**Repository:** [{parsed['owner']}/{parsed['repo']}]({pr_url})\n**Author:** {pr_info['user']}\n**Status:** {pr_info['state'].capitalize()}",
+                color=0x57F287 if pr_info['state'] == 'open' else 0xE02B2B,
+            )
+            embed.set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+            embed.add_field(name="Changes", value=f"**+{pr_info['additions']}** / **-{pr_info['deletions']}**", inline=True)
+            embed.add_field(name="Files Changed", value=f"{pr_info['changed_files']}", inline=True)
+            embed.add_field(name="Branches", value=f"`{pr_info['base_branch']}` ← `{pr_info['head_branch']}`", inline=False)
+            embed.set_footer(text=f"Requested by {context.author.name}", icon_url=context.author.display_avatar.url)
+            
+            interaction = getattr(context, "interaction", None)
+            if interaction is not None and not interaction.response.is_done():
+                await interaction.response.defer(ephemeral=True)
+            
+            await context.channel.send(embed=embed)
+            
+            max_diff_length = 1900
+            max_lines = 100
+            
+            diff_lines = diff_content.split('\n')
+            
+            if len(diff_lines) > max_lines:
+                diff_lines = diff_lines[:max_lines]
+                diff_lines.append(f"\n... ({len(diff_content.split(chr(10))) - max_lines} more lines omitted)")
+            
+            current_chunk = ""
+            
+            for line in diff_lines:
+                test_chunk = current_chunk + line + '\n'
+                
+                if len(test_chunk) + 10 > max_diff_length:
+                    if current_chunk.strip():
+                        remaining_lines = len(diff_lines) - len(current_chunk.split('\n'))
+                        if remaining_lines > 0:
+                            current_chunk += f"\n... ({remaining_lines} more lines omitted)"
+                        await context.channel.send(f"```diff\n{current_chunk.rstrip()}\n```")
+                    break
+                else:
+                    current_chunk = test_chunk
+            else:
+                if current_chunk.strip():
+                    await context.channel.send(f"```diff\n{current_chunk.rstrip()}\n```")
+            
+            if interaction is not None:
+                try:
+                    await interaction.delete_original_response()
+                except:
+                    pass
             return
         
         content = await fetch_github_content(parsed['raw_url'])
@@ -188,6 +311,11 @@ def codepreview_command():
         else:
             code = content
             line_info = ""
+        
+        code_lines = code.split('\n')
+        if len(code_lines) > 100:
+            code = '\n'.join(code_lines[:100])
+            code += f"\n\n... ({len(code_lines) - 100} more lines omitted)"
         
         filename = parsed['filepath'].split('/')[-1]
         language = get_language_from_filename(filename)
@@ -221,27 +349,25 @@ def codepreview_command():
             for line in code_lines:
                 line_length = len(line) + 1
                 if current_length + line_length > max_code_length:
+                    remaining_lines = len(code_lines) - len(current_chunk)
+                    if remaining_lines > 0:
+                        current_chunk.append(f"\n... ({remaining_lines} more lines omitted)")
                     chunk_text = '\n'.join(current_chunk)
-                    if interaction is not None:
-                        await context.channel.send(f"```{language}\n{chunk_text}\n```")
-                    else:
-                        await context.channel.send(f"```{language}\n{chunk_text}\n```")
-                    current_chunk = [line]
-                    current_length = line_length
+                    await context.channel.send(f"```{language}\n{chunk_text}\n```")
+                    break
                 else:
                     current_chunk.append(line)
                     current_length += line_length
+            else:
+                if current_chunk:
+                    chunk_text = '\n'.join(current_chunk)
+                    await context.channel.send(f"```{language}\n{chunk_text}\n```")
             
-            if current_chunk:
-                chunk_text = '\n'.join(current_chunk)
-                if interaction is not None:
-                    await context.channel.send(f"```{language}\n{chunk_text}\n```")
-                    try:
-                        await interaction.delete_original_response()
-                    except:
-                        pass
-                else:
-                    await context.channel.send(f"```{language}\n{chunk_text}\n```")
+            if interaction is not None:
+                try:
+                    await interaction.delete_original_response()
+                except:
+                    pass
         else:
             interaction = getattr(context, "interaction", None)
             if interaction is not None:
