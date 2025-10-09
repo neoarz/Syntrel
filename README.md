@@ -18,6 +18,8 @@
 
 ## Commands
 
+![Total Commands](https://img.shields.io/badge/Total%20Commands-63-5865F2)
+
 | Command group | Subcommands |
 | --- | --- |
 | ungrouped | `help`, `botinfo` |
@@ -31,16 +33,6 @@
 | miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`, `depart`, `docs`|
 | utilities | `translate`, `codepreview`, `dictionary` |
 | media | `download`, `mcquote`, `img2gif`, `tweety` |
-
-<div align="center" style="width: 100%; margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; color-scheme: auto;">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%231e1e1e' width='100' height='100'/%3E%3C/svg%3E">
-    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%23f0f0f0' width='100' height='100'/%3E%3C/svg%3E" style="display:none;">
-  </picture>
-  <div style="background-color: #1e1e1e; color: #ffffff; padding: 15px; border-radius: 5px;" class="dark-mode">
-    <strong style="font-size: 1.1em;">Total Commands: 63</strong>
-  </div>
-</div>
 
 
 ## Download
