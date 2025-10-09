@@ -37,11 +37,19 @@
 
 - [x] ~~Add rickroll command~~
 
+- [ ] Add letmegoo
+
 - [ ] Add sending code (regular and from github)
 
 - [ ] Add random color command
 
 - [x] Add translate command
+
+- [ ] Add random picture command
+
+- [ ] add ~~admin abuse~~ command (for games)
+
+- [ ] add [tts](https://developer.puter.com/tutorials/free-unlimited-text-to-speech-api/) command
 
 - [ ] Clean tag system from [tags branch](https://github.com/neoarz/Syntrel/tree/tags) (make sure db is persistent)
 

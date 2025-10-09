@@ -20,10 +20,10 @@ def docs_command():
         if getattr(context, "interaction", None):
             inter = context.interaction
             if not inter.response.is_done():
-                await inter.response.send_message(file=file, ephemeral=False)
+                await inter.response.send_message("## Dont be like the rest, read the docs", file=file, ephemeral=False)
             else:
-                await inter.followup.send(file=file, ephemeral=True)
+                await inter.followup.send("## Dont be like the rest, read the docs", file=file, ephemeral=True)
         else:
-            await context.send(file=file)
+            await context.send("## Dont be like the rest, read the docs", file=file)
     
     return docs
