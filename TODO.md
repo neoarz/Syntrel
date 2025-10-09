@@ -31,6 +31,8 @@
 
 - [ ] Add git log to info 
 
+- [ ] Move all assets to gh
+
 - [ ] Add codepreview for pull requests
 
 - [x] Add try it and see command
