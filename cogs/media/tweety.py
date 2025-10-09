@@ -11,6 +11,8 @@ import aiohttp
 from datetime import datetime
 from typing import Optional
 import pytz
+import time
+import asyncio
 
 
 def break_long_words(text: str, max_word_length: int = 50) -> str:
@@ -132,6 +134,8 @@ class TweetyView(discord.ui.View):
         self.is_dark = tweet_data.get("dark", False)
         self.is_verified = tweet_data.get("verified", False)
         self.image_message = image_message
+        self.last_regenerate_time = 0
+        self.click_count = 0
 
         self.update_button_styles()
     
@@ -158,7 +162,27 @@ class TweetyView(discord.ui.View):
     
     async def regenerate_tweet(self, interaction: discord.Interaction):
         """Regenerate only the image message with current settings"""
+        if self.click_count >= 10:
+            embed = discord.Embed(
+                title="Error",
+                description="Stop spamming! You've reached the maximum number of changes for this tweet.",
+                color=0xE02B2B,
+            )
+            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+            return
+
         await interaction.response.defer()
+
+        current_time = time.time()
+        time_since_last = current_time - self.last_regenerate_time
+        
+        if time_since_last < 3 and self.last_regenerate_time > 0:
+            wait_time = 3 - time_since_last
+            await asyncio.sleep(wait_time)
+
+        self.click_count += 1
+        self.last_regenerate_time = time.time()
 
         try:
             async with aiohttp.ClientSession() as session:
@@ -332,7 +356,7 @@ def tweety_command():
                 "dark": False
             }
             
-            API_BASE_URL = "https://tweety-api.vercel.app"
+            API_BASE_URL = "http://tweet.6969.pro"
             
             async with aiohttp.ClientSession() as session:
                 try:
