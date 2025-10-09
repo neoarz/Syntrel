@@ -20,8 +20,8 @@
 
 ![Total Commands](https://img.shields.io/badge/Total%20Commands-63-5865F2)
 
-| Command group | Subcommands |
-| --- | --- |
+| Command&nbsp;group | Subcommands |
+| ------------ | --- |
 | ungrouped | `help`, `botinfo` |
 | owner | `sync`, `cog_management`, `shutdown`, `say`, `invite`, `logs` |
 | general | `serverinfo`, `ping`, `feedback`, `uptime` |
