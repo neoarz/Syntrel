@@ -95,6 +95,7 @@ def codepreview_command():
                             'title': pr_data.get('title', ''),
                             'number': pr_data.get('number', pr_number),
                             'state': pr_data.get('state', ''),
+                            'merged': pr_data.get('merged', False),
                             'additions': pr_data.get('additions', 0),
                             'deletions': pr_data.get('deletions', 0),
                             'changed_files': pr_data.get('changed_files', 0),
@@ -240,10 +241,21 @@ def codepreview_command():
                 return
             
             pr_url = f"https://github.com/{parsed['owner']}/{parsed['repo']}/pull/{parsed['pr_number']}"
+            
+            if pr_info['merged']:
+                pr_color = 0x6f42c1
+                pr_status = "Merged"
+            elif pr_info['state'] == 'open':
+                pr_color = 0x57F287
+                pr_status = "Open"
+            else:
+                pr_color = 0xE02B2B
+                pr_status = "Closed"
+            
             embed = discord.Embed(
                 title=f"Pull Request #{pr_info['number']}: {pr_info['title'][:100]}",
-                description=f"**Repository:** [{parsed['owner']}/{parsed['repo']}]({pr_url})\n**Author:** {pr_info['user']}\n**Status:** {pr_info['state'].capitalize()}",
-                color=0x57F287 if pr_info['state'] == 'open' else 0xE02B2B,
+                description=f"**Repository:** [{parsed['owner']}/{parsed['repo']}]({pr_url})\n**Author:** {pr_info['user']}\n**Status:** {pr_status}",
+                color=pr_color,
             )
             embed.set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
             embed.add_field(name="Changes", value=f"**+{pr_info['additions']}** / **-{pr_info['deletions']}**", inline=True)
