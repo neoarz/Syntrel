@@ -525,6 +525,8 @@ def userinfo_command():
         if primary_guild and primary_guild.get('identity_guild_id'):
             clan_badge_url = f"https://cdn.discordapp.com/clan-badges/{primary_guild['identity_guild_id']}/{primary_guild['badge']}.png?size=4096"
             embed.set_author(name=primary_guild.get('tag', ''), icon_url=clan_badge_url)
+        else:
+            embed.set_author(name="User Information", icon_url="https://yes.nighty.works/raw/gSxqzV.png")
         
         if member and member.nick and member.nick != display_name:
             embed.title = display_name
