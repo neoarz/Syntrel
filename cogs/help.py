@@ -112,7 +112,13 @@ class Help(commands.Cog, name="help"):
             if context.interaction:
                 await context.interaction.response.send_message(embed=embed, ephemeral=True)
             else:
-                await context.author.send(embed=embed)
+                try:
+                    await context.send(embed=embed)
+                except (discord.Forbidden, discord.HTTPException):
+                    try:
+                        await context.author.send(embed=embed)
+                    except discord.Forbidden:
+                        pass  # User has DMs disabled
             return
         
         category = category.lower()
@@ -125,7 +131,13 @@ class Help(commands.Cog, name="help"):
             if context.interaction:
                 await context.interaction.response.send_message(embed=embed, ephemeral=True)
             else:
-                await context.author.send(embed=embed)
+                try:
+                    await context.send(embed=embed)
+                except (discord.Forbidden, discord.HTTPException):
+                    try:
+                        await context.author.send(embed=embed)
+                    except discord.Forbidden:
+                        pass 
             return
         
         
@@ -179,7 +191,13 @@ class Help(commands.Cog, name="help"):
             if context.interaction:
                 await context.interaction.response.send_message(embed=embed, ephemeral=True)
             else:
-                await context.author.send(embed=embed)
+                try:
+                    await context.send(embed=embed)
+                except (discord.Forbidden, discord.HTTPException):
+                    try:
+                        await context.author.send(embed=embed)
+                    except discord.Forbidden:
+                        pass 
             return
         
         embed = discord.Embed(
@@ -199,7 +217,13 @@ class Help(commands.Cog, name="help"):
         if context.interaction:
             await context.interaction.response.send_message(embed=embed, ephemeral=True)
         else:
-            await context.author.send(embed=embed)
+            try:
+                await context.send(embed=embed)
+            except (discord.Forbidden, discord.HTTPException):
+                try:
+                    await context.author.send(embed=embed)
+                except discord.Forbidden:
+                    pass 
 
 
 async def setup(bot) -> None:

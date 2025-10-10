@@ -92,7 +92,7 @@ class BotInfo(commands.Cog, name="botinfo"):
             current_time = datetime.now().strftime("%m/%d/%y, %I:%M %p")
             
             description_text = (
-                "Heyooo! Im Syntrel, a bot made to help with [SideStore](https://discord.gg/3DwCwpBHfv), [MeloNX](https://discord.gg/Q4VkbkYfmk), and [idevice](https://discord.gg/ZnNcrRT3M8). I even have some cool extras! If you encounter any issues, please file a bug report. If you have any feedback or suggestions, simply select \"Feedback\"!\n\n"
+                "Heyooo! Im Syntrel, a bot made to help with [SideStore](https://discord.gg/3DwCwpBHfv), [MeloNX](https://discord.gg/Q4VkbkYfmk), and [idevice](https://discord.gg/ZnNcrRT3M8). I even have some cool extras! If you encounter any issues, please file a bug report. If you have any feedback or suggestions, simply select \"Feedback\"! <:HeardPanda:1417619745896660992>\n\n"
                 f"**Owner:** [neoarz](https://discordapp.com/users/1015372540937502851)\n"
                 f"**Python Version:** {platform.python_version()}\n"
                 f"**Prefix:** / (Slash Commands) or {self.bot.bot_prefix} for normal commands"
@@ -123,7 +123,7 @@ class BotInfo(commands.Cog, name="botinfo"):
         current_time = datetime.now().strftime("%m/%d/%y, %I:%M %p")
         
         description_text = (
-            "Heyooo! Im Syntrel, a bot made to help with [SideStore](https://discord.gg/3DwCwpBHfv), [MeloNX](https://discord.gg/Q4VkbkYfmk), and [idevice](https://discord.gg/ZnNcrRT3M8). I even have some cool extras! If you encounter any issues, please file a bug report. If have any feedback or suggestions, simply select “Feedback”!\n\n"
+            "Heyooo! Im Syntrel, a bot made to help with [SideStore](https://discord.gg/3DwCwpBHfv), [MeloNX](https://discord.gg/Q4VkbkYfmk), and [idevice](https://discord.gg/ZnNcrRT3M8). I even have some cool extras! If you encounter any issues, please file a bug report. If you have any feedback or suggestions, simply select \"Feedback\"! <:HeardPanda:1417619745896660992>\n\n"
             f"**Owner:** [neoarz](https://discordapp.com/users/1015372540937502851)\n"
             f"**Python Version:** {platform.python_version()}\n"
             f"**Prefix:** / (Slash Commands) or {self.bot.bot_prefix} for normal commands"
@@ -141,7 +141,7 @@ class BotInfo(commands.Cog, name="botinfo"):
         view = BotInfoView(self.bot)
         
         if context.interaction:
-            await context.interaction.response.send_message(embed=embed, view=view, ephemeral=True)
+            await context.interaction.response.send_message(embed=embed, view=view, ephemeral=False)
         else:
             await context.send(embed=embed, view=view)
 
