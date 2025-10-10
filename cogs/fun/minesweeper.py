@@ -137,6 +137,7 @@ class MsView(discord.ui.View):
                 await asyncio.sleep(1)
             else:
                 raise
+        self.stop()
 
     def GetBoardRow(self, pos):
         if pos in [0, 1, 2, 3, 4]:
@@ -206,6 +207,7 @@ class MsView(discord.ui.View):
                 await asyncio.sleep(1)
             else:
                 raise
+        self.stop()
 
 def minesweeper_command():
     @commands.hybrid_command(
