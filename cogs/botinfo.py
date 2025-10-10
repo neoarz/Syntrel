@@ -53,7 +53,7 @@ class BotInfoView(discord.ui.View):
         )
         self.add_item(github_button)
         
-        feedback_emoji = discord.PartialEmoji(name="ThumbsUpBlueEmoji", id=1425703373470175295)
+        feedback_emoji = discord.PartialEmoji(name="ThumbsUpBlueEmoji", id=1426066711500554302)
         feedback_button = discord.ui.Button(
             label="Feedback",
             emoji=feedback_emoji,
