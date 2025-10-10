@@ -21,7 +21,7 @@ def half_command():
                 '- Change Anisette Server\n' +
                 '- Reset adi.pb\n' +
                 '- Sign out from SideStore and sign back in\n' +
-                '- Regenerate pairing file\n' +
+                '- Recreate pairing file\n' +
                 '- Reinstall SideStore\n\n' 
             )
         )
