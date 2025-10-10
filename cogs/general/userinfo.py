@@ -354,39 +354,27 @@ def userinfo_command():
         if (banner_hash or (avatar_hash and avatar_hash.startswith('a_'))) and not user_data.get('bot'):
             badges.append(f"[{BADGE_ICONS['premium']}]({BADGE_URLS['premium']})")
         
-        boosting_member = member
-        boosting_since = None
-        if member and hasattr(member, 'premium_since') and member.premium_since:
+        if member and member.premium_since:
             boosting_since = member.premium_since
-            boosting_member = member
-        else:
-            for g in bot.guilds:
-                m = g.get_member(target_user.id)
-                if m and hasattr(m, 'premium_since') and m.premium_since:
-                    boosting_since = m.premium_since
-                    boosting_member = m
-                    break
-        
-        if boosting_since:
             delta = (datetime.now(timezone.utc) - boosting_since).total_seconds()
             icon = BADGE_ICONS['guild_booster_lvl1']
             
-            if delta >= ONE_MONTH * 2:
-                icon = BADGE_ICONS['guild_booster_lvl2']
-            if delta >= ONE_MONTH * 3:
-                icon = BADGE_ICONS['guild_booster_lvl3']
-            if delta >= ONE_MONTH * 6:
-                icon = BADGE_ICONS['guild_booster_lvl4']
-            if delta >= ONE_MONTH * 9:
-                icon = BADGE_ICONS['guild_booster_lvl5']
-            if delta >= ONE_MONTH * 12:
-                icon = BADGE_ICONS['guild_booster_lvl6']
-            if delta >= ONE_MONTH * 15:
-                icon = BADGE_ICONS['guild_booster_lvl7']
-            if delta >= ONE_MONTH * 18:
-                icon = BADGE_ICONS['guild_booster_lvl8']
             if delta >= ONE_MONTH * 24:
                 icon = BADGE_ICONS['guild_booster_lvl9']
+            elif delta >= ONE_MONTH * 18:
+                icon = BADGE_ICONS['guild_booster_lvl8']
+            elif delta >= ONE_MONTH * 15:
+                icon = BADGE_ICONS['guild_booster_lvl7']
+            elif delta >= ONE_MONTH * 12:
+                icon = BADGE_ICONS['guild_booster_lvl6']
+            elif delta >= ONE_MONTH * 9:
+                icon = BADGE_ICONS['guild_booster_lvl5']
+            elif delta >= ONE_MONTH * 6:
+                icon = BADGE_ICONS['guild_booster_lvl4']
+            elif delta >= ONE_MONTH * 3:
+                icon = BADGE_ICONS['guild_booster_lvl3']
+            elif delta >= ONE_MONTH * 2:
+                icon = BADGE_ICONS['guild_booster_lvl2']
             
             badges.append(f"[{icon}]({BADGE_URLS['premium']})")
         
@@ -554,15 +542,8 @@ def userinfo_command():
         
         embed.add_field(name='Member Since', value=member_since, inline=False)
         
-        if avatar_decoration:
-            animated = ' (Animated)' if avatar_decoration['asset'].startswith('a_') else ''
-            decoration_name = decoration_data.get('sku', {}).get('name') if decoration_data else (quest_decoration_name or '*Unknown*')
-            decoration_link = f"https://discord.com/shop#itemSkuId={avatar_decoration['sku_id']}" if decoration_data else decoration_name
-            embed.add_field(
-                name=f'Avatar Deco{animated}',
-                value=f"[{decoration_name}]({decoration_link})\n-# {avatar_decoration['sku_id']}" if decoration_data else f"{decoration_name}\n-# {avatar_decoration['sku_id']}",
-                inline=True
-            )
+        is_bot = user_data.get('bot', False)
+        embed.add_field(name='Is Bot', value='True' if is_bot else 'False', inline=True)
         
         vc_badges = vencord_badges.get(str(target_user.id))
         if vc_badges:
@@ -576,26 +557,6 @@ def userinfo_command():
         if member and member.roles[1:]:
             role_list = ' '.join([f'<@&{r.id}>' for r in sorted(member.roles[1:], key=lambda r: r.position, reverse=True)])
             embed.add_field(name=f'Roles ({len(member.roles) - 1})', value=role_list, inline=False)
-        
-        if primary_guild and primary_guild.get('identity_guild_id'):
-            primary_guild_data = await get_guild_data(bot, primary_guild['identity_guild_id'])
-            guild_name = primary_guild_data.get('name', '<private guild>') if primary_guild_data else '<private guild>'
-            embed.add_field(
-                name='Server Tag',
-                value=f"{guild_name}\n*{primary_guild['identity_guild_id']}*",
-                inline=True
-            )
-        
-        if collectibles and collectibles.get('nameplate'):
-            nameplate = collectibles['nameplate']
-            nameplate_listing = await get_published_listing(bot, nameplate['sku_id'])
-            nameplate_name = nameplate_listing.get('sku', {}).get('name', '*Unknown*') if nameplate_listing else '*Unknown*'
-            
-            embed.add_field(
-                name='Nameplate',
-                value=f"[{nameplate_name}](https://discord.com/shop#itemSkuId={nameplate['sku_id']})\n*Palette: {nameplate.get('palette', 'Unknown')}*",
-                inline=True
-            )
         
         if images:
             embed.add_field(name='\u200b', value='\u3000'.join(images), inline=False)

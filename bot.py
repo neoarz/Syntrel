@@ -19,25 +19,6 @@ from utils import ascii, setup_logger, get_uptime, setup_signal_handlers
 
 load_dotenv()
 
-"""	
-Default Intents:
-intents.emojis_and_stickers = True
-intents.guild_messages = True
-intents.guild_reactions = True
-intents.guild_scheduled_events = True
-intents.guild_typing = True
-intents.guilds = True
-intents.integrations = True
-intents.invites = True
-intents.reactions = True
-intents.typing = True
-intents.voice_states = True
-intents.webhooks = True
-
-intents.members = True
-intents.presences = True
-"""
-
 intents = discord.Intents.default()
 intents.message_content = True
 intents.bans = True
@@ -46,7 +27,20 @@ intents.dm_reactions = True
 intents.dm_typing = True
 intents.emojis = True
 intents.messages = True 
-
+intents.reactions = True
+intents.typing = True
+intents.voice_states = True
+intents.webhooks = True
+intents.emojis_and_stickers = True
+intents.guild_messages = True
+intents.guild_reactions = True
+intents.guild_scheduled_events = True
+intents.guild_typing = True
+intents.guilds = True
+intents.integrations = True
+intents.invites = True
+intents.presences = True
+intents.members = True
 
 
 
