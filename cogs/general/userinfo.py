@@ -395,14 +395,70 @@ def userinfo_command():
         avatar_url = target_user.avatar.url if target_user.avatar else default_avatar
         
         banner_url = None
+        banner_file = None
+        original_banner_link = None
         if banner_hash:
-            ext = 'gif' if banner_hash.startswith('a_') else 'png'
-            banner_url = f'https://cdn.discordapp.com/banners/{target_user.id}/{banner_hash}.{ext}?size=4096'
+            is_animated = banner_hash.startswith('a_')
+            ext = 'gif' if is_animated else 'png'
+            original_banner_url = f'https://cdn.discordapp.com/banners/{target_user.id}/{banner_hash}.{ext}?size=4096'
+            original_banner_link = original_banner_url
+            
+            try:
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(original_banner_url) as resp:
+                        if resp.status == 200:
+                            banner_data = await resp.read()
+                            img = Image.open(BytesIO(banner_data))
+                            
+                            if img.width < 1100:
+                                new_width = 1100
+                                aspect_ratio = img.height / img.width
+                                new_height = int(new_width * aspect_ratio)
+                                
+                                if is_animated:
+                                    frames = []
+                                    durations = []
+                                    
+                                    try:
+                                        while True:
+                                            frame = img.copy().convert('RGBA')
+                                            frame = frame.resize((new_width, new_height), Image.Resampling.LANCZOS)
+                                            frames.append(frame)
+                                            durations.append(img.info.get('duration', 100))
+                                            img.seek(img.tell() + 1)
+                                    except EOFError:
+                                        pass
+                                    
+                                    output = BytesIO()
+                                    frames[0].save(
+                                        output,
+                                        format='GIF',
+                                        save_all=True,
+                                        append_images=frames[1:],
+                                        duration=durations,
+                                        loop=0,
+                                        optimize=False
+                                    )
+                                    output.seek(0)
+                                    banner_file = discord.File(output, filename='banner.gif')
+                                    banner_url = 'attachment://banner.gif'
+                                else:
+                                    img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+                                    
+                                    output = BytesIO()
+                                    img.save(output, format='PNG')
+                                    output.seek(0)
+                                    banner_file = discord.File(output, filename='banner.png')
+                                    banner_url = 'attachment://banner.png'
+                            else:
+                                banner_url = original_banner_url
+            except:
+                banner_url = original_banner_url
         
         images = [f'[Avatar]({avatar_url})']
         
         if banner_url:
-            images.append(f'[Banner]({banner_url})')
+            images.append(f'[Banner]({original_banner_link})')
         
         decoration_data = None
         if avatar_decoration:
@@ -507,7 +563,10 @@ def userinfo_command():
         
         embed.set_footer(text=f'ID: {target_user.id}')
         
-        await context.send(embed=embed)
+        if banner_file:
+            await context.send(embed=embed, file=banner_file)
+        else:
+            await context.send(embed=embed)
     
     return userinfo
 
