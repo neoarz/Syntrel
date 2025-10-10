@@ -5,7 +5,6 @@ import aiohttp
 import asyncio
 from io import BytesIO
 from PIL import Image, ImageDraw
-import colorsys
 import re
 from datetime import datetime, timezone
 
@@ -112,50 +111,6 @@ ACTIVITY_TYPE_ICONS = {
     3: '<:i:1392584313786208296>'
 }
 
-def murmurhash3_32(key, seed=0):
-    key = str(key).encode('utf-8')
-    length = len(key)
-    h = seed
-    c1 = 0xcc9e2d51
-    c2 = 0x1b873593
-    
-    for i in range(0, length - 3, 4):
-        k = int.from_bytes(key[i:i+4], 'little')
-        k = (k * c1) & 0xffffffff
-        k = ((k << 15) | (k >> 17)) & 0xffffffff
-        k = (k * c2) & 0xffffffff
-        
-        h ^= k
-        h = ((h << 13) | (h >> 19)) & 0xffffffff
-        h = ((h * 5) + 0xe6546b64) & 0xffffffff
-    
-    tail = key[length - (length % 4):]
-    k = 0
-    if len(tail) >= 3:
-        k ^= tail[2] << 16
-    if len(tail) >= 2:
-        k ^= tail[1] << 8
-    if len(tail) >= 1:
-        k ^= tail[0]
-        k = (k * c1) & 0xffffffff
-        k = ((k << 15) | (k >> 17)) & 0xffffffff
-        k = (k * c2) & 0xffffffff
-        h ^= k
-    
-    h ^= length
-    h ^= (h >> 16)
-    h = (h * 0x85ebca6b) & 0xffffffff
-    h ^= (h >> 13)
-    h = (h * 0xc2b2ae35) & 0xffffffff
-    h ^= (h >> 16)
-    
-    return h
-
-def pastelize(user_id):
-    hue = murmurhash3_32(user_id) % 360
-    r, g, b = colorsys.hls_to_rgb(hue / 360, 0.60, 0.75)
-    return int(r * 255) << 16 | int(g * 255) << 8 | int(b * 255)
-
 def format_username(user):
     if user.discriminator and user.discriminator != '0':
         return f'{user.name}#{user.discriminator}'
@@ -170,17 +125,6 @@ def get_default_avatar(user_id, discriminator=None):
 
 def snowflake_to_timestamp(snowflake):
     return ((int(snowflake) >> 22) + 1420070400000) / 1000
-
-def get_top_color(member, fallback=0x7289da):
-    if not member:
-        return fallback
-    
-    roles = [r for r in member.roles if r.color.value != 0]
-    if not roles:
-        return fallback
-    
-    roles.sort(key=lambda r: r.position, reverse=True)
-    return roles[0].color.value
 
 async def fetch_vencord_data():
     global vencord_fetch, vencord_badges, vencord_contributors
@@ -517,7 +461,7 @@ def userinfo_command():
             desc_lines.extend(activity_lines)
         
         embed = discord.Embed(
-            color=get_top_color(member, user_data.get('accent_color') or pastelize(target_user.id)),
+            color=0x7289DA,
             description='\n'.join(desc_lines)
         )
         
