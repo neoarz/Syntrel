@@ -18,10 +18,13 @@
 
 ## Commands
 
-| Command group | Subcommands |
-| --- | --- |
+![Total Commands](https://img.shields.io/badge/Total%20Commands-63-5865F2)
+
+| Command&nbsp;group | Subcommands |
+| ------------ | --- |
+| ungrouped | `help`, `botinfo` |
 | owner | `sync`, `cog_management`, `shutdown`, `say`, `invite`, `logs` |
-| general | `help`, `botinfo`, `serverinfo`, `ping`, `feedback`, `uptime` |
+| general | `serverinfo`, `ping`, `feedback`, `uptime` |
 | fun | `randomfact`, `coinflip`, `rps`, `8ball`, `minesweeper` |
 | moderation | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive`, `timeout` |
 | sidestore | `help`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
@@ -30,6 +33,7 @@
 | miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`, `depart`, `docs`|
 | utilities | `translate`, `codepreview`, `dictionary` |
 | media | `download`, `mcquote`, `img2gif`, `tweety` |
+
 
 ## Download
 
