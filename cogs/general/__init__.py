@@ -1,4 +1,5 @@
 import discord
+from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 
@@ -6,6 +7,7 @@ from .ping import ping_command
 from .uptime import uptime_command
 from .serverinfo import serverinfo_command
 from .feedback import feedback_command
+from .userinfo import userinfo_command
 
 
 def _require_group_prefix(context: Context) -> bool:
@@ -31,13 +33,13 @@ class General(commands.GroupCog, name="general"):
             color=0x7289DA
         )
         embed.set_author(name="General", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-        embed.add_field(name="Available", value="ping, uptime, serverinfo, feedback", inline=False)
+        embed.add_field(name="Available", value="ping, uptime, serverinfo, userinfo, feedback", inline=False)
         await context.send(embed=embed)
 
-    async def _invoke_hybrid(self, context: Context, name: str):
+    async def _invoke_hybrid(self, context: Context, name: str, **kwargs):
         command = self.bot.get_command(name)
         if command is not None:
-            await context.invoke(command)
+            await context.invoke(command, **kwargs)
         else:
             await context.send(f"Unknown general command: {name}")
 
@@ -52,6 +54,10 @@ class General(commands.GroupCog, name="general"):
     @general_group.command(name="serverinfo")
     async def general_group_serverinfo(self, context: Context):
         await self._invoke_hybrid(context, "serverinfo")
+
+    @general_group.command(name="userinfo")
+    async def general_group_userinfo(self, context: Context, user: discord.User = None, user_id: str = None):
+        await self._invoke_hybrid(context, "userinfo", user=user, user_id=user_id)
 
     @general_group.command(name="feedback")
     async def general_group_feedback(self, context: Context):
@@ -83,6 +89,18 @@ class General(commands.GroupCog, name="general"):
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
+        name="userinfo",
+        description="Get information on a user.",
+    )
+    @app_commands.describe(
+        user="User to get info for",
+        user_id="User ID to get info for"
+    )
+    async def userinfo(self, context, user: discord.User = None, user_id: str = None):
+        return await userinfo_command()(self, context, user=user, user_id=user_id)
+
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
         name="feedback",
         description="Submit a feedback for the owners of the bot"
     )
@@ -96,4 +114,5 @@ async def setup(bot) -> None:
     bot.logger.info("Loaded extension 'general.ping'")
     bot.logger.info("Loaded extension 'general.uptime'")
     bot.logger.info("Loaded extension 'general.serverinfo'")
+    bot.logger.info("Loaded extension 'general.userinfo'")
     bot.logger.info("Loaded extension 'general.feedback'")
