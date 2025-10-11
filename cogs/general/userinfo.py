@@ -10,14 +10,8 @@ from datetime import datetime, timezone
 
 ONE_MONTH = 2628000
 
-vencord_fetch = 0
-vencord_badges = {}
-vencord_contributors = set()
-
 quests_fetch = 0
 quest_data = []
-
-REGEX_DEVS = re.compile(r'id: (\d+)n(,\n\s+badge: false)?')
 
 ACTIVITY_TYPE_NAMES = [
     "Playing",
@@ -126,31 +120,6 @@ def get_default_avatar(user_id, discriminator=None):
 def snowflake_to_timestamp(snowflake):
     return ((int(snowflake) >> 22) + 1420070400000) / 1000
 
-async def fetch_vencord_data():
-    global vencord_fetch, vencord_badges, vencord_contributors
-    
-    async with aiohttp.ClientSession() as session:
-        async with session.get(
-            'https://badges.vencord.dev/badges.json',
-            headers={'User-Agent': 'HiddenPhox/userinfo'}
-        ) as resp:
-            badges = await resp.json()
-            vencord_badges = badges
-        
-        async with session.get(
-            'https://raw.githubusercontent.com/Vendicated/Vencord/main/src/utils/constants.ts'
-        ) as resp:
-            constants = await resp.text()
-            vencord_contributors.clear()
-            
-            for match in REGEX_DEVS.finditer(constants):
-                user_id, no_badge = match.groups()
-                if no_badge or user_id == '0':
-                    continue
-                vencord_contributors.add(user_id)
-    
-    vencord_fetch = int(datetime.now().timestamp() * 1000) + 3600000
-
 async def fetch_quest_data():
     global quests_fetch, quest_data
     
@@ -227,12 +196,6 @@ def userinfo_command():
         
         guild = context.guild
         member = guild.get_member(target_user.id) if guild else None
-        
-        if int(datetime.now().timestamp() * 1000) > vencord_fetch:
-            try:
-                await fetch_vencord_data()
-            except:
-                pass
         
         if int(datetime.now().timestamp() * 1000) > quests_fetch:
             try:
@@ -344,9 +307,6 @@ def userinfo_command():
         elif avatar_decoration and (avatar_decoration.get('expires_at') or avatar_decoration.get('sku_id') == '1226939756617793606'):
             badges.append(f"[{BADGE_ICONS['quest_completed']}]({BADGE_URLS['quest_completed']})")
         
-        if str(target_user.id) in vencord_contributors:
-            badges.append('[<:VencordContributor:1273333728709574667>](https://vencord.dev)')
-        
         if user_data.get('legacy_username'):
             badges.append(BADGE_ICONS['username'])
         
@@ -401,9 +361,23 @@ def userinfo_command():
                             img = Image.open(BytesIO(banner_data))
                             
                             if img.width < 1100:
-                                new_width = 1100
-                                aspect_ratio = img.height / img.width
-                                new_height = int(new_width * aspect_ratio)
+                                target_width = 1100
+                                target_height = 440
+                                
+                                img_aspect = img.width / img.height
+                                target_aspect = target_width / target_height
+                                
+                                if img_aspect > target_aspect:
+                                    scale_height = target_height
+                                    scale_width = int(scale_height * img_aspect)
+                                else:
+                                    scale_width = target_width
+                                    scale_height = int(scale_width / img_aspect)
+                                
+                                left = (scale_width - target_width) // 2
+                                top = (scale_height - target_height) // 2
+                                right = left + target_width
+                                bottom = top + target_height
                                 
                                 if is_animated:
                                     frames = []
@@ -412,7 +386,8 @@ def userinfo_command():
                                     try:
                                         while True:
                                             frame = img.copy().convert('RGBA')
-                                            frame = frame.resize((new_width, new_height), Image.Resampling.LANCZOS)
+                                            frame = frame.resize((scale_width, scale_height), Image.Resampling.LANCZOS)
+                                            frame = frame.crop((left, top, right, bottom))
                                             frames.append(frame)
                                             durations.append(img.info.get('duration', 100))
                                             img.seek(img.tell() + 1)
@@ -433,7 +408,8 @@ def userinfo_command():
                                     banner_file = discord.File(output, filename='banner.gif')
                                     banner_url = 'attachment://banner.gif'
                                 else:
-                                    img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+                                    img = img.resize((scale_width, scale_height), Image.Resampling.LANCZOS)
+                                    img = img.crop((left, top, right, bottom))
                                     
                                     output = BytesIO()
                                     img.save(output, format='PNG')
@@ -535,15 +511,6 @@ def userinfo_command():
         
         is_bot = user_data.get('bot', False)
         embed.add_field(name='Is Bot', value='True' if is_bot else 'False', inline=True)
-        
-        vc_badges = vencord_badges.get(str(target_user.id))
-        if vc_badges:
-            vc_badge_list = [f'"[{b["tooltip"]}]({b["badge"]})"' for b in vc_badges]
-            embed.add_field(
-                name=f'Vencord Donator Badge{"s" if len(vc_badges) > 1 else ""} ({len(vc_badges)})' if len(vc_badges) > 1 else 'Vencord Donator Badge',
-                value=', '.join(vc_badge_list),
-                inline=True
-            )
         
         if member and member.roles[1:]:
             roles = sorted(member.roles[1:], key=lambda r: r.position, reverse=True)
