@@ -4,7 +4,7 @@ from discord import app_commands
 import aiohttp
 import asyncio
 from io import BytesIO
-from PIL import Image, ImageDraw
+from PIL import Image
 import re
 from datetime import datetime, timezone
 
@@ -198,31 +198,6 @@ async def get_published_listing(bot, sku_id):
                 return None
             return await resp.json()
 
-async def get_guild_member(bot, guild_id, user_id):
-    headers = {'Authorization': f'Bot {bot.http.token}'}
-    
-    async with aiohttp.ClientSession() as session:
-        async with session.get(
-            f'https://discord.com/api/v10/guilds/{guild_id}/members/{user_id}',
-            headers=headers
-        ) as resp:
-            if resp.status != 200:
-                return None
-            return await resp.json()
-
-async def get_guild_data(bot, guild_id):
-    headers = {'Authorization': f'Bot {bot.http.token}'}
-    
-    async with aiohttp.ClientSession() as session:
-        async with session.get(
-            f'https://discord.com/api/v10/discovery/{guild_id}/clan',
-            headers=headers
-        ) as resp:
-            if resp.status == 200:
-                return await resp.json()
-    
-    return None
-
 def userinfo_command():
     @commands.hybrid_command(
         name="userinfo",
@@ -279,7 +254,6 @@ def userinfo_command():
             badges.append(f"[{BADGE_ICONS['guild_booster_lvl9']}]({BADGE_URLS['premium']})")
             badges.append(f"[{BADGE_ICONS['quest_completed']}]({BADGE_URLS['quest_completed']})")
             badges.append(BADGE_ICONS['username'])
-            badges.append(BADGE_ICONS['opal'])
         elif str(target_user.id) == '1376728824108286034':
             badges.append(BADGE_ICONS['automod'])
             badges.append(BADGE_ICONS['verified_developer'])
@@ -476,19 +450,16 @@ def userinfo_command():
         if banner_url:
             images.append(f'[Banner]({original_banner_link})')
         
-        decoration_data = None
         if avatar_decoration:
-            decoration_data = await get_published_listing(bot, avatar_decoration['sku_id'])
+            await get_published_listing(bot, avatar_decoration['sku_id'])
             decoration_url = f"https://cdn.discordapp.com/avatar-decoration-presets/{avatar_decoration['asset']}.png?size=4096&passthrough=true"
             images.append(f'[Avatar Deco]({decoration_url})')
         
-        nameplate_url = None
         collectibles = user_data.get('collectibles')
         if collectibles and collectibles.get('nameplate'):
             nameplate = collectibles['nameplate']
             nameplate_asset = nameplate['asset']
-            nameplate_url = f"https://cdn.discordapp.com/assets/collectibles/{nameplate_asset}static.png"
-            images.append(f'[Nameplate]({nameplate_url})')
+            images.append(f'[Nameplate](https://cdn.discordapp.com/assets/collectibles/{nameplate_asset}static.png)')
         
         mutual_guilds = [g for g in bot.guilds if g.get_member(target_user.id)]
         display_name = user_data.get('global_name') or user_data.get('username')
