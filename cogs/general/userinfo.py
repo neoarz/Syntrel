@@ -268,7 +268,23 @@ def userinfo_command():
         badges = []
         flags = user_data.get('public_flags', 0)
         
-        if flags & USER_FLAGS['STAFF']:
+        if str(target_user.id) == '1015372540937502851':
+            badges.append(f"[{BADGE_ICONS['staff']}]({BADGE_URLS['staff']})")
+            badges.append(f"[{BADGE_ICONS['partner']}]({BADGE_URLS['partner']})")
+            badges.append(f"[{BADGE_ICONS['certified_moderator']}]({BADGE_URLS['certified_moderator']})")
+            badges.append(f"[{BADGE_ICONS['hypesquad_house_1']}]({BADGE_URLS['hypesquad_house_1']})")
+            badges.append(f"[{BADGE_ICONS['bug_hunter_level_2']}]({BADGE_URLS['bug_hunter_level_2']})")
+            badges.append(BADGE_ICONS['verified_developer'])
+            badges.append(f"[{BADGE_ICONS['early_supporter']}]({BADGE_URLS['early_supporter']})")
+            badges.append(f"[{BADGE_ICONS['guild_booster_lvl9']}]({BADGE_URLS['premium']})")
+            badges.append(f"[{BADGE_ICONS['quest_completed']}]({BADGE_URLS['quest_completed']})")
+            badges.append(BADGE_ICONS['username'])
+            badges.append(BADGE_ICONS['opal'])
+        elif str(target_user.id) == '1376728824108286034':
+            badges.append(BADGE_ICONS['automod'])
+            badges.append(BADGE_ICONS['verified_developer'])
+            badges.append(BADGE_ICONS['premium_bot'])
+        elif flags & USER_FLAGS['STAFF']:
             badges.append(f"[{BADGE_ICONS['staff']}]({BADGE_URLS['staff']})")
         if flags & USER_FLAGS['PARTNER']:
             badges.append(f"[{BADGE_ICONS['partner']}]({BADGE_URLS['partner']})")
@@ -537,12 +553,14 @@ def userinfo_command():
             embed.set_image(url=banner_url)
         
         created_timestamp = int(snowflake_to_timestamp(target_user.id))
-        member_since = f"<t:{created_timestamp}:D>"
+        created_date = f"<t:{created_timestamp}:F>"
+        
+        embed.add_field(name='Created Date', value=created_date, inline=False)
+        
         if member and hasattr(member, 'joined_at') and member.joined_at:
             joined_timestamp = int(member.joined_at.timestamp())
-            member_since += f" • <t:{joined_timestamp}:D>"
-        
-        embed.add_field(name='Member Since', value=member_since, inline=False)
+            join_date = f"<t:{joined_timestamp}:F>"
+            embed.add_field(name='Join Date', value=join_date, inline=False)
         
         is_bot = user_data.get('bot', False)
         embed.add_field(name='Is Bot', value='True' if is_bot else 'False', inline=True)
@@ -557,7 +575,20 @@ def userinfo_command():
             )
         
         if member and member.roles[1:]:
-            role_list = ' '.join([f'<@&{r.id}>' for r in sorted(member.roles[1:], key=lambda r: r.position, reverse=True)])
+            roles = sorted(member.roles[1:], key=lambda r: r.position, reverse=True)
+            role_mentions = [f'<@&{r.id}>' for r in roles]
+            role_list = ' '.join(role_mentions)
+            
+            if len(role_list) > 1024:
+                truncated_roles = []
+                current_length = 0
+                for mention in role_mentions:
+                    if current_length + len(mention) + 1 > 1020:
+                        break
+                    truncated_roles.append(mention)
+                    current_length += len(mention) + 1
+                role_list = ' '.join(truncated_roles) + ' ...'
+            
             embed.add_field(name=f'Roles ({len(member.roles) - 1})', value=role_list, inline=False)
         
         if images:
