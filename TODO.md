@@ -53,7 +53,7 @@
 
 - [ ] add [tts](https://developer.puter.com/tutorials/free-unlimited-text-to-speech-api/) command
 
-- [ ] update botinfo command
+- [x] update botinfo command
 
 - [ ] Clean tag system from [tags branch](https://github.com/neoarz/Syntrel/tree/tags) (make sure db is persistent)
 
