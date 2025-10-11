@@ -41,6 +41,11 @@ class RowButton(discord.ui.Button):
         b_id = self.custom_id
         if int(b_id[5:]) in view.moves:
             return await interaction.followup.send("That part is already taken.", ephemeral=True)
+        
+        if not view.bombs_generated:
+            view.generate_bombs(int(b_id[5:]))
+            self.bombs = view.bombs
+        
         if int(b_id[5:]) in self.bombs:
             await view.RevealBombs(b_id, view.board)
         else:
@@ -89,16 +94,36 @@ class RowButton(discord.ui.Button):
                         raise
 
 class MsView(discord.ui.View):
-    def __init__(self, ctx, options, bombs, board):
+    def __init__(self, ctx, options, bomb_count, board):
         super().__init__(timeout=300)
         for i, op in enumerate(options):
-            self.add_item(RowButton(ctx, op, f"block{i}", bombs, board))
+            self.add_item(RowButton(ctx, op, f"block{i}", [], board))
         self.board = board
-        self.bombs = bombs
+        self.bombs = []
+        self.bomb_count = bomb_count
+        self.bombs_generated = False
         self.moves = []
         self.ctx = ctx
         self.message = None
         self.last_interaction = 0
+    
+    def generate_bombs(self, first_move_pos):
+        """Generate bombs excluding the first clicked position"""
+        bombpositions = []
+        excluded_positions = [0, 4, 20, 24, first_move_pos] 
+        
+        while len(bombpositions) < self.bomb_count:
+            random_index = random.randint(0, 24)
+            if random_index not in bombpositions and random_index not in excluded_positions:
+                bombpositions.append(random_index)
+        
+        self.bombs = bombpositions
+        self.bombs_generated = True
+        
+
+        for button in self.children:
+            if isinstance(button, RowButton):
+                button.bombs = self.bombs
     
     async def on_timeout(self):
         for button in self.children:
@@ -216,15 +241,7 @@ def minesweeper_command():
     )
     async def minesweeper(self, context):
         board = [["឵឵ "] * 5 for _ in range(5)]
-        bombs = 0
-        bombpositions = []
-        for x in repeat(None, random.randint(4, 11)):
-            random_index = random.randint(0, 24)
-            if random_index not in bombpositions and random_index not in [
-                0, 4, 20, 24
-            ]:
-                bombpositions.append(random_index)
-                bombs += 1
+        bomb_count = random.randint(4, 11)
 
         def ExtractBlocks():
             new_b = []
@@ -235,12 +252,12 @@ def minesweeper_command():
 
         embed = discord.Embed(
             title="Minesweeper",
-            description=f"💣 Total Bombs: `{len(bombpositions)}`\n\nClick the buttons to reveal the grid. Avoid the bombs!",
+            description=f"💣 Total Bombs: `{bomb_count}`\n\nClick the buttons to reveal the grid. Avoid the bombs!",
             color=0x7289DA
         )
         embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
         
-        view = MsView(context, ExtractBlocks(), bombpositions, board)
+        view = MsView(context, ExtractBlocks(), bomb_count, board)
         message = await context.send(embed=embed, view=view)
         view.message = message
     
