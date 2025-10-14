@@ -30,7 +30,7 @@
 | sidestore | `help`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
 | idevice | `help`, `noapps`, `errorcode`, `developermode`, `mountddi` |
 | melonx | `help`, `transfer`, `mods`, `gamecrash`, `requirements`, `error`, `26` |
-| miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`, `depart`, `docs` `sigmq` |
+| miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`, `depart`, `docs` `sigma` |
 | utilities | `translate`, `codepreview`, `dictionary` |
 | media | `download`, `mcquote`, `img2gif`, `tweety` |
 
