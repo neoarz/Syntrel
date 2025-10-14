@@ -11,6 +11,7 @@ from .piracy import piracy_command
 from .keanu import keanu_command
 from .support import support_command
 from .docs import docs_command
+from .sigma import sigma_command
 
 class Miscellaneous(commands.GroupCog, name="misc"):
     def __init__(self, bot) -> None:
@@ -80,6 +81,10 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     @miscellaneous_group.command(name="docs")
     async def miscellaneous_group_docs(self, context: Context):
         await self._invoke_hybrid(context, "docs")
+
+    @miscellaneous_group.command(name="sigma")
+    async def miscellaneous_group_sigma(self, context: Context):
+        await self._invoke_hybrid(context, "sigma")
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
@@ -153,6 +158,14 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     async def docs(self, context):
         return await docs_command()(self, context)
 
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="sigma",
+        description="i feel so sigma!"
+    )
+    async def sigma(self, context):
+        return await sigma_command()(self, context)
+
 async def setup(bot) -> None:
     cog = Miscellaneous(bot)
     await bot.add_cog(cog)
@@ -166,3 +179,4 @@ async def setup(bot) -> None:
     bot.logger.info("Loaded extension 'miscellaneous.keanu'")
     bot.logger.info("Loaded extension 'miscellaneous.support'")
     bot.logger.info("Loaded extension 'miscellaneous.docs'")
+    bot.logger.info("Loaded extension 'miscellaneous.sigma'")
