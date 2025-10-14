@@ -214,7 +214,7 @@ class DiscordBot(commands.Bot):
         split = full_command_name.split(" ")
         executed_command = str(split[0])
         
-        if executed_command.lower() == "shutdown":
+        if executed_command.lower() in ["shutdown", "say", "embed"]:
             return
             
         if context.guild is not None:
