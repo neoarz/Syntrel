@@ -4,6 +4,7 @@ from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 from utils.ascii_art import ascii_plain
+from utils.checks import is_owner_or_friend
 
 
 class Logs(commands.Cog, name="logs"):
@@ -27,7 +28,7 @@ class Logs(commands.Cog, name="logs"):
     @app_commands.describe(lines="Number of lines to read from the end of the log file (default: 50, max: 200)")
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     @app_commands.allowed_installs(guilds=True, users=True)
-    @commands.is_owner()
+    @is_owner_or_friend()
     async def logs(self, context: Context, lines: int = 50) -> None:
         if lines > 200:
             lines = 200
@@ -98,7 +99,7 @@ class Logs(commands.Cog, name="logs"):
             await self.send_embed(context, embed, ephemeral=True)
 
     async def cog_command_error(self, context: Context, error) -> None:
-        if isinstance(error, commands.NotOwner):
+        if isinstance(error, (commands.NotOwner, commands.CheckFailure)):
             embed = discord.Embed(
                 title="Permission Denied",
                 description="You are not the owner of this bot!",

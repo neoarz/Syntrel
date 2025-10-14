@@ -3,6 +3,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
+from utils.checks import is_owner_or_friend
 
 
 class Invite(commands.Cog, name="invite"):
@@ -25,7 +26,7 @@ class Invite(commands.Cog, name="invite"):
     )
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     @app_commands.allowed_installs(guilds=True, users=True)
-    @commands.is_owner()
+    @is_owner_or_friend()
     async def invite(self, context: Context) -> None:
         """
         Get the invite link of the bot to be able to invite it.
@@ -43,7 +44,7 @@ class Invite(commands.Cog, name="invite"):
         await self.send_embed(context, embed, ephemeral=False)
 
     async def cog_command_error(self, context: Context, error) -> None:
-        if isinstance(error, commands.NotOwner):
+        if isinstance(error, (commands.NotOwner, commands.CheckFailure)):
             embed = discord.Embed(
                 title="Permission Denied",
                 description="You are not the owner of this bot.",
