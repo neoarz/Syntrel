@@ -81,6 +81,10 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     async def miscellaneous_group_docs(self, context: Context):
         await self._invoke_hybrid(context, "docs")
 
+    @miscellaneous_group.command(name="sigma")
+    async def miscellaneous_group_docs(self, context: Context):
+        await self._invoke_hybrid(context, "sigma")
+
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="dontasktoask",
@@ -153,6 +157,14 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     async def docs(self, context):
         return await docs_command()(self, context)
 
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="sigma",
+        description="i feel so sigma!"
+    )
+    async def sigma(self, context):
+        return await docs_command()(self, context)
+
 async def setup(bot) -> None:
     cog = Miscellaneous(bot)
     await bot.add_cog(cog)
@@ -166,3 +178,4 @@ async def setup(bot) -> None:
     bot.logger.info("Loaded extension 'miscellaneous.keanu'")
     bot.logger.info("Loaded extension 'miscellaneous.support'")
     bot.logger.info("Loaded extension 'miscellaneous.docs'")
+    bot.logger.info("Loaded extension 'miscellaneous.sigma'")
