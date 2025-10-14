@@ -51,7 +51,7 @@
 
 - [ ] add ~~admin abuse~~ command (for games)
 
-- [ ] add [tts](https://developer.puter.com/tutorials/free-unlimited-text-to-speech-api/) command
+- [x] add [tts](https://developer.puter.com/tutorials/free-unlimited-text-to-speech-api/) command
 
 - [x] update botinfo command
 
