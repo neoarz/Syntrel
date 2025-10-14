@@ -47,7 +47,12 @@ class Say(commands.Cog, name="say"):
         
         interaction = getattr(context, "interaction", None)
         if interaction is not None:
+            await interaction.response.defer(ephemeral=True)
             await context.channel.send(message, allowed_mentions=allowed_mentions)
+            try:
+                await interaction.delete_original_response()
+            except:
+                pass
         else:
             try:
                 await context.message.delete()
@@ -89,7 +94,12 @@ class Say(commands.Cog, name="say"):
         
         interaction = getattr(context, "interaction", None)
         if interaction is not None:
+            await interaction.response.defer(ephemeral=True)
             await context.channel.send(embed=embed, allowed_mentions=allowed_mentions)
+            try:
+                await interaction.delete_original_response()
+            except:
+                pass
         else:
             try:
                 await context.message.delete()
