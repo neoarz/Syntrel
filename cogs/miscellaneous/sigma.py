@@ -11,7 +11,7 @@ def sigma_command():
         description="i feel so sigma",
     )
     async def sigma(self, context):
-        image_url = "https://raw.githubusercontent.com/yeIIowstar520/Syntrel/refs/heads/main/assets/IMG_8453.jpeg?raw=true"
+        image_url = "https://yes.nighty.works/raw/EpWodj.jpeg"
 
         async with aiohttp.ClientSession() as session:
             async with session.get(image_url) as resp:

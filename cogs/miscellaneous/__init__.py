@@ -11,6 +11,7 @@ from .piracy import piracy_command
 from .keanu import keanu_command
 from .support import support_command
 from .docs import docs_command
+from .sigma import sigma_command
 
 class Miscellaneous(commands.GroupCog, name="misc"):
     def __init__(self, bot) -> None:
@@ -82,7 +83,7 @@ class Miscellaneous(commands.GroupCog, name="misc"):
         await self._invoke_hybrid(context, "docs")
 
     @miscellaneous_group.command(name="sigma")
-    async def miscellaneous_group_docs(self, context: Context):
+    async def miscellaneous_group_sigma(self, context: Context):
         await self._invoke_hybrid(context, "sigma")
 
     @commands.check(_require_group_prefix)
@@ -163,7 +164,7 @@ class Miscellaneous(commands.GroupCog, name="misc"):
         description="i feel so sigma!"
     )
     async def sigma(self, context):
-        return await docs_command()(self, context)
+        return await sigma_command()(self, context)
 
 async def setup(bot) -> None:
     cog = Miscellaneous(bot)
