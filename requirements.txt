@@ -6,3 +6,4 @@ yt-dlp
 Pillow
 pillow-heif
 pytz
+gTTS

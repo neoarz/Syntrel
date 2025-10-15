@@ -64,7 +64,7 @@ class Media(commands.GroupCog, name="media"):
             await self.tweety(context)
             return
         if name == "tts":
-            await self.tts(context, text=kwargs.get('text'), voice=kwargs.get('voice'))
+            await self.tts(context, text=kwargs.get('text'))
             return
         await context.send(f"Unknown media command: {name}")
 
@@ -85,8 +85,8 @@ class Media(commands.GroupCog, name="media"):
         await self._invoke_hybrid(context, "tweety")
 
     @media_group.command(name="tts")
-    async def media_group_tts(self, context: Context, *, text: str = None, voice: str = "alloy"):
-        await self._invoke_hybrid(context, "tts", text=text, voice=voice)
+    async def media_group_tts(self, context: Context, *, text: str = None):
+        await self._invoke_hybrid(context, "tts", text=text)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
@@ -123,10 +123,10 @@ class Media(commands.GroupCog, name="media"):
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="tts",
-        description="Convert text to speech using the Puter TTS API.",
+        description="Convert text to speech using Google Text-to-Speech.",
     )
-    async def tts(self, context, text: str = None, voice: str = "alloy"):
-        return await tts_command()(self, context, text=text, voice=voice)
+    async def tts(self, context, text: str = None):
+        return await tts_command()(context, text=text)
 
 async def setup(bot) -> None:
     cog = Media(bot)
