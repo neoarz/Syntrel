@@ -11,6 +11,9 @@ from .requirements import requirements_command
 from .error import error_command
 from .ios26 import ios26_command
 
+
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@app_commands.allowed_installs(guilds=True, users=True)
 class Melonx(commands.GroupCog, name="melonx"):
     def __init__(self, bot) -> None:
         self.bot = bot

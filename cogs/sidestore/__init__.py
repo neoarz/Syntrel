@@ -14,6 +14,9 @@ from .udid import udid_command
 from .half import half_command
 from .sparse import sparse_command
 
+
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@app_commands.allowed_installs(guilds=True, users=True)
 class Sidestore(commands.GroupCog, name="sidestore"):
     def __init__(self, bot) -> None:
         self.bot = bot

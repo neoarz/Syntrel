@@ -1,4 +1,5 @@
 import discord
+from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 from typing import Optional
@@ -20,6 +21,9 @@ def _require_group_prefix(context: Context) -> bool:
     content = context.message.content.strip().lower()
     return content.startswith(f"{prefix}{group} ")
 
+
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@app_commands.allowed_installs(guilds=True, users=True)
 class Media(commands.GroupCog, name="media"):
     def __init__(self, bot) -> None:
         self.bot = bot

@@ -20,6 +20,9 @@ def _require_group_prefix(context: Context) -> bool:
     content = context.message.content.strip().lower()
     return content.startswith(f"{prefix}{group} ")
 
+
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@app_commands.allowed_installs(guilds=True, users=True)
 class General(commands.GroupCog, name="general"):
     def __init__(self, bot) -> None:
         self.bot = bot

@@ -12,6 +12,9 @@ from .hackban import hackban_command
 from .nick import nick_command
 from .timeout import timeout_command
 
+
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@app_commands.allowed_installs(guilds=True, users=True)
 class Moderation(commands.GroupCog, name="moderation"):
     def __init__(self, bot) -> None:
         self.bot = bot

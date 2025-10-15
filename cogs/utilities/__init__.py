@@ -7,6 +7,9 @@ from .translate import translate_command, language_autocomplete
 from .codepreview import codepreview_command
 from .dictionary import dictionary_command
 
+
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@app_commands.allowed_installs(guilds=True, users=True)
 class Utilities(commands.GroupCog, name="utils"):
     def __init__(self, bot) -> None:
         self.bot = bot

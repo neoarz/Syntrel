@@ -33,7 +33,7 @@
 
 - [ ] Move all assets to gh
 
-- [ ] Add codepreview for pull requests
+- [x] Add codepreview for pull requests
 
 - [x] Add try it and see command
 

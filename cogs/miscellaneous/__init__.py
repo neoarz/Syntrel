@@ -1,4 +1,5 @@
 import discord
+from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 
@@ -13,6 +14,9 @@ from .support import support_command
 from .docs import docs_command
 from .sigma import sigma_command
 
+
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@app_commands.allowed_installs(guilds=True, users=True)
 class Miscellaneous(commands.GroupCog, name="misc"):
     def __init__(self, bot) -> None:
         self.bot = bot
