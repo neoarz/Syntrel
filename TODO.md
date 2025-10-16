@@ -49,6 +49,14 @@
 
 - [ ] Add random picture command
 
+- [ ] Add reminder command
+
+- [ ] Add converting file types
+
+- [ ] fix code preview command
+
+- [ ] Add moderation giverole command
+
 - [ ] add ~~admin abuse~~ command (for games)
 
 - [x] add [tts](https://developer.puter.com/tutorials/free-unlimited-text-to-speech-api/) command
