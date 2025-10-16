@@ -1,27 +1,35 @@
-Syntrel Discord Bot
+MIT License
+
 Copyright (c) 2025 neoarz
 
-This project contains code from multiple sources under different licenses:
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-THIRD-PARTY SOFTWARE:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-Python Discord Bot Template
-Copyright © Krypton 2019-Present
-Licensed under the Apache License, Version 2.0
-Source: https://github.com/kkrypt0nn/Python-Discord-Bot-Template
-  
-The original Apache License, Version 2.0 applies to these components.
-See [LICENSE-APACHE](licenses/LICENSE-APACHE) for the full license text.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
-NEW CONTRIBUTIONS:
+---
 
-Original code and modifications by neoarz are licensed under the MIT License.
-See [LICENSE-MIT](licenses/LICENSE-MIT) for the full license text.
+ASSETS RESTRICTION NOTICE:
 
-This includes but is not limited to:
-Custom commands and cogs not present in the original template
-Modifications and enhancements to existing functionality
-New features and integrations
-Documentation and configuration files created by neoarz
+The following files and directories are NOT covered by the MIT License and are
+restricted for use:
 
+- assets/ (all files in this directory)
+- Any image files, links, graphics, logos, or media files
+- Any proprietary content or branding materials
 
+These assets remain the exclusive property of neoarz and may not be used,
+distributed, or modified without explicit written permission.

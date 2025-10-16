@@ -70,8 +70,6 @@ class Fun(commands.GroupCog, name="fun"):
         name="coinflip",
         description="Make a coin flip, but give your bet before."
     )
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    @app_commands.allowed_installs(guilds=True, users=True)
     async def coinflip(self, context):
         return await coinflip_command()(self, context)
 
@@ -80,8 +78,6 @@ class Fun(commands.GroupCog, name="fun"):
         name="8ball",
         description="Ask any question to the bot.",
     )
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    @app_commands.allowed_installs(guilds=True, users=True)
     async def eight_ball(self, context, *, question: str):
         return await eightball_command()(self, context, question=question)
 
@@ -90,15 +86,11 @@ class Fun(commands.GroupCog, name="fun"):
         name="minesweeper", 
         description="Play a buttoned minesweeper mini-game."
     )
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    @app_commands.allowed_installs(guilds=True, users=True)
     async def minesweeper(self, context):
         return await minesweeper_command()(self, context)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(name="randomfact", description="Get a random fact.")
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    @app_commands.allowed_installs(guilds=True, users=True)
     async def randomfact(self, context):
         return await randomfact_command()(self, context)
 
@@ -106,8 +98,6 @@ class Fun(commands.GroupCog, name="fun"):
     @commands.hybrid_command(
         name="rps", description="Play the rock paper scissors game against the bot."
     )
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    @app_commands.allowed_installs(guilds=True, users=True)
     async def rock_paper_scissors(self, context):
         return await rps_command()(self, context)
 
