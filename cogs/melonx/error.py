@@ -31,6 +31,12 @@ def error_command():
             url="https://github.com/neoarz/Syntrel/blob/main/cogs/melonx/error.py",
             emoji="<:githubicon:1417717356846776340>"
         ))
+        view.add_item(discord.ui.Button(
+            label="Join The MeloNX Discord Server", 
+            style=discord.ButtonStyle.primary, 
+            url="https://discord.gg/WEX6mUbq5c",
+            emoji="<:discord:1428671438071791736>>"
+        ))
 
         if context.interaction:
             await context.interaction.response.send_message(embed=embed, view=view)
