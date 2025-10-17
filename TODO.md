@@ -61,6 +61,10 @@
 
 - [ ] switch embeds to double embeds check [botinfo command](https://github.com/neoarz/Syntrel/blob/main/cogs/botinfo.py#L80)
 
+- [ ] Add co-owner commands
+
+- [ ] Add logs to channel
+
 - [x] add [tts](https://developer.puter.com/tutorials/free-unlimited-text-to-speech-api/) command
 
 - [x] update botinfo command
