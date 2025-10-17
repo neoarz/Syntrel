@@ -6,6 +6,7 @@ from discord.ext.commands import Context
 from datetime import datetime
 import time
 import pytz
+from utils.contributors import generate_contributors_image
 
 
 class FeedbackForm(discord.ui.Modal, title="Feedback"):
@@ -125,6 +126,9 @@ class BotInfo(commands.Cog, name="botinfo"):
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     @app_commands.allowed_installs(guilds=True, users=True)
     async def botinfo(self, context: Context) -> None:
+        if context.interaction:
+            await context.interaction.response.defer(ephemeral=False)
+        
         ny_tz = pytz.timezone('America/New_York')
         current_time = datetime.now(ny_tz).strftime("%m/%d/%y, %I:%M %p")
         
@@ -137,21 +141,38 @@ class BotInfo(commands.Cog, name="botinfo"):
             f"**Prefix:** / (Slash Commands) or {self.bot.bot_prefix} for normal commands"
         )
         
-        embed = discord.Embed(
+        embed1 = discord.Embed(
             title="Syntrel Discord Bot",
             description=description_text,
             color=0x7289DA,
         )
-        embed.set_author(name="Syntrel", icon_url="https://github.com/neoarz/Syntrel/blob/main/assets/icon.png?raw=true")
-        embed.set_image(url="https://github.com/neoarz/Syntrel/raw/main/assets/bannerdark.png")
-        embed.set_footer(text=f"neoarz • {current_time}", icon_url="https://yes.nighty.works/raw/P1Us35.webp")
+        embed1.set_author(name="Syntrel", icon_url="https://github.com/neoarz/Syntrel/blob/main/assets/icon.png?raw=true")
+        embed1.set_image(url="https://github.com/neoarz/Syntrel/raw/main/assets/bannerdark.png")
+        embed1.set_footer(text=f"neoarz • {current_time}", icon_url="https://yes.nighty.works/raw/P1Us35.webp")
+        
+        embed2 = discord.Embed(
+            title="Contributors",
+            description="Giving credit where it's due! <a:pandasquish:1428617277317709915>",
+            color=0x7289DA,
+        )
+        
+        contributors_image = generate_contributors_image()
         
         view = BotInfoView(self.bot)
         
-        if context.interaction:
-            await context.interaction.response.send_message(embed=embed, view=view, ephemeral=False)
+        if contributors_image:
+            file = discord.File(contributors_image, filename="contributors.png")
+            embed2.set_image(url="attachment://contributors.png")
+            
+            if context.interaction:
+                await context.interaction.followup.send(embeds=[embed1, embed2], file=file, view=view)
+            else:
+                await context.send(embeds=[embed1, embed2], file=file, view=view)
         else:
-            await context.send(embed=embed, view=view)
+            if context.interaction:
+                await context.interaction.followup.send(embeds=[embed1, embed2], view=view)
+            else:
+                await context.send(embeds=[embed1, embed2], view=view)
 
 
 async def setup(bot) -> None:
