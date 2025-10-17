@@ -37,6 +37,12 @@ def ios26_command():
             url="https://github.com/neoarz/Syntrel/blob/main/cogs/melonx/ios26.py",
             emoji="<:githubicon:1417717356846776340>"
         ))
+        view.add_item(discord.ui.Button(
+            label="MeloNX Discord", 
+            style=discord.ButtonStyle.primary, 
+            url="https://discord.gg/EMXB2XYQgA",
+            emoji="<:Discord:1428762057758474280>"
+        ))
 
         if context.interaction:
             await context.interaction.response.send_message(embed=embed, view=view)
