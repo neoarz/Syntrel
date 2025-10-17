@@ -99,6 +99,7 @@ class BotInfo(commands.Cog, name="botinfo"):
                 "**New to Syntrel?** Run `/help` to get started and explore all available commands!\n\n"
                 f"**Owner:** [neoarz](https://discordapp.com/users/1015372540937502851)\n"
                 f"**Python Version:** {platform.python_version()}\n"
+                f"**Discord.py Version:** {discord.__version__}\n"
                 f"**Prefix:** / (Slash Commands) or {self.bot.bot_prefix} for normal commands"
             )
             
@@ -132,6 +133,7 @@ class BotInfo(commands.Cog, name="botinfo"):
             "**New to Syntrel?** Run `/help` to get started and explore all available commands!\n\n"
             f"**Owner:** [neoarz](https://discordapp.com/users/1015372540937502851)\n"
             f"**Python Version:** {platform.python_version()}\n"
+            f"**Discord.py Version:** {discord.__version__}\n"
             f"**Prefix:** / (Slash Commands) or {self.bot.bot_prefix} for normal commands"
         )
         

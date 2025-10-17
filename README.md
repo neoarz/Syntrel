@@ -18,7 +18,7 @@
 
 ## Commands
 
-![Total Commands](https://img.shields.io/badge/Total%20Commands-66-5865F2)
+![Total Commands](https://img.shields.io/badge/Total%20Commands-67-5865F2)
 
 | Command&nbsp;group | Subcommands |
 | ------------ | --- |
@@ -30,7 +30,7 @@
 | sidestore | `help`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
 | idevice | `help`, `noapps`, `errorcode`, `developermode`, `mountddi` |
 | melonx | `help`, `transfer`, `mods`, `gamecrash`, `requirements`, `error`, `26` |
-| miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`, `depart`, `docs` `sigma`, `duck` |
+| miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`, `depart`, `docs` `sigma`, `duck`, `silly` |
 | utilities | `translate`, `codepreview`, `dictionary` |
 | media | `download`, `mcquote`, `img2gif`, `tweety`, `tts` |
 

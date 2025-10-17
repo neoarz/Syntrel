@@ -14,6 +14,7 @@ from .keanu import keanu_command
 from .support import support_command
 from .docs import docs_command
 from .sigma import sigma_command
+from .silly import silly_command
 
 
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
@@ -31,7 +32,7 @@ class Miscellaneous(commands.GroupCog, name="misc"):
             color=0x7289DA
         )
         embed.set_author(name="Miscellaneous", icon_url="https://yes.nighty.works/raw/YxMC0r.png")
-        embed.add_field(name="Available", value="dontasktoask, rr, depart, labubu, duck, tryitandsee, piracy, keanu, support, docs", inline=False)
+        embed.add_field(name="Available", value="dontasktoask, rr, depart, labubu, duck, tryitandsee, piracy, keanu, support, docs, sigma, silly", inline=False)
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str):
@@ -94,6 +95,10 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     @miscellaneous_group.command(name="sigma")
     async def miscellaneous_group_sigma(self, context: Context):
         await self._invoke_hybrid(context, "sigma")
+
+    @miscellaneous_group.command(name="silly")
+    async def miscellaneous_group_silly(self, context: Context, message_type: str = "regular"):
+        await self._invoke_hybrid(context, "silly", message_type=message_type)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
@@ -183,6 +188,21 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     async def sigma(self, context):
         return await sigma_command()(self, context)
 
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="silly",
+        description="Sends a silly message :3"
+    )
+    @app_commands.describe(
+        message_type="Type of message to send (regular or animated)"
+    )
+    @app_commands.choices(message_type=[
+        app_commands.Choice(name="Regular", value="regular"),
+        app_commands.Choice(name="Animated", value="animated")
+    ])
+    async def silly(self, context, message_type: str = "regular"):
+        return await silly_command()(self, context, message_type=message_type)
+
 async def setup(bot) -> None:
     cog = Miscellaneous(bot)
     await bot.add_cog(cog)
@@ -198,3 +218,4 @@ async def setup(bot) -> None:
     bot.logger.info("Loaded extension 'miscellaneous.support'")
     bot.logger.info("Loaded extension 'miscellaneous.docs'")
     bot.logger.info("Loaded extension 'miscellaneous.sigma'")
+    bot.logger.info("Loaded extension 'miscellaneous.silly'")
