@@ -35,7 +35,7 @@ def error_command():
             label="Join The MeloNX Discord Server", 
             style=discord.ButtonStyle.primary, 
             url="https://discord.gg/WEX6mUbq5c",
-            emoji="<:discord:1428671438071791736>>"
+            emoji="<:discord:1428671438071791736>"
         ))
 
         if context.interaction:
