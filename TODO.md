@@ -39,7 +39,7 @@
 
 - [x] ~~Add rickroll command~~
 
-- [ ] Add letmegoo
+- [ ] Add letmegoogle command
 
 - [ ] Add sending code (regular and from github)
 
@@ -58,6 +58,8 @@
 - [ ] Add moderation giverole command
 
 - [ ] add ~~admin abuse~~ command (for games)
+
+- [ ] switch embeds to double embeds check [botinfo command](https://github.com/neoarz/Syntrel/blob/main/cogs/botinfo.py#L80)
 
 - [x] add [tts](https://developer.puter.com/tutorials/free-unlimited-text-to-speech-api/) command
 
