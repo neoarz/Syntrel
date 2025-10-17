@@ -43,10 +43,10 @@ def transfer_command():
             emoji="<:githubicon:1417717356846776340>"
         ))          
         view.add_item(discord.ui.Button(
-            label="Join The MeloNX Discord Server", 
+            label="MeloNX Discord", 
             style=discord.ButtonStyle.primary, 
-            url="https://discord.gg/WEX6mUbq5c",
-            emoji="<:discord:1428671438071791736>"
+            url="https://discord.gg/EMXB2XYQgA",
+            emoji="<:Discord:1428762057758474280>"
         ))
 
         if context.interaction:
