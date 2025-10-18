@@ -47,12 +47,17 @@ class Say(commands.Cog, name="say"):
         
         interaction = getattr(context, "interaction", None)
         if interaction is not None:
-            await interaction.response.defer(ephemeral=True)
-            await context.channel.send(message, allowed_mentions=allowed_mentions)
+            is_in_guild = context.guild is not None
+            await interaction.response.defer(ephemeral=is_in_guild)
             try:
-                await interaction.delete_original_response()
-            except:
-                pass
+                await context.channel.send(message, allowed_mentions=allowed_mentions)
+                if is_in_guild:
+                    try:
+                        await interaction.delete_original_response()
+                    except:
+                        pass
+            except discord.Forbidden:
+                await interaction.followup.send(message, allowed_mentions=allowed_mentions)
         else:
             try:
                 await context.message.delete()
@@ -94,12 +99,17 @@ class Say(commands.Cog, name="say"):
         
         interaction = getattr(context, "interaction", None)
         if interaction is not None:
-            await interaction.response.defer(ephemeral=True)
-            await context.channel.send(embed=embed, allowed_mentions=allowed_mentions)
+            is_in_guild = context.guild is not None
+            await interaction.response.defer(ephemeral=is_in_guild)
             try:
-                await interaction.delete_original_response()
-            except:
-                pass
+                await context.channel.send(embed=embed, allowed_mentions=allowed_mentions)
+                if is_in_guild:
+                    try:
+                        await interaction.delete_original_response()
+                    except:
+                        pass
+            except discord.Forbidden:
+                await interaction.followup.send(embed=embed, allowed_mentions=allowed_mentions)
         else:
             try:
                 await context.message.delete()
