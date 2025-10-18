@@ -65,6 +65,8 @@
 
 - [ ] Add logs to channel
 
+- [ ] Add idevice livecontainer command
+
 - [x] add [tts](https://developer.puter.com/tutorials/free-unlimited-text-to-speech-api/) command
 
 - [x] update botinfo command

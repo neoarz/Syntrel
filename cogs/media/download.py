@@ -10,6 +10,45 @@ import logging
 
 logger = logging.getLogger("discord_bot")
 
+async def send_error_message(context, description: str):
+    embed = discord.Embed(
+        title="Error",
+        description=description,
+        color=0xE02B2B,
+    )
+    embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+    
+    interaction = getattr(context, "interaction", None)
+    if interaction is not None:
+        if not interaction.response.is_done():
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+        else:
+            await interaction.followup.send(embed=embed, ephemeral=True)
+    else:
+        await context.send(embed=embed, ephemeral=True)
+
+async def upload_to_catbox(path: str) -> str:
+    try:
+        file_size_bytes = os.path.getsize(path)
+    except Exception:
+        file_size_bytes = -1
+    logger.info(f"Catbox upload start: name={os.path.basename(path)} size={file_size_bytes}")
+    form = aiohttp.FormData()
+    form.add_field('reqtype', 'fileupload')
+    with open(path, 'rb') as f:
+        form.add_field('fileToUpload', f, filename=os.path.basename(path))
+        timeout = aiohttp.ClientTimeout(total=600)
+        async with aiohttp.ClientSession(timeout=timeout) as session:
+            async with session.post('https://catbox.moe/user/api.php', data=form) as resp:
+                text = await resp.text()
+                logger.info(f"Catbox response: status={resp.status} body_len={len(text)}")
+                if resp.status == 200 and text.startswith('https://'):
+                    url_text = text.strip()
+                    logger.info(f"Catbox upload success: url={url_text}")
+                    return url_text
+                logger.error(f"Catbox upload failed: status={resp.status} body={text.strip()[:500]}")
+                raise RuntimeError(f"Upload failed: {text.strip()}")
+
 def download_command():
     @commands.hybrid_command(
         name="download",
@@ -18,74 +57,29 @@ def download_command():
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def download(self, context, *, url: str):
         if not url:
-            embed = discord.Embed(
-                title="Error",
-                description="Please provide a valid URL to download.",
-                color=0xE02B2B,
-            )
-            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-            
-            interaction = getattr(context, "interaction", None)
-            if interaction is not None:
-                if not interaction.response.is_done():
-                    await interaction.response.send_message(embed=embed, ephemeral=True)
-                else:
-                    await interaction.followup.send(embed=embed, ephemeral=True)
-            else:
-                await context.send(embed=embed, ephemeral=True)
+            await send_error_message(context, "Please provide a valid URL to download.")
             return
 
         try:
             parsed_url = urlparse(url)
             if not parsed_url.scheme or not parsed_url.netloc:
-                embed = discord.Embed(
-                    title="Error",
-                    description="Please provide a valid URL.",
-                    color=0xE02B2B,
-                )
-                embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                
-                interaction = getattr(context, "interaction", None)
-                if interaction is not None:
-                    if not interaction.response.is_done():
-                        await interaction.response.send_message(embed=embed, ephemeral=True)
-                    else:
-                        await interaction.followup.send(embed=embed, ephemeral=True)
-                else:
-                    await context.send(embed=embed, ephemeral=True)
+                await send_error_message(context, "Please provide a valid URL.")
                 return
         except Exception:
-            embed = discord.Embed(
-                title="Error",
-                description="Please provide a valid URL.",
-                color=0xE02B2B,
-            )
-            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-            
-            interaction = getattr(context, "interaction", None)
-            if interaction is not None:
-                if not interaction.response.is_done():
-                    await interaction.response.send_message(embed=embed, ephemeral=True)
-                else:
-                    await interaction.followup.send(embed=embed, ephemeral=True)
-            else:
-                await context.send(embed=embed, ephemeral=True)
+            await send_error_message(context, "Please provide a valid URL.")
             return
 
-        processing_embed = discord.Embed(
-            title="Download (Processing)",
-            description="<a:mariospin:1423677027013103709> Downloading video... This may take a moment.",
-            color=0x7289DA,
-        )
-        processing_embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-        
         interaction = getattr(context, "interaction", None)
         if interaction is not None:
             if not interaction.response.is_done():
-                await interaction.response.send_message(embed=processing_embed, ephemeral=True)
-            else:
-                await interaction.followup.send(embed=processing_embed, ephemeral=True)
+                await interaction.response.defer(ephemeral=False)
         else:
+            processing_embed = discord.Embed(
+                title="Download (Processing)",
+                description="<a:mariospin:1423677027013103709> Downloading video... This may take a moment.",
+                color=0x7289DA,
+            )
+            processing_embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
             processing_msg = await context.send(embed=processing_embed)
 
         temp_dir = tempfile.mkdtemp()
@@ -122,7 +116,6 @@ def download_command():
                 video_uploader = info.get('uploader', 'Unknown')
                 video_url = info.get('webpage_url') or info.get('original_url') or url
                 platform = info.get('extractor') or info.get('extractor_key') or 'Unknown'
-                view_count = info.get('view_count')
                 
                 files = [f for f in os.listdir(temp_dir) if os.path.isfile(os.path.join(temp_dir, f))]
                 
@@ -135,32 +128,11 @@ def download_command():
                 
                 if file_size > 24 * 1024 * 1024:  # 24MB limit
                     logger.info("File is over 24MB, uploading to Catbox")
-                    async def upload_to_catbox(path: str) -> str:
-                        try:
-                            file_size_bytes = os.path.getsize(path)
-                        except Exception:
-                            file_size_bytes = -1
-                        logger.info(f"Catbox upload start: name={os.path.basename(path)} size={file_size_bytes}")
-                        form = aiohttp.FormData()
-                        form.add_field('reqtype', 'fileupload')
-                        form.add_field('fileToUpload', open(path, 'rb'), filename=os.path.basename(path))
-                        timeout = aiohttp.ClientTimeout(total=600)
-                        async with aiohttp.ClientSession(timeout=timeout) as session:
-                            async with session.post('https://catbox.moe/user/api.php', data=form) as resp:
-                                text = await resp.text()
-                                logger.info(f"Catbox response: status={resp.status} body_len={len(text)}")
-                                if resp.status == 200 and text.startswith('https://'):
-                                    url_text = text.strip()
-                                    logger.info(f"Catbox upload success: url={url_text}")
-                                    return url_text
-                                logger.error(f"Catbox upload failed: status={resp.status} body={text.strip()[:500]}")
-                                raise RuntimeError(f"Upload failed: {text.strip()}")
-
                     try:
                         link = await upload_to_catbox(video_file)
                         minutes, seconds = divmod(video_duration_seconds, 60)
                         duration_str = f"{minutes}:{seconds:02d}"
-                        description_text = f"### **[{video_title}]({video_url})**" if video_url else f"### **{video_title}**"
+                        description_text = f"### **[{video_title}]({video_url})**\n\n{link}" if video_url else f"### **{video_title}**\n\n{link}"
                         embed = discord.Embed(
                             title="Download",
                             description=description_text,
@@ -173,16 +145,10 @@ def download_command():
                         embed.set_footer(text=f"Requested by {context.author.name}", icon_url=context.author.display_avatar.url)
                         
                         if interaction is not None:
-                            await context.channel.send(embed=embed)
-                            await context.channel.send(link)
-                            try:
-                                await interaction.delete_original_response()
-                            except:
-                                pass
+                            await interaction.followup.send(embed=embed)
                         else:
                             await processing_msg.delete()
-                            await context.channel.send(embed=embed)
-                            await context.channel.send(link)
+                            await context.send(embed=embed)
                         return
                     except Exception as upload_error:
                         logger.exception(f"Catbox upload exception: {upload_error}")
@@ -200,10 +166,6 @@ def download_command():
                         embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
                         
                         if interaction is not None:
-                            try:
-                                await interaction.delete_original_response()
-                            except:
-                                pass
                             await interaction.followup.send(embed=embed, ephemeral=True)
                         else:
                             await processing_msg.delete()
@@ -230,45 +192,19 @@ def download_command():
                             file = discord.File(f, filename=files[0])
                             
                             if interaction is not None:
-                                await context.channel.send(embed=embed)
-                                await context.channel.send(file=file)
-                                try:
-                                    await interaction.delete_original_response()
-                                except:
-                                    pass
+                                await interaction.followup.send(embeds=[embed], files=[file])
                             else:
                                 await processing_msg.delete()
-                                await context.channel.send(embed=embed)
-                                await context.channel.send(file=file)
+                                await context.send(embeds=[embed], files=[file])
                     except discord.HTTPException as e:
                         if e.status == 413:
                             logger.info("Discord rejected file (413), falling back to Catbox upload")
-                            async def upload_to_catbox(path: str) -> str:
-                                try:
-                                    file_size_bytes = os.path.getsize(path)
-                                except Exception:
-                                    file_size_bytes = -1
-                                logger.info(f"Catbox upload start: name={os.path.basename(path)} size={file_size_bytes}")
-                                form = aiohttp.FormData()
-                                form.add_field('reqtype', 'fileupload')
-                                form.add_field('fileToUpload', open(path, 'rb'), filename=os.path.basename(path))
-                                timeout = aiohttp.ClientTimeout(total=600)
-                                async with aiohttp.ClientSession(timeout=timeout) as session:
-                                    async with session.post('https://catbox.moe/user/api.php', data=form) as resp:
-                                        text = await resp.text()
-                                        logger.info(f"Catbox response: status={resp.status} body_len={len(text)}")
-                                        if resp.status == 200 and text.startswith('https://'):
-                                            url_text = text.strip()
-                                            logger.info(f"Catbox upload success: url={url_text}")
-                                            return url_text
-                                        logger.error(f"Catbox upload failed: status={resp.status} body={text.strip()[:500]}")
-                                        raise RuntimeError(f"Upload failed: {text.strip()}")
-
                             try:
                                 link = await upload_to_catbox(video_file)
+                                description_text_with_link = f"### **[{video_title}]({video_url})**\n\n{link}" if video_url else f"### **{video_title}**\n\n{link}"
                                 embed = discord.Embed(
                                     title="Download",
-                                    description=description_text,
+                                    description=description_text_with_link,
                                     color=0x7289DA,
                                 )
                                 embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
@@ -278,16 +214,10 @@ def download_command():
                                 embed.set_footer(text=f"Requested by {context.author.name}", icon_url=context.author.display_avatar.url)
                                 
                                 if interaction is not None:
-                                    await context.channel.send(embed=embed)
-                                    await context.channel.send(link)
-                                    try:
-                                        await interaction.delete_original_response()
-                                    except:
-                                        pass
+                                    await interaction.followup.send(embed=embed)
                                 else:
                                     await processing_msg.delete()
-                                    await context.channel.send(embed=embed)
-                                    await context.channel.send(link)
+                                    await context.send(embed=embed)
                             except Exception as upload_error:
                                 logger.exception(f"Catbox upload exception: {upload_error}")
                                 embed = discord.Embed(
@@ -298,10 +228,6 @@ def download_command():
                                 embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
                                 
                                 if interaction is not None:
-                                    try:
-                                        await interaction.delete_original_response()
-                                    except:
-                                        pass
                                     await interaction.followup.send(embed=embed, ephemeral=True)
                                 else:
                                     await processing_msg.delete()
@@ -318,10 +244,6 @@ def download_command():
             embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
             
             if interaction is not None:
-                try:
-                    await interaction.delete_original_response()
-                except:
-                    pass
                 await interaction.followup.send(embed=embed, ephemeral=True)
             else:
                 try:
