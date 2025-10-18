@@ -19,7 +19,8 @@ def color_command():
         h, l, s = colorsys.rgb_to_hls(rgb_decimal[0], rgb_decimal[1], rgb_decimal[2])
         h_hsv, s_hsv, v_hsv = colorsys.rgb_to_hsv(rgb_decimal[0], rgb_decimal[1], rgb_decimal[2])
 
-        embed = discord.Embed(title="Random Color", color=color)
+        embed = discord.Embed(color=color)
+        embed.set_author(name="Random Color", icon_url="https://yes.nighty.works/raw/YxMC0r.png")
         
         embed.add_field(name="Hex", value=str(color))
         embed.add_field(name="RGB", value=f"rgb({r}, {g}, {b})")
