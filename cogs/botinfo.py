@@ -96,7 +96,7 @@ class BotInfo(commands.Cog, name="botinfo"):
             current_time = datetime.now(ny_tz).strftime("%m/%d/%y, %I:%M %p")
             
             description_text = (
-                "Heyooo! Im Syntrel, a bot made to help with [SideStore](https://discord.gg/3DwCwpBHfv), [MeloNX](https://discord.gg/Q4VkbkYfmk), and [idevice](https://discord.gg/ZnNcrRT3M8). I even have some cool extras! If you encounter any issues, please file a bug report. If you have any feedback or suggestions, simply select \"Feedback\"! <:HeardPanda:1417619745896660992>\n\n"
+                "Heyooo! I'm Syntrel, a bot made to help with [SideStore](https://discord.gg/3DwCwpBHfv), [MeloNX](https://discord.gg/Q4VkbkYfmk), and [idevice](https://discord.gg/ZnNcrRT3M8). I even have some cool extras! If you encounter any issues, please file a bug report. If you have any feedback or suggestions, simply select \"Feedback\"! <:HeardPanda:1417619745896660992>\n\n"
                 "**New to Syntrel?** Run `/help` to get started and explore all available commands!\n\n"
                 f"**Owner:** [neoarz](https://discordapp.com/users/1015372540937502851)\n"
                 f"**Python Version:** {platform.python_version()}\n"
