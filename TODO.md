@@ -43,7 +43,7 @@
 
 - [ ] Add sending code (regular and from github)
 
-- [ ] Add random color command
+- [x] Add random color command
 
 - [x] Add translate command
 
