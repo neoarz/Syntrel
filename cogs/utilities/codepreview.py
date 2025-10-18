@@ -174,6 +174,15 @@ def codepreview_command():
         url="GitHub URL to preview code from"
     )
     async def codepreview(self, context, url: str = None):
+        if not context.guild:
+            embed = discord.Embed(
+                title="Error",
+                description="Due to reasons ~~gatekeep~~, this command can only be used in servers. Please add this bot to your sever to use it, or use it in a server which has this bot added.",
+                color=0xE02B2B,
+            ).set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+            await send_embed(context, embed, ephemeral=True)
+            return
+        
         if not url or not url.strip():
             if context.message and context.message.reference and context.message.reference.resolved:
                 replied_message = context.message.reference.resolved

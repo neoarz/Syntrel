@@ -65,6 +65,8 @@
 
 - [ ] Add logs to channel
 
+- [ ] make /codepreview into /github and it can parse any github url
+
 - [ ] Add idevice livecontainer command
 
 - [x] add [tts](https://developer.puter.com/tutorials/free-unlimited-text-to-speech-api/) command
