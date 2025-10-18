@@ -13,6 +13,23 @@ except Exception:
     pass
 
 
+async def send_error_message(context, description: str):
+    embed = discord.Embed(
+        title="Error",
+        description=description,
+        color=0xE02B2B,
+    )
+    embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+    
+    interaction = getattr(context, "interaction", None)
+    if interaction is not None:
+        if not interaction.response.is_done():
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+        else:
+            await interaction.followup.send(embed=embed, ephemeral=True)
+    else:
+        await context.send(embed=embed, ephemeral=True)
+
 def img2gif_command():
     @commands.hybrid_command(
         name="img2gif",
@@ -29,36 +46,20 @@ def img2gif_command():
             if resolved_attachment is None and context.message and context.message.attachments:
                 resolved_attachment = context.message.attachments[0]
         if resolved_attachment is None or not resolved_attachment.filename.lower().endswith((".png", ".jpg", ".jpeg", ".webp", ".bmp", ".tiff", ".heic", ".heif")):
-            embed = discord.Embed(
-                title="Error",
-                description="Provide or reply to an image (png/jpg/jpeg/webp/bmp/tiff/heic/heif).",
-                color=0xE02B2B,
-            )
-            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-            interaction = getattr(context, "interaction", None)
-            if interaction is not None:
-                if not interaction.response.is_done():
-                    await interaction.response.send_message(embed=embed, ephemeral=True)
-                else:
-                    await interaction.followup.send(embed=embed, ephemeral=True)
-            else:
-                await context.send(embed=embed, ephemeral=True)
+            await send_error_message(context, "Provide or reply to an image (png/jpg/jpeg/webp/bmp/tiff/heic/heif).")
             return
-
-        processing_embed = discord.Embed(
-            title="Image to GIF (Processing)",
-            description="<a:mariospin:1423677027013103709> Converting image...",
-            color=0x7289DA,
-        )
-        processing_embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
 
         interaction = getattr(context, "interaction", None)
         if interaction is not None:
             if not interaction.response.is_done():
-                await interaction.response.send_message(embed=processing_embed, ephemeral=True)
-            else:
-                await interaction.followup.send(embed=processing_embed, ephemeral=True)
+                await interaction.response.defer(ephemeral=False)
         else:
+            processing_embed = discord.Embed(
+                title="Image to GIF (Processing)",
+                description="<a:mariospin:1423677027013103709> Converting image...",
+                color=0x7289DA,
+            )
+            processing_embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
             processing_msg = await context.send(embed=processing_embed)
 
         tmp_dir = tempfile.mkdtemp()
@@ -93,47 +94,27 @@ def img2gif_command():
                 else:
                     raise
 
-            original_ext = os.path.splitext(resolved_attachment.filename)[1].lstrip('.').upper() or "IMAGE"
-            embed = discord.Embed(
-                title="Image to GIF",
-                description=f"Converted {original_ext} to GIF.",
-                color=0x7289DA,
-            )
-            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-            embed.set_footer(text=f"Requested by {context.author.name}", icon_url=context.author.display_avatar.url)
-
             with open(out_path, "rb") as f:
                 file = discord.File(f, filename=os.path.basename(out_path))
                 if interaction is not None:
-                    await context.channel.send(embed=embed)
-                    await context.channel.send(file=file)
-                    try:
-                        await interaction.delete_original_response()
-                    except:
-                        pass
+                    await interaction.followup.send(file=file)
                 else:
                     await processing_msg.delete()
-                    await context.channel.send(embed=embed)
-                    await context.channel.send(file=file)
+                    await context.send(file=file)
         except Exception as e:
-            embed = discord.Embed(
-                title="Error",
-                description=f"Failed to convert image: {e}",
-                color=0xE02B2B,
-            )
-            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
             if interaction is not None:
-                try:
-                    await interaction.delete_original_response()
-                except:
-                    pass
-                await interaction.followup.send(embed=embed, ephemeral=True)
+                await interaction.followup.send(embed=discord.Embed(
+                    title="Error",
+                    description=f"Failed to convert image: {e}",
+                    color=0xE02B2B,
+                ).set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"), ephemeral=True)
             else:
-                try:
-                    await processing_msg.delete()
-                except:
-                    pass
-                await context.send(embed=embed, ephemeral=True)
+                await processing_msg.delete()
+                await context.send(embed=discord.Embed(
+                    title="Error",
+                    description=f"Failed to convert image: {e}",
+                    color=0xE02B2B,
+                ).set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"), ephemeral=True)
         finally:
             try:
                 for f in os.listdir(tmp_dir):
