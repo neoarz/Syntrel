@@ -29,7 +29,7 @@
 | moderation | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive`, `timeout` |
 | sidestore | `help`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
 | idevice | `help`, `noapps`, `errorcode`, `developermode`, `mountddi` |
-| melonx | `help`, `transfer`, `mods`, `gamecrash`, `requirements`, `error`, `26` |
+| melonx | `help`, `transfer`, `mods`, `gamecrash`, `requirements`, `error`, `26`, `legal` |
 | miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`, `depart`, `docs` `sigma`, `duck`, `silly`, `color` |
 | utilities | `translate`, `codepreview`, `dictionary` |
 | media | `download`, `mcquote`, `img2gif`, `tweety`, `tts` |
