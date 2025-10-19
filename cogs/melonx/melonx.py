@@ -38,6 +38,11 @@ class MelonxSelect(discord.ui.Select):
                 value="26",
                 description="How can I run MeloNX on iOS 26?",
             ),
+            discord.SelectOption(
+                label="Legal",
+                value="legal",
+                description="Legality of emulators and our stance on piracy",
+            ),
         ]
         super().__init__(placeholder="Choose a MeloNX command...", options=options)
 

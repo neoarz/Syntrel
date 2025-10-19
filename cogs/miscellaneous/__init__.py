@@ -15,6 +15,7 @@ from .support import support_command
 from .docs import docs_command
 from .sigma import sigma_command
 from .silly import silly_command
+from .color import color_command
 
 
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
@@ -32,7 +33,7 @@ class Miscellaneous(commands.GroupCog, name="misc"):
             color=0x7289DA
         )
         embed.set_author(name="Miscellaneous", icon_url="https://yes.nighty.works/raw/YxMC0r.png")
-        embed.add_field(name="Available", value="dontasktoask, rr, depart, labubu, duck, tryitandsee, piracy, keanu, support, docs, sigma, silly", inline=False)
+        embed.add_field(name="Available", value="dontasktoask, rr, depart, labubu, duck, tryitandsee, piracy, keanu, support, docs, sigma, silly, color", inline=False)
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str):
@@ -99,6 +100,10 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     @miscellaneous_group.command(name="silly")
     async def miscellaneous_group_silly(self, context: Context, message_type: str = "regular"):
         await self._invoke_hybrid(context, "silly", message_type=message_type)
+
+    @miscellaneous_group.command(name="color")
+    async def miscellaneous_group_color(self, context: Context):
+        await self._invoke_hybrid(context, "color")
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
@@ -203,6 +208,14 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     async def silly(self, context, message_type: str = "regular"):
         return await silly_command()(self, context, message_type=message_type)
 
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="color",
+        description="Get a random color."
+    )
+    async def color(self, context):
+        return await color_command()(self, context)
+
 async def setup(bot) -> None:
     cog = Miscellaneous(bot)
     await bot.add_cog(cog)
@@ -219,3 +232,4 @@ async def setup(bot) -> None:
     bot.logger.info("Loaded extension 'miscellaneous.docs'")
     bot.logger.info("Loaded extension 'miscellaneous.sigma'")
     bot.logger.info("Loaded extension 'miscellaneous.silly'")
+    bot.logger.info("Loaded extension 'miscellaneous.color'")

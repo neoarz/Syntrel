@@ -18,19 +18,19 @@
 
 ## Commands
 
-![Total Commands](https://img.shields.io/badge/Total%20Commands-67-5865F2)
+![Total Commands](https://img.shields.io/badge/Total%20Commands-70-5865F2)
 
 | Command&nbsp;group | Subcommands |
 | ------------ | --- |
 | ungrouped | `help`, `botinfo` |
 | owner | `sync`, `cog_management`, `shutdown`, `say`, `invite`, `logs` |
-| general | `serverinfo`, `ping`, `feedback`, `uptime` |
+| general | `serverinfo`, `ping`, `feedback`, `uptime`, `userinfo` |
 | fun | `randomfact`, `coinflip`, `rps`, `8ball`, `minesweeper` |
 | moderation | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive`, `timeout` |
 | sidestore | `help`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
 | idevice | `help`, `noapps`, `errorcode`, `developermode`, `mountddi` |
-| melonx | `help`, `transfer`, `mods`, `gamecrash`, `requirements`, `error`, `26` |
-| miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`, `depart`, `docs` `sigma`, `duck`, `silly` |
+| melonx | `help`, `transfer`, `mods`, `gamecrash`, `requirements`, `error`, `26`, `legal` |
+| miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`, `depart`, `docs` `sigma`, `duck`, `silly`, `color` |
 | utilities | `translate`, `codepreview`, `dictionary` |
 | media | `download`, `mcquote`, `img2gif`, `tweety`, `tts` |
 
