@@ -5,9 +5,9 @@ from discord.ext.commands import Context
 import time
 
 
-def transfer_command():
+def legal_command():
     @commands.hybrid_command(
-        name="legal", description="Legality of emulators"
+        name="legal", description="Legality of emulators."
     )
     async def transfer(self, context):
         embed = discord.Embed(
