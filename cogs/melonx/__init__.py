@@ -6,6 +6,7 @@ from discord.ext.commands import Context
 from .melonx import MelonxView
 from .transfer import transfer_command
 from .mods import mods_command
+from .legal import legal_command
 from .gamecrash import crash_command
 from .requirements import requirements_command
 from .error import error_command
@@ -44,6 +45,10 @@ class Melonx(commands.GroupCog, name="melonx"):
     @melonx_group.command(name="transfer")
     async def melonx_group_transfer(self, context: Context):
         await self._invoke_hybrid(context, "transfer")
+
+    @melonx_group.command(name="legal")
+    async def melonx_group_legal(self, context: Context):
+        await self._invoke_hybrid(context, "legal")
 
     @melonx_group.command(name="mods")
     async def melonx_group_mods(self, context: Context):
@@ -114,6 +119,14 @@ class Melonx(commands.GroupCog, name="melonx"):
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
+        name="legal",
+        description="Legality of emulators"
+    )
+    async def legal(self, context):
+        return await legal_command()(self, context)
+
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
         name="gamecrash",
         description="Why does my game crash?"
     )
@@ -155,3 +168,4 @@ async def setup(bot) -> None:
     bot.logger.info("Loaded extension 'melonx.requirements'")
     bot.logger.info("Loaded extension 'melonx.error'")
     bot.logger.info("Loaded extension 'melonx.26'")
+    bot.logger.info("Loaded extension 'melonx.legal'")
