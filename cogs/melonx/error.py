@@ -21,7 +21,7 @@ def error_command():
             )
         )
         embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
-        embed.set_footer(text=f'Last Edited by neoarz')
+        embed.set_footer(text=f'Last Edited by Meshal :D')
         embed.timestamp = discord.utils.utcnow()
 
         view = discord.ui.View()
