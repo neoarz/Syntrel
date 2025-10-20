@@ -186,12 +186,21 @@ class ideviceSelect(discord.ui.Select):
                 await interaction.followup.send(embed=embed, view=view, ephemeral=True)
                 
             except discord.Forbidden:
-                self.bot.logger.warning(f"Bot missing permissions in server {interaction.guild.name} (ID: {interaction.guild.id}) - cannot execute errorcodes command")
-                embed = discord.Embed(
-                    title="Permission Error",
-                    description="The bot doesn't have the required permissions in this server to execute this command. Use the slash command `/errorcodes` instead.",
-                    color=0xFF0000
-                )
+                guild_info = f"server {interaction.guild.name} (ID: {interaction.guild.id})" if interaction.guild else "DM or private channel"
+                self.bot.logger.warning(f"Bot missing permissions in {guild_info} - cannot execute errorcodes command")
+                
+                if interaction.guild is None:
+                    embed = discord.Embed(
+                        title="Error",
+                        description="This command cannot be executed in DMs.",
+                        color=0xFF0000
+                    )
+                else:
+                    embed = discord.Embed(
+                        title="Permission Error",
+                        description="The bot needs the `send messages` permission to execute this command.",
+                        color=0xFF0000
+                    )
                 embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
                 await interaction.response.edit_message(embed=embed, view=None)
             except Exception as e:
@@ -220,12 +229,21 @@ class ideviceSelect(discord.ui.Select):
                     embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
                     await interaction.response.edit_message(embed=embed, view=None)
             except discord.Forbidden:
-                self.bot.logger.warning(f"Bot missing permissions in server {interaction.guild.name} (ID: {interaction.guild.id}) - cannot execute {command_name} command")
-                embed = discord.Embed(
-                    title="Permission Error",
-                    description=f"The bot doesn't have the required permissions in this server to execute this command. Use the slash command `/{command_name}` instead.",
-                    color=0xFF0000
-                )
+                guild_info = f"server {interaction.guild.name} (ID: {interaction.guild.id})" if interaction.guild else "DM or private channel"
+                self.bot.logger.warning(f"Bot missing permissions in {guild_info} - cannot execute {command_name} command")
+                
+                if interaction.guild is None:
+                    embed = discord.Embed(
+                        title="Error",
+                        description="This command cannot be executed in DMs.",
+                        color=0xFF0000
+                    )
+                else:
+                    embed = discord.Embed(
+                        title="Permission Error",
+                        description="The bot needs the `send messages` permission to execute this command.",
+                        color=0xFF0000
+                    )
                 embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
                 await interaction.response.edit_message(embed=embed, view=None)
             except Exception as e:
@@ -258,6 +276,34 @@ def idevice_command():
         name="idevice", description="idevice troubleshooting and help"
     )
     async def idevice(self, context):
+        if isinstance(context.channel, discord.DMChannel):
+            embed = discord.Embed(
+                title="Error",
+                description="This command can only be used in servers.",
+                color=0xE02B2B,
+            )
+            embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
+            
+            if context.interaction:
+                await context.interaction.response.send_message(embed=embed, ephemeral=True)
+            else:
+                await context.send(embed=embed, ephemeral=True)
+            return
+
+        if isinstance(context.channel, discord.PartialMessageable):
+            embed = discord.Embed(
+                title="Error",
+                description="The bot needs send messages permissions in this channel.",
+                color=0xE02B2B,
+            )
+            embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
+            
+            if context.interaction:
+                await context.interaction.response.send_message(embed=embed, ephemeral=True)
+            else:
+                await context.send(embed=embed, ephemeral=True)
+            return
+
         embed = discord.Embed(
             title="idevice Commands",
             description="Choose a command from the dropdown below to get help with specific issues:",

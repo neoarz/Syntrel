@@ -63,12 +63,21 @@ class MelonxSelect(discord.ui.Select):
                     embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
                     await interaction.response.edit_message(embed=embed, view=None)
             except discord.Forbidden:
-                self.bot.logger.warning(f"Bot missing permissions in server {interaction.guild.name} (ID: {interaction.guild.id}) - cannot execute {command_name} command")
-                embed = discord.Embed(
-                    title="Permission Error",
-                    description="The bot doesn't have the required permissions in this server to execute this command. Use the slash command `/{command_name}` instead.",
-                    color=0x963155
-                )
+                guild_info = f"server {interaction.guild.name} (ID: {interaction.guild.id})" if interaction.guild else "DM or private channel"
+                self.bot.logger.warning(f"Bot missing permissions in {guild_info} - cannot execute {command_name} command")
+                
+                if interaction.guild is None:
+                    embed = discord.Embed(
+                        title="Error",
+                        description="This command cannot be executed in DMs.",
+                        color=0xFF0000
+                    )
+                else:
+                    embed = discord.Embed(
+                        title="Permission Error",
+                        description="The bot needs the `send messages` permission to execute this command.",
+                        color=0xFF0000
+                    )
                 embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
                 await interaction.response.edit_message(embed=embed, view=None)
             except Exception as e:
@@ -94,3 +103,53 @@ class MelonxView(discord.ui.View):
     def __init__(self, bot):
         super().__init__()
         self.add_item(MelonxSelect(bot))
+
+
+def melonx_command():
+    @commands.hybrid_command(
+        name="melonx", description="MeloNX troubleshooting and help"
+    )
+    async def melonx(self, context):
+        if isinstance(context.channel, discord.DMChannel):
+            embed = discord.Embed(
+                title="Error",
+                description="This command can only be used in servers.",
+                color=0xE02B2B,
+            )
+            embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
+            
+            if context.interaction:
+                await context.interaction.response.send_message(embed=embed, ephemeral=True)
+            else:
+                await context.send(embed=embed, ephemeral=True)
+            return
+
+        if isinstance(context.channel, discord.PartialMessageable):
+            embed = discord.Embed(
+                title="Error",
+                description="The bot needs send messages permissions in this channel.",
+                color=0xE02B2B,
+            )
+            embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
+            
+            if context.interaction:
+                await context.interaction.response.send_message(embed=embed, ephemeral=True)
+            else:
+                await context.send(embed=embed, ephemeral=True)
+            return
+
+        embed = discord.Embed(
+            title="MeloNX Commands",
+            description="Choose a command from the dropdown below to get help with specific issues:",
+            color=0x963155
+        )
+        embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
+        
+        view = MelonxView(self.bot)
+        
+        if context.interaction:
+            await context.interaction.response.send_message(embed=embed, view=view, ephemeral=True)
+        else:
+            await context.send(embed=embed, view=view)
+    
+    return melonx

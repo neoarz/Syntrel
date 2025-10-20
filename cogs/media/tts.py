@@ -85,7 +85,7 @@ def tts_command():
         if isinstance(context.channel, discord.PartialMessageable):
             embed = discord.Embed(
                 title="Error",
-                description="The bot needs send messages permissions in this channel.",
+                description="The bot needs the `send messages` permission in this channel.",
                 color=0xE02B2B,
             )
             embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
@@ -198,15 +198,35 @@ def tts_command():
         )
 
         if interaction is not None:
-            await context.channel.send(embed=embed)
-            await context.channel.send(file=audio_file)
             try:
-                await interaction.delete_original_response()
-            except:
-                pass
+                await context.channel.send(embed=embed)
+                await context.channel.send(file=audio_file)
+                try:
+                    await interaction.delete_original_response()
+                except:
+                    pass
+            except discord.Forbidden:
+                embed = discord.Embed(
+                    title="Permission Error",
+                    description="The bot needs the `send messages` permission to execute this command.",
+                    color=0xE02B2B,
+                )
+                embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+                await interaction.followup.send(embed=embed, ephemeral=True)
+                return
         else:
-            await processing_message.delete()
-            await context.channel.send(embed=embed)
-            await context.channel.send(file=audio_file)
+            try:
+                await processing_message.delete()
+                await context.channel.send(embed=embed)
+                await context.channel.send(file=audio_file)
+            except discord.Forbidden:
+                embed = discord.Embed(
+                    title="Permission Error",
+                    description="The bot needs the `send messages` permission to execute this command.",
+                    color=0xE02B2B,
+                )
+                embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+                await context.send(embed=embed, ephemeral=True)
+                return
 
     return tts
