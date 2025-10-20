@@ -174,13 +174,40 @@ def codepreview_command():
         url="GitHub URL to preview code from"
     )
     async def codepreview(self, context, url: str = None):
-        if not context.guild:
+        if isinstance(context.channel, discord.DMChannel):
             embed = discord.Embed(
                 title="Error",
-                description="Due to reasons ~~gatekeep~~, this command can only be used in servers. Please add this bot to your sever to use it, or use it in a server which has this bot added.",
+                description="This command can only be used in servers.",
                 color=0xE02B2B,
-            ).set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
-            await send_embed(context, embed, ephemeral=True)
+            )
+            embed.set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+            
+            interaction = getattr(context, "interaction", None)
+            if interaction is not None:
+                if not interaction.response.is_done():
+                    await interaction.response.send_message(embed=embed, ephemeral=True)
+                else:
+                    await interaction.followup.send(embed=embed, ephemeral=True)
+            else:
+                await context.send(embed=embed, ephemeral=True)
+            return
+
+        if isinstance(context.channel, discord.PartialMessageable):
+            embed = discord.Embed(
+                title="Error",
+                description="The bot needs the `send messages` permission in this channel.",
+                color=0xE02B2B,
+            )
+            embed.set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+            
+            interaction = getattr(context, "interaction", None)
+            if interaction is not None:
+                if not interaction.response.is_done():
+                    await interaction.response.send_message(embed=embed, ephemeral=True)
+                else:
+                    await interaction.followup.send(embed=embed, ephemeral=True)
+            else:
+                await context.send(embed=embed, ephemeral=True)
             return
         
         if not url or not url.strip():
@@ -223,6 +250,29 @@ def codepreview_command():
                 color=0xE02B2B,
             ).set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
             await send_embed(context, embed, ephemeral=True)
+            return
+
+        # Check if bot has send messages permission before starting processing
+        try:
+            test_embed = discord.Embed(title="Testing permissions...", color=0x7289DA)
+            test_embed.set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+            await context.channel.send(embed=test_embed, delete_after=0.1)
+        except discord.Forbidden:
+            embed = discord.Embed(
+                title="Permission Error",
+                description="The bot needs the `send messages` permission to execute this command.",
+                color=0xE02B2B,
+            )
+            embed.set_author(name="Utility", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
+            
+            interaction = getattr(context, "interaction", None)
+            if interaction is not None:
+                if not interaction.response.is_done():
+                    await interaction.response.send_message(embed=embed, ephemeral=True)
+                else:
+                    await interaction.followup.send(embed=embed, ephemeral=True)
+            else:
+                await context.send(embed=embed, ephemeral=True)
             return
         
         parsed = parse_github_url(url)

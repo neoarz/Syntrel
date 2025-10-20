@@ -128,6 +128,29 @@ def tts_command():
             await send_embed(context, embed, ephemeral=True)
             return
 
+        # Check if bot has send messages permission before starting TTS generation
+        try:
+            test_embed = discord.Embed(title="Testing permissions...", color=0x7289DA)
+            test_embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            await context.channel.send(embed=test_embed, delete_after=0.1)
+        except discord.Forbidden:
+            embed = discord.Embed(
+                title="Permission Error",
+                description="The bot needs the `send messages` permission to execute this command.",
+                color=0xE02B2B,
+            )
+            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            
+            interaction = getattr(context, "interaction", None)
+            if interaction is not None:
+                if not interaction.response.is_done():
+                    await interaction.response.send_message(embed=embed, ephemeral=True)
+                else:
+                    await interaction.followup.send(embed=embed, ephemeral=True)
+            else:
+                await context.send(embed=embed, ephemeral=True)
+            return
+
         processing_embed = (
             discord.Embed(
                 title="TTS (Processing)",
@@ -198,35 +221,15 @@ def tts_command():
         )
 
         if interaction is not None:
+            await context.channel.send(embed=embed)
+            await context.channel.send(file=audio_file)
             try:
-                await context.channel.send(embed=embed)
-                await context.channel.send(file=audio_file)
-                try:
-                    await interaction.delete_original_response()
-                except:
-                    pass
-            except discord.Forbidden:
-                embed = discord.Embed(
-                    title="Permission Error",
-                    description="The bot needs the `send messages` permission to execute this command.",
-                    color=0xE02B2B,
-                )
-                embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                await interaction.followup.send(embed=embed, ephemeral=True)
-                return
+                await interaction.delete_original_response()
+            except:
+                pass
         else:
-            try:
-                await processing_message.delete()
-                await context.channel.send(embed=embed)
-                await context.channel.send(file=audio_file)
-            except discord.Forbidden:
-                embed = discord.Embed(
-                    title="Permission Error",
-                    description="The bot needs the `send messages` permission to execute this command.",
-                    color=0xE02B2B,
-                )
-                embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                await context.send(embed=embed, ephemeral=True)
-                return
+            await processing_message.delete()
+            await context.channel.send(embed=embed)
+            await context.channel.send(file=audio_file)
 
     return tts

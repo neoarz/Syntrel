@@ -71,6 +71,29 @@ def download_command():
                 await context.send(embed=embed, ephemeral=True)
             return
 
+        # Check if bot has send messages permission before starting download
+        try:
+            test_embed = discord.Embed(title="Testing permissions...", color=0x7289DA)
+            test_embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            await context.channel.send(embed=test_embed, delete_after=0.1)
+        except discord.Forbidden:
+            embed = discord.Embed(
+                title="Permission Error",
+                description="The bot needs the `send messages` permission to execute this command.",
+                color=0xE02B2B,
+            )
+            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            
+            interaction = getattr(context, "interaction", None)
+            if interaction is not None:
+                if not interaction.response.is_done():
+                    await interaction.response.send_message(embed=embed, ephemeral=True)
+                else:
+                    await interaction.followup.send(embed=embed, ephemeral=True)
+            else:
+                await context.send(embed=embed, ephemeral=True)
+            return
+
         try:
             parsed_url = urlparse(url)
             if not parsed_url.scheme or not parsed_url.netloc:
@@ -208,36 +231,16 @@ def download_command():
                         embed.set_footer(text=f"Requested by {context.author.name}", icon_url=context.author.display_avatar.url)
 
                         if interaction is not None:
+                            await context.channel.send(embed=embed)
+                            await context.channel.send(link)
                             try:
-                                await context.channel.send(embed=embed)
-                                await context.channel.send(link)
-                                try:
-                                    await interaction.delete_original_response()
-                                except:
-                                    pass
-                            except discord.Forbidden:
-                                embed = discord.Embed(
-                                    title="Permission Error",
-                                    description="The bot needs the `send messages` permission to execute this command.",
-                                    color=0xE02B2B,
-                                )
-                                embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                                await interaction.followup.send(embed=embed, ephemeral=True)
-                                return
+                                await interaction.delete_original_response()
+                            except:
+                                pass
                         else:
-                            try:
-                                await processing_msg.delete()
-                                await context.channel.send(embed=embed)
-                                await context.channel.send(link)
-                            except discord.Forbidden:
-                                embed = discord.Embed(
-                                    title="Permission Error",
-                                    description="The bot needs the `send messages` permission to execute this command.",
-                                    color=0xE02B2B,
-                                )
-                                embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                                await context.send(embed=embed, ephemeral=True)
-                                return
+                            await processing_msg.delete()
+                            await context.channel.send(embed=embed)
+                            await context.channel.send(link)
                         return
                     except Exception as upload_error:
                         logger.exception(f"Catbox upload exception: {upload_error}")
@@ -285,36 +288,16 @@ def download_command():
                             file = discord.File(f, filename=files[0])
                             
                             if interaction is not None:
+                                await context.channel.send(embed=embed)
+                                await context.channel.send(file=file)
                                 try:
-                                    await context.channel.send(embed=embed)
-                                    await context.channel.send(file=file)
-                                    try:
-                                        await interaction.delete_original_response()
-                                    except:
-                                        pass
-                                except discord.Forbidden:
-                                    embed = discord.Embed(
-                                        title="Permission Error",
-                                        description="The bot needs the `send messages` permission to execute this command.",
-                                        color=0xE02B2B,
-                                    )
-                                    embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                                    await interaction.followup.send(embed=embed, ephemeral=True)
-                                    return
+                                    await interaction.delete_original_response()
+                                except:
+                                    pass
                             else:
-                                try:
-                                    await processing_msg.delete()
-                                    await context.channel.send(embed=embed)
-                                    await context.channel.send(file=file)
-                                except discord.Forbidden:
-                                    embed = discord.Embed(
-                                        title="Permission Error",
-                                        description="The bot needs the `send messages` permission to execute this command.",
-                                        color=0xE02B2B,
-                                    )
-                                    embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                                    await context.send(embed=embed, ephemeral=True)
-                                    return
+                                await processing_msg.delete()
+                                await context.channel.send(embed=embed)
+                                await context.channel.send(file=file)
                     except discord.HTTPException as e:
                         if e.status == 413:
                             logger.info("Discord rejected file (413), falling back to Catbox upload")
@@ -353,36 +336,16 @@ def download_command():
                                 embed.set_footer(text=f"Requested by {context.author.name}", icon_url=context.author.display_avatar.url)
 
                                 if interaction is not None:
+                                    await context.channel.send(embed=embed)
+                                    await context.channel.send(link)
                                     try:
-                                        await context.channel.send(embed=embed)
-                                        await context.channel.send(link)
-                                        try:
-                                            await interaction.delete_original_response()
-                                        except:
-                                            pass
-                                    except discord.Forbidden:
-                                        embed = discord.Embed(
-                                            title="Permission Error",
-                                            description="The bot needs the `send messages` permission to execute this command.",
-                                            color=0xE02B2B,
-                                        )
-                                        embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                                        await interaction.followup.send(embed=embed, ephemeral=True)
-                                        return
+                                        await interaction.delete_original_response()
+                                    except:
+                                        pass
                                 else:
-                                    try:
-                                        await processing_msg.delete()
-                                        await context.channel.send(embed=embed)
-                                        await context.channel.send(link)
-                                    except discord.Forbidden:
-                                        embed = discord.Embed(
-                                            title="Permission Error",
-                                            description="The bot needs the `send messages` permission to execute this command.",
-                                            color=0xE02B2B,
-                                        )
-                                        embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-                                        await context.send(embed=embed, ephemeral=True)
-                                        return
+                                    await processing_msg.delete()
+                                    await context.channel.send(embed=embed)
+                                    await context.channel.send(link)
                             except Exception as upload_error:
                                 logger.exception(f"Catbox upload exception: {upload_error}")
                                 embed = discord.Embed(
