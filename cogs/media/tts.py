@@ -11,23 +11,6 @@ from gtts import gTTS
 
 DEFAULT_LANG = "en"
 
-async def send_error_message(context, description: str):
-    embed = discord.Embed(
-        title="Error",
-        description=description,
-        color=0xE02B2B,
-    )
-    embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-    
-    interaction = getattr(context, "interaction", None)
-    if interaction is not None:
-        if not interaction.response.is_done():
-            await interaction.response.send_message(embed=embed, ephemeral=True)
-        else:
-            await interaction.followup.send(embed=embed, ephemeral=True)
-    else:
-        await context.send(embed=embed, ephemeral=True)
-
 def tts_command():
 
     async def send_embed(
@@ -81,22 +64,86 @@ def tts_command():
         text="The text to convert to speech",
     )
     async def tts(context: commands.Context, text: Optional[str] = None):
+        if isinstance(context.channel, discord.DMChannel):
+            embed = discord.Embed(
+                title="Error",
+                description="This command can only be used in servers.",
+                color=0xE02B2B,
+            )
+            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            
+            interaction = getattr(context, "interaction", None)
+            if interaction is not None:
+                if not interaction.response.is_done():
+                    await interaction.response.send_message(embed=embed, ephemeral=True)
+                else:
+                    await interaction.followup.send(embed=embed, ephemeral=True)
+            else:
+                await context.send(embed=embed, ephemeral=True)
+            return
+
+        if isinstance(context.channel, discord.PartialMessageable):
+            embed = discord.Embed(
+                title="Error",
+                description="The bot needs send messages permissions in this channel.",
+                color=0xE02B2B,
+            )
+            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            
+            interaction = getattr(context, "interaction", None)
+            if interaction is not None:
+                if not interaction.response.is_done():
+                    await interaction.response.send_message(embed=embed, ephemeral=True)
+                else:
+                    await interaction.followup.send(embed=embed, ephemeral=True)
+            else:
+                await context.send(embed=embed, ephemeral=True)
+            return
+
         if not text or not text.strip():
             if context.message and context.message.reference and context.message.reference.resolved:
                 referenced = context.message.reference.resolved
                 if isinstance(referenced, discord.Message) and referenced.content:
                     text = referenced.content
         if not text or not text.strip():
-            await send_error_message(context, "Please provide text to convert or reply to a message containing text.")
+            embed = (
+                discord.Embed(
+                    title="Error",
+                    description="Please provide text to convert or reply to a message containing text.",
+                    color=0xE02B2B,
+                ).set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            )
+            await send_embed(context, embed, ephemeral=True)
             return
 
         text = text.strip()
         if len(text) > 500:
-            await send_error_message(context, "Text is too long. Please limit to 500 characters.")
+            embed = (
+                discord.Embed(
+                    title="Error",
+                    description="Text is too long. Please limit to 500 characters.",
+                    color=0xE02B2B,
+                ).set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            )
+            await send_embed(context, embed, ephemeral=True)
             return
 
+        processing_embed = (
+            discord.Embed(
+                title="TTS (Processing)",
+                description="<a:mariospin:1423677027013103709> Generating speech...",
+                color=0x7289DA,
+            ).set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+        )
         interaction = getattr(context, "interaction", None)
+        processing_message = None
+        sent_initial_interaction_response = False
         if interaction is not None:
+            if interaction.response.is_done():
+                processing_message = await interaction.followup.send(embed=processing_embed, ephemeral=True)
+            else:
+                await interaction.response.send_message(embed=processing_embed, ephemeral=True)
+                sent_initial_interaction_response = True
             if not interaction.response.is_done():
                 await interaction.response.defer(ephemeral=False)
         else:
@@ -112,19 +159,24 @@ def tts_command():
         audio_bytes, error = await generate_tts_audio(text)
 
         if error or not audio_bytes:
-            if interaction is not None:
-                await interaction.followup.send(embed=discord.Embed(
+            embed = (
+                discord.Embed(
                     title="Error",
                     description=f"Failed to generate speech. {error or 'Unknown error.'}",
                     color=0xE02B2B,
-                ).set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"), ephemeral=True)
-            else:
-                await processing_message.delete()
-                await context.send(embed=discord.Embed(
-                    title="Error",
-                    description=f"Failed to generate speech. {error or 'Unknown error.'}",
-                    color=0xE02B2B,
-                ).set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"), ephemeral=True)
+                ).set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            )
+            await send_embed(context, embed, ephemeral=True)
+            if interaction is not None and sent_initial_interaction_response:
+                try:
+                    await interaction.delete_original_response()
+                except Exception:
+                    pass
+            if processing_message:
+                try:
+                    await processing_message.delete()
+                except Exception:
+                    pass
             return
 
         audio_file = discord.File(
@@ -146,9 +198,15 @@ def tts_command():
         )
 
         if interaction is not None:
-            await interaction.followup.send(embeds=[embed], files=[audio_file])
+            await context.channel.send(embed=embed)
+            await context.channel.send(file=audio_file)
+            try:
+                await interaction.delete_original_response()
+            except:
+                pass
         else:
             await processing_message.delete()
-            await context.send(embeds=[embed], files=[audio_file])
+            await context.channel.send(embed=embed)
+            await context.channel.send(file=audio_file)
 
     return tts
