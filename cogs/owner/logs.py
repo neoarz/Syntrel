@@ -21,6 +21,16 @@ class Logs(commands.Cog, name="logs"):
         else:
             await context.send(embed=embed)
 
+    async def send_file(self, context: Context, *, file: discord.File, ephemeral: bool = False) -> None:
+        interaction = getattr(context, "interaction", None)
+        if interaction is not None:
+            if interaction.response.is_done():
+                await interaction.followup.send(file=file, ephemeral=ephemeral)
+            else:
+                await interaction.response.send_message(file=file, ephemeral=ephemeral)
+        else:
+            await context.send(file=file)
+
     @commands.hybrid_command(
         name="logs",
         description="View the bot's log file",
@@ -77,7 +87,7 @@ class Logs(commands.Cog, name="logs"):
                 f.write(log_content)
             
             file_obj = discord.File(log_file)
-            await context.send(file=file_obj)
+            await self.send_file(context, file=file_obj, ephemeral=True)
             
             os.remove(log_file)
             
