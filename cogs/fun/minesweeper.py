@@ -6,6 +6,70 @@ from discord.ext import commands
 import asyncio
 import time
 
+class ChallengeConfirmView(discord.ui.View):
+    def __init__(self, context, challenger, challenged, bomb_count, board):
+        super().__init__(timeout=60)
+        self.context = context
+        self.challenger = challenger
+        self.challenged = challenged
+        self.bomb_count = bomb_count
+        self.board = board
+        self.accepted = False
+
+    @discord.ui.button(label="Confirm", style=discord.ButtonStyle.grey, emoji="<:Check:1417250703407186051>")
+    async def confirm_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if interaction.user.id != self.challenged.id:
+            return await interaction.response.send_message("Only the challenged player can accept!", ephemeral=True)
+        
+        self.accepted = True
+        self.stop()
+        
+        embed = discord.Embed(
+            title="Challenge Accepted!",
+            description=f"🎮 **{self.challenger.mention}** vs **{self.challenged.mention}**\n\n💣 Total Bombs: `{self.bomb_count}`\n\n{self.challenger.mention} goes first! Click the buttons to reveal the grid. Avoid the bombs!",
+            color=0x00FF00
+        )
+        embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+        
+        view = MsView(self.context, self.ExtractBlocks(), self.bomb_count, self.board, self.challenged)
+        message = await interaction.response.edit_message(embed=embed, view=view)
+        view.message = message
+
+    @discord.ui.button(label="Cancel", style=discord.ButtonStyle.grey, emoji="<:Cross:1417250649514446849>")
+    async def cancel_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if interaction.user.id != self.challenged.id:
+            return await interaction.response.send_message("Only the challenged player can decline!", ephemeral=True)
+        
+        embed = discord.Embed(
+            title="Challenge Declined",
+            description=f"<a:woeisnuke:1432138229628276927> {self.challenged.mention} declined the minesweeper challenge from {self.challenger.mention}",
+            color=0xE02B2B
+        )
+        embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+        
+        await interaction.response.edit_message(embed=embed, view=None)
+        self.stop()
+
+    async def on_timeout(self):
+        embed = discord.Embed(
+            title="Challenge Expired",
+            description=f"⏰ {self.challenged.mention} didn't respond to the minesweeper challenge from {self.challenger.mention}",
+            color=0xFFA500
+        )
+        embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+        
+        try:
+            await self.message.edit(embed=embed, view=None)
+        except:
+            pass
+
+    def ExtractBlocks(self):
+        new_b = []
+        for x in self.board:
+            for y in x:
+                new_b.append(y)
+        return new_b
+
 class RowButton(discord.ui.Button):
     def __init__(self, ctx, label, custom_id, bombs, board, opponent=None):
         super().__init__(label=label, style=discord.ButtonStyle.grey, custom_id=custom_id)
@@ -163,7 +227,7 @@ class MsView(discord.ui.View):
         )
         embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
         try:
-            await self.message.edit(embed=embed, view=self)
+            await interaction.edit_original_response(embed=embed, view=self)
         except:
             pass
 
@@ -380,7 +444,7 @@ class MsView(discord.ui.View):
         embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
         
         try:
-            await self.message.edit(embed=embed, view=self)
+            await interaction.edit_original_response(embed=embed, view=self)
         except discord.errors.HTTPException as e:
             if e.status == 429:
                 await asyncio.sleep(1)
@@ -418,11 +482,15 @@ def minesweeper_command():
                 return await context.send(embed=embed, ephemeral=True)
             
             embed = discord.Embed(
-                title="Minesweeper - Multiplayer",
-                description=f"💣 Total Bombs: `{bomb_count}`\n\n🎮 **Players:**\n{context.author.mention} vs {opponent.mention}\n\n{context.author.mention} goes first! Click the buttons to reveal the grid. Avoid the bombs!",
+                title="Minesweeper Challenge",
+                description=f"🎮 **{opponent.mention}**, you are challenged by **{context.author.mention}** to a round of Minesweeper!\n\n💣 Total Bombs: `{bomb_count}`",
                 color=0x7289DA
             )
             embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+            
+            view = ChallengeConfirmView(context, context.author, opponent, bomb_count, board)
+            message = await context.send(embed=embed, view=view)
+            view.message = message
         else:
             embed = discord.Embed(
                 title="Minesweeper",
@@ -430,9 +498,9 @@ def minesweeper_command():
                 color=0x7289DA
             )
             embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
-        
-        view = MsView(context, ExtractBlocks(), bomb_count, board, opponent)
-        message = await context.send(embed=embed, view=view)
-        view.message = message
+            
+            view = MsView(context, ExtractBlocks(), bomb_count, board, opponent)
+            message = await context.send(embed=embed, view=view)
+            view.message = message
     
     return minesweeper
