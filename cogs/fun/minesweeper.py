@@ -82,6 +82,10 @@ class RowButton(discord.ui.Button):
                 view.GetBoardPos(pos)
             ] = str(number) if number > 0 else "0"
             view.moves.append(pos)
+            
+            if number == 0:
+                await view.auto_reveal_safe_squares(rawpos, interaction)
+            
             if len(view.moves) + len(self.bombs) == 25:
                 await view.EndGame()
             else:
@@ -108,7 +112,6 @@ class MsView(discord.ui.View):
         self.last_interaction = 0
     
     def generate_bombs(self, first_move_pos):
-        """Generate bombs excluding the first clicked position"""
         bombpositions = []
         excluded_positions = [0, 4, 20, 24, first_move_pos] 
         
@@ -163,6 +166,85 @@ class MsView(discord.ui.View):
             else:
                 raise
         self.stop()
+
+    async def auto_reveal_safe_squares(self, center_pos, interaction):
+        positions_to_check = [center_pos]
+        revealed_positions = set()
+        
+        while positions_to_check:
+            current_pos = positions_to_check.pop(0)
+            if current_pos in revealed_positions:
+                continue
+                
+            revealed_positions.add(current_pos)
+            
+            adjacent_positions = []
+            pos = self.GetBoardPos(current_pos)
+            
+            if pos > 0 and current_pos - 1 not in self.bombs:
+                adjacent_positions.append(current_pos - 1)
+            if pos < 4 and current_pos + 1 not in self.bombs:
+                adjacent_positions.append(current_pos + 1)
+            if current_pos >= 5 and current_pos - 5 not in self.bombs:
+                adjacent_positions.append(current_pos - 5)
+            if current_pos <= 19 and current_pos + 5 not in self.bombs:
+                adjacent_positions.append(current_pos + 5)
+            if pos > 0 and current_pos >= 5 and current_pos - 6 not in self.bombs:
+                adjacent_positions.append(current_pos - 6)
+            if pos < 4 and current_pos >= 5 and current_pos - 4 not in self.bombs:
+                adjacent_positions.append(current_pos - 4)
+            if pos > 0 and current_pos <= 19 and current_pos + 4 not in self.bombs:
+                adjacent_positions.append(current_pos + 4)
+            if pos < 4 and current_pos <= 19 and current_pos + 6 not in self.bombs:
+                adjacent_positions.append(current_pos + 6)
+            
+            for adj_pos in adjacent_positions:
+                if adj_pos not in self.moves and adj_pos not in revealed_positions:
+                    adj_count = []
+                    adj_pos_obj = self.GetBoardPos(adj_pos)
+                    
+                    def checkpos_adj(count, rawpos, pos):
+                        pos = self.GetBoardPos(rawpos)
+                        if not rawpos - 1 in self.bombs or pos == 0:
+                            count.append(rawpos - 1)
+                        if not rawpos + 1 in self.bombs or pos == 4:
+                            count.append(rawpos + 1)
+                        if not rawpos - 6 in self.bombs or pos == 0:
+                            count.append(rawpos - 6)
+                        if not rawpos - 4 in self.bombs or pos == 4:
+                            count.append(rawpos - 4)
+                        if not rawpos + 6 in self.bombs or pos == 4:
+                            count.append(rawpos + 6)
+                        if not rawpos + 4 in self.bombs or pos == 0:
+                            count.append(rawpos + 4)
+                        if not rawpos - 5 in self.bombs:
+                            count.append(rawpos - 5)
+                        if not rawpos + 5 in self.bombs:
+                            count.append(rawpos + 5)
+                        return count
+                    
+                    adj_count = checkpos_adj(adj_count, adj_pos, adj_pos_obj)
+                    adj_number = 8 - len(adj_count)
+                    
+                    for button in self.children:
+                        if int(button.custom_id[5:]) == adj_pos:
+                            button.label = str(adj_number) if adj_number > 0 else "0"
+                            button.style = discord.ButtonStyle.green
+                            break
+                    
+                    self.board[self.GetBoardRow(adj_pos)][self.GetBoardPos(adj_pos)] = str(adj_number) if adj_number > 0 else "0"
+                    self.moves.append(adj_pos)
+                    
+                    if adj_number == 0:
+                        positions_to_check.append(adj_pos)
+        
+        try:
+            await interaction.edit_original_response(view=self)
+        except discord.errors.HTTPException as e:
+            if e.status == 429:
+                await asyncio.sleep(1)
+            else:
+                raise
 
     def GetBoardRow(self, pos):
         if pos in [0, 1, 2, 3, 4]:
