@@ -1,16 +1,18 @@
 import random
 from itertools import repeat
 import discord
+from discord import app_commands
 from discord.ext import commands
 import asyncio
 import time
 
 class RowButton(discord.ui.Button):
-    def __init__(self, ctx, label, custom_id, bombs, board):
+    def __init__(self, ctx, label, custom_id, bombs, board, opponent=None):
         super().__init__(label=label, style=discord.ButtonStyle.grey, custom_id=custom_id)
         self.ctx = ctx
         self.bombs = bombs
         self.board = board
+        self.opponent = opponent
 
     async def callback(self, interaction):
         assert self.view is not None
@@ -33,10 +35,20 @@ class RowButton(discord.ui.Button):
                 return
             raise
         
-        if interaction.user.id != self.ctx.author.id:
-            return await interaction.followup.send(
-                "You cannot interact with these buttons.", ephemeral=True
-            )
+        if view.opponent:
+            if interaction.user.id not in [self.ctx.author.id, view.opponent.id]:
+                return await interaction.followup.send(
+                    "You cannot interact with these buttons.", ephemeral=True
+                )
+            if interaction.user.id != view.current_player.id:
+                return await interaction.followup.send(
+                    f"It's {view.current_player.mention}'s turn!", ephemeral=True
+                )
+        else:
+            if interaction.user.id != self.ctx.author.id:
+                return await interaction.followup.send(
+                    "You cannot interact with these buttons.", ephemeral=True
+                )
 
         b_id = self.custom_id
         if int(b_id[5:]) in view.moves:
@@ -47,7 +59,7 @@ class RowButton(discord.ui.Button):
             self.bombs = view.bombs
         
         if int(b_id[5:]) in self.bombs:
-            await view.RevealBombs(b_id, view.board)
+            await view.RevealBombs(b_id, view.board, interaction)
         else:
             count = []
             rawpos = int(b_id[5:])
@@ -83,14 +95,23 @@ class RowButton(discord.ui.Button):
             ] = str(number) if number > 0 else "0"
             view.moves.append(pos)
             
+            if view.opponent:
+                if interaction.user.id == view.ctx.author.id:
+                    view.player1_score += 1
+                else:
+                    view.player2_score += 1
+            
             if number == 0:
                 await view.auto_reveal_safe_squares(rawpos, interaction)
+            
+            if view.opponent:
+                view.current_player = view.opponent if view.current_player.id == view.ctx.author.id else view.ctx.author
             
             if len(view.moves) + len(self.bombs) == 25:
                 await view.EndGame()
             else:
                 try:
-                    await interaction.edit_original_response(view=view)
+                    await view.update_embed(interaction)
                 except discord.errors.HTTPException as e:
                     if e.status == 429:
                         await asyncio.sleep(1)
@@ -98,10 +119,10 @@ class RowButton(discord.ui.Button):
                         raise
 
 class MsView(discord.ui.View):
-    def __init__(self, ctx, options, bomb_count, board):
+    def __init__(self, ctx, options, bomb_count, board, opponent=None):
         super().__init__(timeout=300)
         for i, op in enumerate(options):
-            self.add_item(RowButton(ctx, op, f"block{i}", [], board))
+            self.add_item(RowButton(ctx, op, f"block{i}", [], board, opponent))
         self.board = board
         self.bombs = []
         self.bomb_count = bomb_count
@@ -110,6 +131,10 @@ class MsView(discord.ui.View):
         self.ctx = ctx
         self.message = None
         self.last_interaction = 0
+        self.opponent = opponent
+        self.current_player = ctx.author
+        self.player1_score = 0
+        self.player2_score = 0
     
     def generate_bombs(self, first_move_pos):
         bombpositions = []
@@ -151,9 +176,24 @@ class MsView(discord.ui.View):
                 button.style = discord.ButtonStyle.red
                 self.board[self.GetBoardRow(pos)][self.GetBoardPos(pos)] = "💣"
         
+        if self.opponent:
+            if self.player1_score > self.player2_score:
+                winner = self.ctx.author
+            elif self.player2_score > self.player1_score:
+                winner = self.opponent
+            else:
+                winner = None
+            
+            if winner:
+                description = f"🎉 **{winner.mention}** won!"
+            else:
+                description = f"🤝 It's a tie!"
+        else:
+            description = "Game Ended. You won!"
+        
         embed = discord.Embed(
             title="Minesweeper",
-            description="Game Ended. You won!",
+            description=description,
             color=0x00FF00
         )
         embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
@@ -167,9 +207,28 @@ class MsView(discord.ui.View):
                 raise
         self.stop()
 
+    async def update_embed(self, interaction):
+        if self.opponent:
+            embed = discord.Embed(
+                title="Minesweeper - Multiplayer",
+                description=f"💣 Total Bombs: `{self.bomb_count}`\n\n🎮 **Players:**\n{self.ctx.author.mention} vs {self.opponent.mention}\n\n**Current Turn:** {self.current_player.mention}",
+                color=0x7289DA
+            )
+            embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+        else:
+            embed = discord.Embed(
+                title="Minesweeper",
+                description=f"💣 Total Bombs: `{self.bomb_count}`\n\nClick the buttons to reveal the grid. Avoid the bombs!",
+                color=0x7289DA
+            )
+            embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+        
+        await interaction.edit_original_response(embed=embed, view=self)
+
     async def auto_reveal_safe_squares(self, center_pos, interaction):
         positions_to_check = [center_pos]
         revealed_positions = set()
+        current_player_id = interaction.user.id
         
         while positions_to_check:
             current_pos = positions_to_check.pop(0)
@@ -235,11 +294,17 @@ class MsView(discord.ui.View):
                     self.board[self.GetBoardRow(adj_pos)][self.GetBoardPos(adj_pos)] = str(adj_number) if adj_number > 0 else "0"
                     self.moves.append(adj_pos)
                     
+                    if self.opponent:
+                        if current_player_id == self.ctx.author.id:
+                            self.player1_score += 1
+                        else:
+                            self.player2_score += 1
+                    
                     if adj_number == 0:
                         positions_to_check.append(adj_pos)
         
         try:
-            await interaction.edit_original_response(view=self)
+            await self.update_embed(interaction)
         except discord.errors.HTTPException as e:
             if e.status == 429:
                 await asyncio.sleep(1)
@@ -280,7 +345,7 @@ class MsView(discord.ui.View):
                     return i
         return False
 
-    async def RevealBombs(self, b_id, board):
+    async def RevealBombs(self, b_id, board, interaction):
         bombemo = "💣"
         
         for button in self.children:
@@ -300,9 +365,16 @@ class MsView(discord.ui.View):
                     self.GetBoardPos(pos)
                 ] = bombemo
         
+        if self.opponent:
+            loser = self.ctx.author if interaction.user.id == self.ctx.author.id else self.opponent
+            winner = self.opponent if loser.id == self.ctx.author.id else self.ctx.author
+            description = f"💥 BOOM! {loser.mention} hit a bomb!\n🎉 **{winner.mention}** wins!"
+        else:
+            description = f"💥 BOOM! You hit a bomb. Game Over!\n-# gg {self.ctx.author.mention}"
+        
         embed = discord.Embed(
             title="Minesweeper",
-            description=f"💥 BOOM! You hit a bomb. Game Over!\n-# gg {self.ctx.author.mention}",
+            description=description,
             color=0xE02B2B
         )
         embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
@@ -321,7 +393,10 @@ def minesweeper_command():
         name="minesweeper", 
         description="Play a buttoned minesweeper mini-game."
     )
-    async def minesweeper(self, context):
+    @app_commands.describe(
+        opponent="Optional user to play against in multiplayer mode."
+    )
+    async def minesweeper(self, context, opponent: discord.User = None):
         board = [["឵឵ "] * 5 for _ in range(5)]
         bomb_count = random.randint(4, 11)
 
@@ -332,14 +407,31 @@ def minesweeper_command():
                     new_b.append(y)
             return new_b
 
-        embed = discord.Embed(
-            title="Minesweeper",
-            description=f"💣 Total Bombs: `{bomb_count}`\n\nClick the buttons to reveal the grid. Avoid the bombs!",
-            color=0x7289DA
-        )
-        embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+        if opponent:
+            if opponent.id == context.author.id:
+                embed = discord.Embed(
+                    title="Error!",
+                    description="You cannot play against yourself!",
+                    color=0xE02B2B
+                )
+                embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+                return await context.send(embed=embed, ephemeral=True)
+            
+            embed = discord.Embed(
+                title="Minesweeper - Multiplayer",
+                description=f"💣 Total Bombs: `{bomb_count}`\n\n🎮 **Players:**\n{context.author.mention} vs {opponent.mention}\n\n{context.author.mention} goes first! Click the buttons to reveal the grid. Avoid the bombs!",
+                color=0x7289DA
+            )
+            embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+        else:
+            embed = discord.Embed(
+                title="Minesweeper",
+                description=f"💣 Total Bombs: `{bomb_count}`\n\nClick the buttons to reveal the grid. Avoid the bombs!",
+                color=0x7289DA
+            )
+            embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
         
-        view = MsView(context, ExtractBlocks(), bomb_count, board)
+        view = MsView(context, ExtractBlocks(), bomb_count, board, opponent)
         message = await context.send(embed=embed, view=view)
         view.message = message
     

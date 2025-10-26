@@ -54,8 +54,8 @@ class Fun(commands.GroupCog, name="fun"):
         await self._invoke_hybrid(context, "8ball", question=question)
 
     @fun_group.command(name="minesweeper")
-    async def fun_group_minesweeper(self, context: Context):
-        await self._invoke_hybrid(context, "minesweeper")
+    async def fun_group_minesweeper(self, context: Context, opponent: discord.User = None):
+        await self._invoke_hybrid(context, "minesweeper", opponent=opponent)
 
     @fun_group.command(name="randomfact")
     async def fun_group_randomfact(self, context: Context):
@@ -86,8 +86,11 @@ class Fun(commands.GroupCog, name="fun"):
         name="minesweeper", 
         description="Play a buttoned minesweeper mini-game."
     )
-    async def minesweeper(self, context):
-        return await minesweeper_command()(self, context)
+    @app_commands.describe(
+        opponent="Optional user to play against in multiplayer mode."
+    )
+    async def minesweeper(self, context, opponent: discord.User = None):
+        return await minesweeper_command()(self, context, opponent=opponent)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(name="randomfact", description="Get a random fact.")
