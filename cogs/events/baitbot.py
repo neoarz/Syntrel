@@ -13,7 +13,7 @@ BAIT_CONFIGS = {
     },
     "neotest": {
         "guild_id": 1069946178659160076,
-        "channel_id": 1432149872953262151,
+        "channel_id": 1432175690270118012,
         "protected_role_id": 1432165329483857940,
     },
 }
@@ -128,24 +128,58 @@ class BaitBotListener(commands.Cog):
             return
         
         protected_role_id = bait_config.get("protected_role_id")
+        is_protected = False
         if protected_role_id and hasattr(message.author, 'roles'):
             protected_role = message.guild.get_role(protected_role_id)
             if protected_role:
                 for role in message.author.roles:
                     if role.position >= protected_role.position and role.id != message.guild.default_role.id:
-                        return
+                        self.bot.logger.info(f'[BAITBOT] Skipped banning {message.author} ({message.author.id}) in #{message.channel.name}: protected role ({role.name})')
+                        is_protected = True
+                        break
+        try:
+            await message.delete()
+            self.bot.logger.info(f'[BAITBOT] Deleted triggering message from {message.author} in #{message.channel.name}')
+        except Exception as e:
+            self.bot.logger.warning(f'[BAITBOT] Could not delete triggering message from {message.author}: {e}')
+        if is_protected:
+            return
         
         try:
             self.bot.logger.warning(f'[BAITBOT] Detected user in bait channel [{config_name}]: {message.author.name} ({message.author.id}) in #{message.channel.name}')
             
-            await message.author.ban(reason=BAN_REASON, delete_message_days=7)
-            self.bot.logger.info(f'[BAITBOT] Banned {message.author.name} - deleted messages from last 7 days')
-            
+            if not message.guild.me.guild_permissions.ban_members:
+                self.bot.logger.error(f'[BAITBOT] No permission to ban members in {message.guild.name}')
+                return
+            if not message.guild.me.guild_permissions.manage_messages:
+                self.bot.logger.warning(f'[BAITBOT] No permission to manage messages in {message.guild.name}')
+            try:
+                await message.author.ban(reason=BAN_REASON, delete_message_days=7)
+                self.bot.logger.info(f'[BAITBOT] Banned {message.author.name} - deleted messages from last 7 days')
+            except discord.Forbidden:
+                self.bot.logger.error(f'[BAITBOT] Could not ban {message.author.name}: missing permissions')
+                return
+            except Exception as e:
+                self.bot.logger.error(f'[BAITBOT] Error banning {message.author.name}: {e}')
+                return
+            try:
+                cutoff_time = datetime.utcnow() - timedelta(days=7)
+                deleted_count = 0
+                async for msg in message.channel.history(limit=100, after=cutoff_time):
+                    if msg.author.id == message.author.id:
+                        try:
+                            await msg.delete()
+                            deleted_count += 1
+                        except Exception:
+                            continue
+                self.bot.logger.info(f'[BAITBOT] Deleted {deleted_count} recent messages from {message.author} in #{message.channel.name}')
+            except Exception as e:
+                self.bot.logger.warning(f'[BAITBOT] Error deleting recent messages from {message.author}: {e}')
             await asyncio.sleep(2)
-            await message.guild.unban(message.author, reason="Auto-unban after cleanup")
-            self.bot.logger.info(f'[BAITBOT] Unbanned {message.author.name} - cleanup complete')
-            
-        except discord.Forbidden:
-            self.bot.logger.error(f'[BAITBOT] No permission to ban {message.author.name}')
+            try:
+                await message.guild.unban(message.author, reason="Auto-unban after cleanup")
+                self.bot.logger.info(f'[BAITBOT] Unbanned {message.author.name} - cleanup complete')
+            except Exception as e:
+                self.bot.logger.error(f'[BAITBOT] Error unbanning {message.author.name}: {e}')
         except Exception as e:
             self.bot.logger.error(f'[BAITBOT] Error handling bait message: {e}')
