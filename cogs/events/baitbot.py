@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import Context
 import asyncio
-from datetime import datetime, timedelta
 
 # Make a pr to add your own server config here, you shouldn't need to touch the rest of the file
 BAIT_CONFIGS = {
@@ -154,8 +153,6 @@ class BaitBotListener(commands.Cog):
             if not message.guild.me.guild_permissions.ban_members:
                 self.bot.logger.error(f'[BAITBOT] No permission to ban members in {message.guild.name}')
                 return
-            if not message.guild.me.guild_permissions.manage_messages:
-                self.bot.logger.warning(f'[BAITBOT] No permission to manage messages in {message.guild.name}')
             try:
                 await message.author.ban(reason=BAN_REASON, delete_message_days=7)
                 self.bot.logger.info(f'[BAITBOT] Banned {message.author.name} - deleted messages from last 7 days')
@@ -165,19 +162,6 @@ class BaitBotListener(commands.Cog):
             except Exception as e:
                 self.bot.logger.error(f'[BAITBOT] Error banning {message.author.name}: {e}')
                 return
-            try:
-                cutoff_time = datetime.utcnow() - timedelta(days=7)
-                deleted_count = 0
-                async for msg in message.channel.history(limit=100, after=cutoff_time):
-                    if msg.author.id == message.author.id:
-                        try:
-                            await msg.delete()
-                            deleted_count += 1
-                        except Exception:
-                            continue
-                self.bot.logger.info(f'[BAITBOT] Deleted {deleted_count} recent messages from {message.author} in #{message.channel.name}')
-            except Exception as e:
-                self.bot.logger.warning(f'[BAITBOT] Error deleting recent messages from {message.author}: {e}')
             await asyncio.sleep(2)
             try:
                 await message.guild.unban(message.author, reason="Auto-unban after cleanup")
