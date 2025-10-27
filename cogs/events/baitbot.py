@@ -7,8 +7,8 @@ import asyncio
 BAIT_CONFIGS = {
     "SideStore": {
         "guild_id": 949183273383395328,
-        "channel_id": 1432149872953262151,
-        "protected_role_id": 123456789123456789,
+        "channel_id": 1432134748062482586,
+        "protected_role_id": 959598279685963776,
     },
     "neotest": {
         "guild_id": 1069946178659160076,
