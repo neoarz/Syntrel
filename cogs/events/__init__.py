@@ -43,9 +43,10 @@ class Events(commands.GroupCog, name="events"):
             await context.send(f"Unknown events command: {name}")
 
     @events_group.command(name="baitbot")
+    @has_protected_role()
     async def events_group_baitbot(self, context: Context):
         await self._invoke_hybrid(context, "baitbot")
-
+        
     @commands.check(_require_group_prefix)
     @has_protected_role()
     @commands.hybrid_command(

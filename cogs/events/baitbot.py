@@ -23,6 +23,7 @@ BAN_REASON = 'Detected bot/scammer in bait channel'
 def has_protected_role():
     async def predicate(context: Context):
         if not context.guild:
+            context.bot.logger.warning(f'[BAITBOT] Unauthorized baitbot command attempt by {context.author} ({context.author.id}) in DMs')
             embed = discord.Embed(
                 title="Permission Denied",
                 description="You don't have permission to use this command.",
@@ -33,6 +34,7 @@ def has_protected_role():
             return False
         
         if not hasattr(context.author, 'roles'):
+            context.bot.logger.warning(f'[BAITBOT] Unauthorized baitbot command attempt by {context.author} ({context.author.id}) in {context.guild.name} - no roles')
             embed = discord.Embed(
                 title="Permission Denied",
                 description="You don't have permission to use this command.",
@@ -51,6 +53,7 @@ def has_protected_role():
                         if role.position >= protected_role.position and role.id != context.guild.default_role.id:
                             return True
         
+        context.bot.logger.warning(f'[BAITBOT] Unauthorized baitbot command attempt by {context.author} ({context.author.id}) in {context.guild.name} - insufficient role permissions')
         embed = discord.Embed(
             title="Permission Denied",
             description="You don't have permission to use this command.",
@@ -64,7 +67,7 @@ def has_protected_role():
 def baitbot_command():
     async def wrapper(self, context: Context):
         embed = discord.Embed(
-            title="Bait Bot Configuration",
+            title="Bait Bot",
             description="Bans people who post in a specific channel.\n\n"
                        "**Configuration:**",
             color=0x7289DA
@@ -139,9 +142,9 @@ class BaitBotListener(commands.Cog):
                         break
         try:
             await message.delete()
-            self.bot.logger.info(f'[BAITBOT] Deleted triggering message from {message.author} in #{message.channel.name}')
+            self.bot.logger.info(f'[BAITBOT] Deleted message from {message.author} in #{message.channel.name}')
         except Exception as e:
-            self.bot.logger.warning(f'[BAITBOT] Could not delete triggering message from {message.author}: {e}')
+            self.bot.logger.warning(f'[BAITBOT] Could not delete message from {message.author}: {e}')
         if is_protected:
             return
         
