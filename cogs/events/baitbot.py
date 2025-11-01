@@ -3,7 +3,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 import asyncio
 
-# Make a pr to add your own server config here, you shouldn't need to touch the rest of the file
+# Make a pr to add your own server config here, you shouldn't need to touch the rest of the file, please fill in all the values for your own server
 BAIT_CONFIGS = {
     "SideStore": {
         "guild_id": 949183273383395328,
@@ -23,6 +23,22 @@ BAIT_CONFIGS = {
         ],
         "protected_role_id": 1432165329483857940,
         "log_channel_id": 1433987853184139365,
+    },
+    "idevice": {
+        "guild_id": 1329314147434758175,
+        "channel_ids": [
+            1434317669695492177,
+        ],
+        "protected_role_id": 1333666918548111373,
+        "log_channel_id": 1333673259446571022,
+    },
+    "melonx": {
+        "guild_id": 1300369899704680479,
+        "channel_ids": [
+            1434327970679492830,
+        ],
+        "protected_role_id": 1300372178138697758,
+        "log_channel_id": 1300374786471366696,
     },
 }
 
