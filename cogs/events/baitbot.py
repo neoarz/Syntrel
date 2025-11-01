@@ -7,13 +7,22 @@ import asyncio
 BAIT_CONFIGS = {
     "SideStore": {
         "guild_id": 949183273383395328,
-        "channel_id": 1432134748062482586,
+        "channel_ids": [
+            1432134748062482586,
+            1432204211009097819,
+        ],
         "protected_role_id": 959598279685963776,
+        "log_channel_id": 1433532504647667823,
     },
     "neotest": {
         "guild_id": 1069946178659160076,
-        "channel_id": 1432175690270118012,
+        "channel_ids": [
+            1432175690270118012,
+            1433987189670281278,
+            1433988339031080991,
+        ],
         "protected_role_id": 1432165329483857940,
+        "log_channel_id": 1433987853184139365,
     },
 }
 
@@ -67,8 +76,7 @@ def baitbot_command():
     async def wrapper(self, context: Context):
         embed = discord.Embed(
             title="Bait Bot",
-            description="Bans people who post in a specific channel.\n\n"
-                       "**Configuration:**",
+            description="Bans people who post in a specific channel.",
             color=0x7289DA
         )
         embed.set_author(name="Events", icon_url="https://yes.nighty.works/raw/C8Hh6o.png")
@@ -78,20 +86,33 @@ def baitbot_command():
             for name, config in BAIT_CONFIGS.items():
                 guild_id = config.get("guild_id")
                 if context.guild and guild_id == context.guild.id:
-                    channel_id = config.get("channel_id", "Not set")
+                    channel_ids = config.get("channel_ids", [])
+                    if not channel_ids:
+                        channel_id = config.get("channel_id")
+                        if channel_id:
+                            channel_ids = [channel_id]
                     role_id = config.get("protected_role_id", "Not set")
 
-                    server_name = context.guild.name
-
-                    channel = context.guild.get_channel(channel_id)
-                    channel_display = f"<#{channel_id}> (`{channel_id}`)" if channel else f"`{channel_id}`"
+                    channel_displays = []
+                    for channel_id in channel_ids:
+                        channel = context.guild.get_channel(channel_id)
+                        channel_display = f"<#{channel_id}> (`{channel_id}`)" if channel else f"`{channel_id}`"
+                        channel_displays.append(channel_display)
+                    
+                    channels_text = "\n".join(channel_displays) if channel_displays else "Not set"
 
                     role = context.guild.get_role(role_id)
                     role_display = f"<@&{role_id}> (`{role_id}`)" if role else f"`{role_id}`"
+                    
+                    log_channel_id = config.get("log_channel_id")
+                    log_channel = None
+                    if log_channel_id:
+                        log_channel = context.guild.get_channel(log_channel_id)
+                    log_display = f"<#{log_channel_id}> (`{log_channel_id}`)" if log_channel else (f"`{log_channel_id}`" if log_channel_id else "Not set")
 
                     embed.add_field(
-                        name=server_name,
-                        value=f"Channel: {channel_display}\nProtected Role: {role_display}",
+                        name="\u200b",
+                        value=f"Channels:\n{channels_text}\n\nProtected Role:\n{role_display}\n\nLog Channel:\n{log_display}",
                         inline=False
                     )
                     found_config = True
@@ -102,6 +123,9 @@ def baitbot_command():
                 value="No bait channels configured for this server",
                 inline=False
             )
+
+        if context.guild and context.guild.icon:
+            embed.set_thumbnail(url=context.guild.icon.url)
 
         await context.send(embed=embed)
     return wrapper
@@ -121,7 +145,16 @@ class BaitBotListener(commands.Cog):
         bait_config = None
         config_name = None
         for name, config in BAIT_CONFIGS.items():
-            if message.channel.id == config.get("channel_id") and message.guild.id == config.get("guild_id"):
+            if message.guild.id != config.get("guild_id"):
+                continue
+            
+            channel_ids = config.get("channel_ids", [])
+            if not channel_ids:
+                channel_id = config.get("channel_id")
+                if channel_id:
+                    channel_ids = [channel_id]
+            
+            if message.channel.id in channel_ids:
                 bait_config = config
                 config_name = name
                 break
@@ -139,34 +172,103 @@ class BaitBotListener(commands.Cog):
                         self.bot.logger.info(f'[BAITBOT] Skipped banning {message.author} ({message.author.id}) in #{message.channel.name}: protected role ({role.name})')
                         is_protected = True
                         break
+        
+        message_content = message.content if message.content else "*No text content*"
+        message_attachments = message.attachments
+        message_embeds = message.embeds
+        
         try:
             await message.delete()
             self.bot.logger.info(f'[BAITBOT] Deleted message from {message.author} in #{message.channel.name}')
         except Exception as e:
             self.bot.logger.warning(f'[BAITBOT] Could not delete message from {message.author}: {e}')
-        if is_protected:
-            return
+        banned = False
+        if not is_protected:
+            try:
+                self.bot.logger.warning(f'[BAITBOT] Detected user in bait channel [{config_name}]: {message.author.name} ({message.author.id}) in #{message.channel.name}')
+                
+                if not message.guild.me.guild_permissions.ban_members:
+                    self.bot.logger.error(f'[BAITBOT] No permission to ban members in {message.guild.name}')
+                else:
+                    try:
+                        await message.author.ban(reason=BAN_REASON, delete_message_days=7)
+                        self.bot.logger.info(f'[BAITBOT] Banned {message.author.name} - deleted messages from last 7 days')
+                        banned = True
+                    except discord.Forbidden:
+                        self.bot.logger.error(f'[BAITBOT] Could not ban {message.author.name}: missing permissions')
+                    except Exception as e:
+                        self.bot.logger.error(f'[BAITBOT] Error banning {message.author.name}: {e}')
+                    
+                    if banned:
+                        await asyncio.sleep(2)
+                        try:
+                            await message.guild.unban(message.author, reason="Auto-unban after cleanup")
+                            self.bot.logger.info(f'[BAITBOT] Unbanned {message.author.name} - cleanup complete')
+                        except Exception as e:
+                            self.bot.logger.error(f'[BAITBOT] Error unbanning {message.author.name}: {e}')
+            except Exception as e:
+                self.bot.logger.error(f'[BAITBOT] Error handling bait message: {e}')
         
-        try:
-            self.bot.logger.warning(f'[BAITBOT] Detected user in bait channel [{config_name}]: {message.author.name} ({message.author.id}) in #{message.channel.name}')
-            
-            if not message.guild.me.guild_permissions.ban_members:
-                self.bot.logger.error(f'[BAITBOT] No permission to ban members in {message.guild.name}')
-                return
+        log_channel_id = bait_config.get("log_channel_id")
+        if log_channel_id:
             try:
-                await message.author.ban(reason=BAN_REASON, delete_message_days=7)
-                self.bot.logger.info(f'[BAITBOT] Banned {message.author.name} - deleted messages from last 7 days')
-            except discord.Forbidden:
-                self.bot.logger.error(f'[BAITBOT] Could not ban {message.author.name}: missing permissions')
-                return
+                log_channel = self.bot.get_channel(log_channel_id)
+                if log_channel:
+                    action_text = "Message deleted (user banned and unbanned)" if banned else "Message deleted (protected user)" if is_protected else "Message deleted"
+                    log_embed = discord.Embed(
+                        title="Bait Bot",
+                        description=action_text,
+                        color=0xE02B2B,
+                        timestamp=message.created_at
+                    )
+                    log_embed.set_author(name=str(message.author), icon_url=message.author.display_avatar.url)
+                    log_embed.add_field(name="User", value=message.author.mention, inline=True)
+                    log_embed.add_field(name="Channel", value=message.channel.mention, inline=True)
+                    
+                    combined_content = []
+                    if message_content and message_content != "*No text content*":
+                        combined_content.append(message_content)
+                    
+                    image_url = None
+                    if message_attachments:
+                        for attachment in message_attachments:
+                            if attachment.content_type and attachment.content_type.startswith("image/"):
+                                if not image_url:
+                                    image_url = attachment.url
+                            combined_content.append(attachment.filename)
+                    
+                    content_text = "\n".join(combined_content) if combined_content else "*No content*"
+                    if len(content_text) > 1000:
+                        content_text = content_text[:997] + "..."
+                    
+                    log_embed.add_field(name="Content", value=f"```\n{content_text}\n```", inline=False)
+                    
+                    if image_url:
+                        log_embed.set_image(url=image_url)
+                    
+                    if message_embeds:
+                        embed_info = []
+                        for embed in message_embeds[:3]:
+                            embed_desc = f"**Embed:** {embed.title or 'Untitled'}\n"
+                            if embed.description:
+                                desc_text = embed.description[:200] + "..." if len(embed.description) > 200 else embed.description
+                                embed_desc += f"{desc_text}\n"
+                            if embed.url:
+                                embed_desc += f"[Link]({embed.url})"
+                            embed_info.append(embed_desc)
+                        if embed_info:
+                            log_embed.add_field(name="Embeds", value="\n\n".join(embed_info), inline=False)
+                    
+                    log_embed.set_footer(text=f"Message ID: {message.id}")
+                    
+                    try:
+                        await log_channel.send(embed=log_embed)
+                        self.bot.logger.info(f'[BAITBOT] Sent log to #{log_channel.name}')
+                    except discord.Forbidden:
+                        self.bot.logger.error(f'[BAITBOT] No permission to send log to #{log_channel.name}')
+                    except Exception as e:
+                        self.bot.logger.error(f'[BAITBOT] Error sending log: {e}')
+                else:
+                    self.bot.logger.warning(f'[BAITBOT] Log channel {log_channel_id} not found')
             except Exception as e:
-                self.bot.logger.error(f'[BAITBOT] Error banning {message.author.name}: {e}')
-                return
-            await asyncio.sleep(2)
-            try:
-                await message.guild.unban(message.author, reason="Auto-unban after cleanup")
-                self.bot.logger.info(f'[BAITBOT] Unbanned {message.author.name} - cleanup complete')
-            except Exception as e:
-                self.bot.logger.error(f'[BAITBOT] Error unbanning {message.author.name}: {e}')
-        except Exception as e:
-            self.bot.logger.error(f'[BAITBOT] Error handling bait message: {e}')
+                self.bot.logger.error(f'[BAITBOT] Error handling log channel: {e}')
