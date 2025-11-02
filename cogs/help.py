@@ -13,7 +13,7 @@ class Help(commands.Cog, name="help"):
         interaction: discord.Interaction,
         current: str,
     ) -> list[app_commands.Choice[str]]:
-        categories = ["general", "fun", "moderation", "owner", "sidestore", "idevice", "melonx", "media", "miscellaneous", "utilities"]
+        categories = ["general", "fun", "moderation", "owner", "sidestore", "idevice", "melonx", "media", "miscellaneous", "utilities", "events"]
         
         suggestions = []
         for category in categories:
@@ -48,6 +48,7 @@ class Help(commands.Cog, name="help"):
             "sidestore": "sidestore",
             "utils": "utilities",
             "utilities": "utilities",
+            "events": "events",
             
             "sync": "owner",
             "logs": "owner",
@@ -69,7 +70,8 @@ class Help(commands.Cog, name="help"):
             "melonx": "MeloNX troubleshooting commands",
             "media": "Media commands",
             "utilities": "Utility commands",
-            "miscellaneous": "Miscellaneous commands"
+            "miscellaneous": "Miscellaneous commands",
+            "events": "Events commands"
         }
         
         if category is None:
