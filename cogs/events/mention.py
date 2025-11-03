@@ -36,6 +36,4 @@ class MentionListener(commands.Cog):
                         f"Failed to react with fallback emoji: {fallback_error}"
                     )
 
-        await self.bot.process_commands(message)
-
 
