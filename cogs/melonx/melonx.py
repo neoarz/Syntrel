@@ -1,7 +1,5 @@
 import discord
-from discord import app_commands
 from discord.ext import commands
-from discord.ext.commands import Context
 
 
 class MelonxSelect(discord.ui.Select):
@@ -37,6 +35,11 @@ class MelonxSelect(discord.ui.Select):
                 label="iOS 26",
                 value="26",
                 description="How can I run MeloNX on iOS 26?",
+            ),
+            discord.SelectOption(
+                label="Upgrade",
+                value="upgrade",
+                description="How can I upgrade my firmware and keys in MeloNX?",
             ),
             discord.SelectOption(
                 label="Legal",

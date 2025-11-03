@@ -11,6 +11,7 @@ from .gamecrash import crash_command
 from .requirements import requirements_command
 from .error import error_command
 from .ios26 import ios26_command
+from .upgrade import upgrade_command
 
 
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
@@ -73,6 +74,10 @@ class Melonx(commands.GroupCog, name="melonx"):
     @melonx_group.command(name="26")
     async def melonx_group_26(self, context: Context):
         await self._invoke_hybrid(context, "26")
+
+    @melonx_group.command(name="upgrade")
+    async def melonx_group_upgrade(self, context: Context):
+        await self._invoke_hybrid(context, "upgrade")
 
     async def _invoke_hybrid(self, context: Context, name: str):
         command = self.bot.get_command(name)
@@ -148,6 +153,13 @@ class Melonx(commands.GroupCog, name="melonx"):
     async def ios26(self, context):
         return await ios26_command()(self, context)
 
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="upgrade", description="How can I upgrade my firmware and keys in MeloNX?"
+    )
+    async def upgrade(self, context):
+        return await upgrade_command()(self, context)
+
 
 async def setup(bot) -> None:
     cog = Melonx(bot)
@@ -160,4 +172,5 @@ async def setup(bot) -> None:
     bot.logger.info("Loaded extension 'melonx.requirements'")
     bot.logger.info("Loaded extension 'melonx.error'")
     bot.logger.info("Loaded extension 'melonx.26'")
+    bot.logger.info("Loaded extension 'melonx.upgrade'")
     bot.logger.info("Loaded extension 'melonx.legal'")
