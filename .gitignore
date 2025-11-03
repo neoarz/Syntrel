@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.ruff_cache/
 
 # C extensions
 *.so
@@ -148,7 +149,5 @@ cython_debug/
 
 # Log file
 discord.log
-
 cogs/media/files/
-
 logs.txt

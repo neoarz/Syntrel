@@ -1,11 +1,6 @@
-import asyncio
-import json
-import logging
 import os
 import platform
 import random
-import signal
-import sys
 import time
 
 import aiosqlite
@@ -198,30 +193,6 @@ class DiscordBot(commands.Bot):
         except Exception as e:
             self.logger.error(f"Error during bot shutdown: {e}")
 
-    async def on_message(self, message: discord.Message) -> None:
-        if message.author == self.user or message.author.bot:
-            return
-
-        if self.user in message.mentions:
-            try:
-                emoji_string = "<a:PandaPing:1417550314260926575>"
-                self.logger.debug(
-                    f"Attempting to react with PandaPing emoji: {emoji_string}"
-                )
-                await message.add_reaction(emoji_string)
-                self.logger.debug("Successfully reacted with PandaPing emoji")
-            except Exception as e:
-                self.logger.debug(f"Failed to react with PandaPing emoji: {e}")
-                try:
-                    self.logger.debug("Falling back to wave emoji")
-                    await message.add_reaction("👋")
-                    self.logger.debug("Successfully reacted with wave emoji")
-                except Exception as fallback_error:
-                    self.logger.debug(
-                        f"Failed to react with fallback emoji: {fallback_error}"
-                    )
-        await self.process_commands(message)
-
     async def on_command_completion(self, context: Context) -> None:
         full_command_name = context.command.qualified_name
         split = full_command_name.split(" ")
@@ -310,5 +281,5 @@ if __name__ == "__main__":
         bot.run(os.getenv("TOKEN"))
     except KeyboardInterrupt:
         pass
-    except:
+    except Exception:
         pass

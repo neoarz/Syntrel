@@ -4,6 +4,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 from .baitbot import baitbot_command, BaitBotListener, has_protected_role
+from .mention import MentionListener
 
 
 def _require_group_prefix(context: Context) -> bool:
@@ -65,4 +66,8 @@ async def setup(bot) -> None:
     listener = BaitBotListener(bot)
     await bot.add_cog(listener)
 
+    mention_listener = MentionListener(bot)
+    await bot.add_cog(mention_listener)
+
     bot.logger.info("Loaded extension 'events.baitbot'")
+    bot.logger.info("Loaded extension 'events.mention'")
