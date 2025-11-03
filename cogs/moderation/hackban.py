@@ -15,9 +15,7 @@ def hackban_command():
         user_id="The user ID that should be banned.",
         reason="The reason why the user should be banned.",
     )
-    async def hackban(
-        self, context, user_id: str, *, reason: str = "Not specified"
-    ):
+    async def hackban(self, context, user_id: str, *, reason: str = "Not specified"):
         """
         Bans a user without the user having to be in the server.
 
@@ -34,7 +32,9 @@ def hackban_command():
                 title="Ban",
                 description=f"**{user}** (ID: {user_id}) was banned by **{context.author}**!",
                 color=0x7289DA,
-            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
+            ).set_author(
+                name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png"
+            )
             embed.add_field(name="Reason:", value=reason)
             await context.send(embed=embed)
         except Exception:
@@ -42,7 +42,9 @@ def hackban_command():
                 title="Error!",
                 description="An error occurred while trying to ban the user. Make sure ID is an existing ID that belongs to a user.",
                 color=0xE02B2B,
-            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")    
+            ).set_author(
+                name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png"
+            )
             await context.send(embed=embed)
-    
+
     return hackban

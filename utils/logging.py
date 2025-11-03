@@ -37,12 +37,14 @@ def setup_logger():
 
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(LoggingFormatter())
-    
+
     log_file_path = os.getenv("LOG_FILE", "logs/discord.log")
     log_dir = os.path.dirname(log_file_path)
     if log_dir:
         os.makedirs(log_dir, exist_ok=True)
-    file_handler = logging.FileHandler(filename=log_file_path, encoding="utf-8", mode="w")
+    file_handler = logging.FileHandler(
+        filename=log_file_path, encoding="utf-8", mode="w"
+    )
     file_handler_formatter = logging.Formatter(
         "[{asctime}] [{levelname:<8}] {name}: {message}", "%Y-%m-%d %H:%M:%S", style="{"
     )
@@ -50,5 +52,5 @@ def setup_logger():
 
     logger.addHandler(console_handler)
     logger.addHandler(file_handler)
-    
+
     return logger

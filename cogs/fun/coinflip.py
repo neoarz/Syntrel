@@ -2,6 +2,7 @@ import random
 import discord
 from discord.ext import commands
 
+
 class Choice(discord.ui.View):
     def __init__(self) -> None:
         super().__init__()
@@ -21,19 +22,19 @@ class Choice(discord.ui.View):
         self.value = "tails"
         self.stop()
 
+
 def coinflip_command():
     @commands.hybrid_command(
-        name="coinflip",
-        description="Make a coin flip, but give your bet before."
+        name="coinflip", description="Make a coin flip, but give your bet before."
     )
     async def coinflip(self, context):
         buttons = Choice()
         embed = discord.Embed(
-            title="Coinflip",
-            description="What is your bet?", 
-            color=0x7289DA
+            title="Coinflip", description="What is your bet?", color=0x7289DA
         )
-        embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+        embed.set_author(
+            name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp"
+        )
         message = await context.send(embed=embed, view=buttons)
         await buttons.wait()
         result = random.choice(["heads", "tails"])
@@ -43,14 +44,18 @@ def coinflip_command():
                 description=f"Correct! You guessed `{buttons.value}` and I flipped the coin to `{result}`.",
                 color=0x00FF00,
             )
-            embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+            embed.set_author(
+                name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp"
+            )
         else:
             embed = discord.Embed(
                 title="Coinflip",
                 description=f"Woops! You guessed `{buttons.value}` and I flipped the coin to `{result}`, better luck next time!",
                 color=0xE02B2B,
             )
-            embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+            embed.set_author(
+                name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp"
+            )
         await message.edit(embed=embed, view=None, content=None)
-    
+
     return coinflip

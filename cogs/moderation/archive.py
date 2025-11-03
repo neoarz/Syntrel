@@ -23,7 +23,7 @@ def archive_command():
         :param limit: The limit of messages that should be archived. Default is 10.
         """
         log_file = f"{context.channel.id}.log"
-        
+
         messages = []
         async for message in context.channel.history(
             limit=limit, before=context.message
@@ -36,10 +36,10 @@ def archive_command():
                 if len(attachments) >= 1
                 else ""
             )
-            
+
             message_line = f"{message.created_at.strftime('%m/%d/%Y %H:%M:%S')} {message.author} {message.id}: {message.clean_content} {attachments_text}\n"
             messages.append(message_line)
-        
+
         with open(log_file, "w", encoding="UTF-8") as f:
             f.write(
                 f'Archived messages from: #{context.channel} ({context.channel.id}) in the guild "{context.guild}" ({context.guild.id}) at {datetime.now().strftime("%m/%d/%Y %H:%M:%S")}\n'
@@ -47,9 +47,9 @@ def archive_command():
 
             for message_line in reversed(messages):
                 f.write(message_line)
-        
+
         f = discord.File(log_file)
         await context.send(file=f)
         os.remove(log_file)
-    
+
     return archive

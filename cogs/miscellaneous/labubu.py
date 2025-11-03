@@ -49,9 +49,11 @@ def labubu_command():
             description=f"```ansi\n{labubu_art}\n```",
             color=0x7289DA,
         )
-        embed.set_author(name="Labubu", icon_url="https://yes.nighty.works/raw/YxMC0r.png")
+        embed.set_author(
+            name="Labubu", icon_url="https://yes.nighty.works/raw/YxMC0r.png"
+        )
         embed.set_footer(text=f"May look broken on mobile")
-        
+
         if getattr(context, "interaction", None):
             inter = context.interaction
             if not inter.response.is_done():
@@ -60,5 +62,5 @@ def labubu_command():
                 await inter.followup.send(embed=embed, ephemeral=True)
         else:
             await context.send(embed=embed)
-    
+
     return labubu

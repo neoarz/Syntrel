@@ -10,7 +10,7 @@ def tryitandsee_command():
     )
     async def tryitandsee(self, context):
         link = "https://tryitands.ee/"
-        
+
         if getattr(context, "interaction", None):
             inter = context.interaction
             if not inter.response.is_done():
@@ -19,5 +19,5 @@ def tryitandsee_command():
                 await inter.followup.send(link, ephemeral=True)
         else:
             await context.send(link)
-    
+
     return tryitandsee

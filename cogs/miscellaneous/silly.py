@@ -13,7 +13,7 @@ def silly_command():
             message = "https://yes.nighty.works/raw/LX4nqt.gif"
         else:
             message = ":3"
-            
+
         interaction = getattr(context, "interaction", None)
         if interaction is not None:
             await interaction.response.defer(ephemeral=True)
@@ -28,5 +28,5 @@ def silly_command():
             except:
                 pass
             await context.channel.send(message)
-    
+
     return silly

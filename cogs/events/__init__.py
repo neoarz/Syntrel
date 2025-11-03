@@ -29,9 +29,11 @@ class Events(commands.GroupCog, name="events"):
         embed = discord.Embed(
             title="Events Commands",
             description="Use `.events <subcommand>` or `/events <subcommand>`.",
-            color=0x7289DA
+            color=0x7289DA,
         )
-        embed.set_author(name="Events", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+        embed.set_author(
+            name="Events", icon_url="https://yes.nighty.works/raw/eW5lLm.webp"
+        )
         embed.add_field(name="Available", value="baitbot", inline=False)
         await context.send(embed=embed)
 
@@ -46,12 +48,11 @@ class Events(commands.GroupCog, name="events"):
     @has_protected_role()
     async def events_group_baitbot(self, context: Context):
         await self._invoke_hybrid(context, "baitbot")
-        
+
     @commands.check(_require_group_prefix)
     @has_protected_role()
     @commands.hybrid_command(
-        name="baitbot",
-        description="View bait bot configuration and status."
+        name="baitbot", description="View bait bot configuration and status."
     )
     async def baitbot(self, context):
         return await baitbot_command()(self, context)
@@ -60,8 +61,8 @@ class Events(commands.GroupCog, name="events"):
 async def setup(bot) -> None:
     cog = Events(bot)
     await bot.add_cog(cog)
-    
+
     listener = BaitBotListener(bot)
     await bot.add_cog(listener)
-    
+
     bot.logger.info("Loaded extension 'events.baitbot'")

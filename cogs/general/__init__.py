@@ -33,10 +33,16 @@ class General(commands.GroupCog, name="general"):
         embed = discord.Embed(
             title="General Commands",
             description="Use `.general <subcommand>` or `/general <subcommand>`.",
-            color=0x7289DA
+            color=0x7289DA,
         )
-        embed.set_author(name="General", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-        embed.add_field(name="Available", value="ping, uptime, serverinfo, userinfo, feedback", inline=False)
+        embed.set_author(
+            name="General", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"
+        )
+        embed.add_field(
+            name="Available",
+            value="ping, uptime, serverinfo, userinfo, feedback",
+            inline=False,
+        )
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str, **kwargs):
@@ -59,7 +65,9 @@ class General(commands.GroupCog, name="general"):
         await self._invoke_hybrid(context, "serverinfo")
 
     @general_group.command(name="userinfo")
-    async def general_group_userinfo(self, context: Context, user: discord.User = None, user_id: str = None):
+    async def general_group_userinfo(
+        self, context: Context, user: discord.User = None, user_id: str = None
+    ):
         await self._invoke_hybrid(context, "userinfo", user=user, user_id=user_id)
 
     @general_group.command(name="feedback")
@@ -96,24 +104,23 @@ class General(commands.GroupCog, name="general"):
         description="Get information on a user.",
     )
     @app_commands.describe(
-        user="User to get info for",
-        user_id="User ID to get info for"
+        user="User to get info for", user_id="User ID to get info for"
     )
     async def userinfo(self, context, user: discord.User = None, user_id: str = None):
         return await userinfo_command()(self, context, user=user, user_id=user_id)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="feedback",
-        description="Submit a feedback for the owners of the bot"
+        name="feedback", description="Submit a feedback for the owners of the bot"
     )
     async def feedback(self, context):
         return await feedback_command()(self, context)
 
+
 async def setup(bot) -> None:
     cog = General(bot)
     await bot.add_cog(cog)
-    
+
     bot.logger.info("Loaded extension 'general.ping'")
     bot.logger.info("Loaded extension 'general.uptime'")
     bot.logger.info("Loaded extension 'general.serverinfo'")

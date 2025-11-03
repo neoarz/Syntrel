@@ -4,14 +4,14 @@ from discord.ext.commands import Context
 import aiohttp
 import io
 
+
 def dontasktoask_command():
     @commands.hybrid_command(
-        name="dontasktoask",
-        description="Shows the 'Don't Ask to Ask' image."
+        name="dontasktoask", description="Shows the 'Don't Ask to Ask' image."
     )
     async def dontasktoask(self, context):
         image_url = "https://yes.nighty.works/raw/KecbCr.jpg"
-        
+
         async with aiohttp.ClientSession() as session:
             async with session.get(image_url) as resp:
                 data = await resp.read()
@@ -25,5 +25,5 @@ def dontasktoask_command():
                 await inter.followup.send(file=file, ephemeral=True)
         else:
             await context.send(file=file)
-    
+
     return dontasktoask

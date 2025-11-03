@@ -25,9 +25,11 @@ class Melonx(commands.GroupCog, name="melonx"):
         embed = discord.Embed(
             title="MeloNX Commands",
             description="Choose a command from the dropdown below to get help with specific issues:",
-            color=0x963155
+            color=0x963155,
         )
-        embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
+        embed.set_author(
+            name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png"
+        )
         view = MelonxView(self.bot)
         await context.send(embed=embed, view=view)
 
@@ -36,9 +38,11 @@ class Melonx(commands.GroupCog, name="melonx"):
         embed = discord.Embed(
             title="MeloNX Commands",
             description="Choose a command from the dropdown below to get help with specific issues:",
-            color=0x963155
+            color=0x963155,
         )
-        embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
+        embed.set_author(
+            name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png"
+        )
         view = MelonxView(self.bot)
         await context.send(embed=embed, view=view)
 
@@ -87,80 +91,68 @@ class Melonx(commands.GroupCog, name="melonx"):
         content = context.message.content.strip().lower()
         return content.startswith(f"{prefix}{group} ")
 
-    @app_commands.command(
-        name="help",
-        description="MeloNX troubleshooting help"
-    )
+    @app_commands.command(name="help", description="MeloNX troubleshooting help")
     async def help(self, interaction: discord.Interaction):
         embed = discord.Embed(
             title="MeloNX Commands",
             description="Choose a command from the dropdown below to get help with specific issues:",
-            color=0x963155
+            color=0x963155,
         )
-        embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
+        embed.set_author(
+            name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png"
+        )
         view = MelonxView(self.bot)
         await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="transfer",
-        description="How to transfer save files from other emulators or platforms"
+        description="How to transfer save files from other emulators or platforms",
     )
     async def transfer(self, context):
         return await transfer_command()(self, context)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="mods",
-        description="How to install mods within MeloNX (Limited Support)"
+        name="mods", description="How to install mods within MeloNX (Limited Support)"
     )
     async def mods(self, context):
         return await mods_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="legal",
-        description="Legality of emulators"
-    )
+    @commands.hybrid_command(name="legal", description="Legality of emulators")
     async def legal(self, context):
         return await legal_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="gamecrash",
-        description="Why does my game crash?"
-    )
+    @commands.hybrid_command(name="gamecrash", description="Why does my game crash?")
     async def gamecrash(self, context):
         return await crash_command()(self, context)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="requirements",
-        description="What does MeloNX require?"
+        name="requirements", description="What does MeloNX require?"
     )
     async def requirements(self, context):
         return await requirements_command()(self, context)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="error",
-        description="What does this error message mean?"
+        name="error", description="What does this error message mean?"
     )
     async def error(self, context):
         return await error_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="26",
-        description="How can I run MeloNX on iOS 26?"
-    )
+    @commands.hybrid_command(name="26", description="How can I run MeloNX on iOS 26?")
     async def ios26(self, context):
         return await ios26_command()(self, context)
+
 
 async def setup(bot) -> None:
     cog = Melonx(bot)
     await bot.add_cog(cog)
-    
+
     bot.logger.info("Loaded extension 'melonx.help'")
     bot.logger.info("Loaded extension 'melonx.transfer'")
     bot.logger.info("Loaded extension 'melonx.mods'")

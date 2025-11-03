@@ -30,10 +30,16 @@ class Miscellaneous(commands.GroupCog, name="misc"):
         embed = discord.Embed(
             title="Miscellaneous Commands",
             description="Use `.misc <subcommand>` or `/misc <subcommand>`.",
-            color=0x7289DA
+            color=0x7289DA,
         )
-        embed.set_author(name="Miscellaneous", icon_url="https://yes.nighty.works/raw/YxMC0r.png")
-        embed.add_field(name="Available", value="dontasktoask, rr, depart, labubu, duck, tryitandsee, piracy, keanu, support, docs, sigma, silly, color", inline=False)
+        embed.set_author(
+            name="Miscellaneous", icon_url="https://yes.nighty.works/raw/YxMC0r.png"
+        )
+        embed.add_field(
+            name="Available",
+            value="dontasktoask, rr, depart, labubu, duck, tryitandsee, piracy, keanu, support, docs, sigma, silly, color",
+            inline=False,
+        )
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str):
@@ -98,7 +104,9 @@ class Miscellaneous(commands.GroupCog, name="misc"):
         await self._invoke_hybrid(context, "sigma")
 
     @miscellaneous_group.command(name="silly")
-    async def miscellaneous_group_silly(self, context: Context, message_type: str = "regular"):
+    async def miscellaneous_group_silly(
+        self, context: Context, message_type: str = "regular"
+    ):
         await self._invoke_hybrid(context, "silly", message_type=message_type)
 
     @miscellaneous_group.command(name="color")
@@ -107,119 +115,83 @@ class Miscellaneous(commands.GroupCog, name="misc"):
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="dontasktoask",
-        description="Shows the 'Don't Ask to Ask' image."
+        name="dontasktoask", description="Shows the 'Don't Ask to Ask' image."
     )
     async def dontasktoask(self, context):
         return await dontasktoask_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="rr",
-        description="Rickroll"
-    )
+    @commands.hybrid_command(name="rr", description="Rickroll")
     async def rr(self, context):
         return await rr_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="depart",
-        description="Show the departure meme"
-    )
+    @commands.hybrid_command(name="depart", description="Show the departure meme")
     async def depart(self, context):
         return await depart_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="labubu",
-        description="Labubu ASCII art"
-    )
+    @commands.hybrid_command(name="labubu", description="Labubu ASCII art")
     async def labubu(self, context):
         return await labubu_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="duck",
-        description="Duck ASCII art"
-    )
+    @commands.hybrid_command(name="duck", description="Duck ASCII art")
     async def duck(self, context):
         return await duck_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="tryitandsee",
-        description="Try it and see"
-    )
+    @commands.hybrid_command(name="tryitandsee", description="Try it and see")
     async def tryitandsee(self, context):
         return await tryitandsee_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="piracy",
-        description="FBI Anti Piracy Warning"
-    )
+    @commands.hybrid_command(name="piracy", description="FBI Anti Piracy Warning")
     async def piracy(self, context):
         return await piracy_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="keanu",
-        description="Reeves"
-    )
+    @commands.hybrid_command(name="keanu", description="Reeves")
     async def keanu(self, context):
         return await keanu_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="support",
-        description="Support?"
-    )
+    @commands.hybrid_command(name="support", description="Support?")
     async def support(self, context):
         return await support_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="docs",
-        description="Shows the docs image."
-    )
+    @commands.hybrid_command(name="docs", description="Shows the docs image.")
     async def docs(self, context):
         return await docs_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="sigma",
-        description="i feel so sigma!"
-    )
+    @commands.hybrid_command(name="sigma", description="i feel so sigma!")
     async def sigma(self, context):
         return await sigma_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="silly",
-        description="Sends a silly message :3"
+    @commands.hybrid_command(name="silly", description="Sends a silly message :3")
+    @app_commands.describe(message_type="Type of message to send (regular or animated)")
+    @app_commands.choices(
+        message_type=[
+            app_commands.Choice(name="Regular", value="regular"),
+            app_commands.Choice(name="Animated", value="animated"),
+        ]
     )
-    @app_commands.describe(
-        message_type="Type of message to send (regular or animated)"
-    )
-    @app_commands.choices(message_type=[
-        app_commands.Choice(name="Regular", value="regular"),
-        app_commands.Choice(name="Animated", value="animated")
-    ])
     async def silly(self, context, message_type: str = "regular"):
         return await silly_command()(self, context, message_type=message_type)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="color",
-        description="Get a random color."
-    )
+    @commands.hybrid_command(name="color", description="Get a random color.")
     async def color(self, context):
         return await color_command()(self, context)
+
 
 async def setup(bot) -> None:
     cog = Miscellaneous(bot)
     await bot.add_cog(cog)
-    
+
     bot.logger.info("Loaded extension 'miscellaneous.dontasktoask'")
     bot.logger.info("Loaded extension 'miscellaneous.rr'")
     bot.logger.info("Loaded extension 'miscellaneous.depart'")

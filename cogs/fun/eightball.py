@@ -2,6 +2,7 @@ import random
 import discord
 from discord.ext import commands
 
+
 def eightball_command():
     @commands.hybrid_command(
         name="8ball",
@@ -35,8 +36,10 @@ def eightball_command():
             description=f"{random.choice(answers)}",
             color=0x7289DA,
         )
-        embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+        embed.set_author(
+            name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp"
+        )
         embed.set_footer(text=f"The question was: {question}")
         await context.send(embed=embed)
-    
+
     return eight_ball

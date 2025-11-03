@@ -5,13 +5,17 @@ from discord.ext.commands import Context
 
 
 def warnings_command():
-    async def send_embed(context, embed: discord.Embed, *, ephemeral: bool = False) -> None:
+    async def send_embed(
+        context, embed: discord.Embed, *, ephemeral: bool = False
+    ) -> None:
         interaction = getattr(context, "interaction", None)
         if interaction is not None:
             if interaction.response.is_done():
                 await interaction.followup.send(embed=embed, ephemeral=ephemeral)
             else:
-                await interaction.response.send_message(embed=embed, ephemeral=ephemeral)
+                await interaction.response.send_message(
+                    embed=embed, ephemeral=ephemeral
+                )
         else:
             await context.send(embed=embed)
 
@@ -30,16 +34,20 @@ def warnings_command():
                 title="Missing Permissions!",
                 description="You are missing the permission(s) `manage_messages` to execute this command!",
                 color=0xE02B2B,
-            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+            ).set_author(
+                name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png"
+            )
             return await self.send_embed(context, embed, ephemeral=True)
-        
+
         if context.invoked_subcommand is None:
             embed = discord.Embed(
                 title="Warning",
                 description="Please specify a subcommand.\n\n**Subcommands:**\n`add` - Add a warning to a user.\n`remove` - Remove a warning from a user.\n`list` - List all warnings of a user.",
                 color=0x7289DA,
             )
-            embed.set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+            embed.set_author(
+                name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png"
+            )
             await self.send_embed(context, embed)
 
     @warning.command(
@@ -65,7 +73,9 @@ def warnings_command():
                 title="Missing Permissions!",
                 description="You are missing the permission(s) `manage_messages` to execute this command!",
                 color=0xE02B2B,
-            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+            ).set_author(
+                name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png"
+            )
             return await self.send_embed(context, embed, ephemeral=True)
         member = context.guild.get_member(user.id) or await context.guild.fetch_member(
             user.id
@@ -78,7 +88,9 @@ def warnings_command():
             description=f"**{member}** was warned by **{context.author}**!\nTotal warns for this user: {total}",
             color=0x7289DA,
         )
-        embed.set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+        embed.set_author(
+            name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png"
+        )
         embed.add_field(name="Reason:", value=reason)
         await self.send_embed(context, embed)
         try:
@@ -87,7 +99,9 @@ def warnings_command():
                 description=f"You were warned by **{context.author}** in **{context.guild.name}**!\nReason: {reason}",
                 color=0xE02B2B,
             )
-            dm_embed.set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+            dm_embed.set_author(
+                name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png"
+            )
             await member.send(embed=dm_embed)
         except:
             fallback = discord.Embed(
@@ -120,7 +134,9 @@ def warnings_command():
                 title="Missing Permissions!",
                 description="You are missing the permission(s) `manage_messages` to execute this command!",
                 color=0xE02B2B,
-            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+            ).set_author(
+                name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png"
+            )
             return await self.send_embed(context, embed, ephemeral=True)
         member = context.guild.get_member(user.id) or await context.guild.fetch_member(
             user.id
@@ -131,7 +147,9 @@ def warnings_command():
             description=f"Removed the warning **#{warn_id}** from **{member}**!\nTotal warns for this user: {total}",
             color=0x7289DA,
         )
-        embed.set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+        embed.set_author(
+            name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png"
+        )
         await self.send_embed(context, embed)
 
     @warning.command(
@@ -151,11 +169,15 @@ def warnings_command():
                 title="Missing Permissions!",
                 description="You are missing the permission(s) `manage_messages` to execute this command!",
                 color=0xE02B2B,
-            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+            ).set_author(
+                name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png"
+            )
             return await self.send_embed(context, embed, ephemeral=True)
         warnings_list = await self.bot.database.get_warnings(user.id, context.guild.id)
         embed = discord.Embed(title=f"Warnings of {user}", color=0x7289DA)
-        embed.set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+        embed.set_author(
+            name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png"
+        )
         description = ""
         if len(warnings_list) == 0:
             description = "This user has no warnings."
@@ -164,7 +186,5 @@ def warnings_command():
                 description += f"• Warned by <@{warning[2]}>: **{warning[3]}** (<t:{warning[4]}>) - Warn ID #{warning[5]}\n"
         embed.description = description
         await self.send_embed(context, embed)
-
-
 
     return warning

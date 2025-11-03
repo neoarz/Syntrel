@@ -18,7 +18,7 @@
 
 ## Commands
 
-![Total Commands](https://img.shields.io/badge/Total%20Commands-70-5865F2)
+![Total Commands](https://img.shields.io/badge/Total%20Commands-71-5865F2)
 
 | Command&nbsp;group | Subcommands |
 | ------------ | --- |

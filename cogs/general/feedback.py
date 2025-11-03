@@ -2,6 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
+
 class FeedbackForm(discord.ui.Modal, title="Feeedback"):
     feedback = discord.ui.TextInput(
         label="What do you think about this bot?",
@@ -16,10 +17,10 @@ class FeedbackForm(discord.ui.Modal, title="Feeedback"):
         self.answer = str(self.feedback)
         self.stop()
 
+
 def feedback_command():
     @commands.hybrid_command(
-        name="feedback",
-        description="Submit a feedback for the owners of the bot"
+        name="feedback", description="Submit a feedback for the owners of the bot"
     )
     async def feedback(self, context):
         if getattr(context, "interaction", None):
@@ -34,7 +35,10 @@ def feedback_command():
                     title="Thank You!",
                     description="Your feedback has been submitted, the owners have been notified about it.",
                     color=0x7289DA,
-                ).set_author(name="Feedback System", icon_url="https://yes.nighty.works/raw/gSxqzV.png"),
+                ).set_author(
+                    name="Feedback System",
+                    icon_url="https://yes.nighty.works/raw/gSxqzV.png",
+                ),
                 ephemeral=True,
             )
 
@@ -44,7 +48,10 @@ def feedback_command():
                     title="New Feedback",
                     description=f"{interaction.user} (<@{interaction.user.id}>) has submitted a new feedback:\n```\n{feedback_form.answer}\n```",
                     color=0x7289DA,
-                ).set_author(name="Feedback System", icon_url="https://yes.nighty.works/raw/gSxqzV.png")
+                ).set_author(
+                    name="Feedback System",
+                    icon_url="https://yes.nighty.works/raw/gSxqzV.png",
+                )
             )
         else:
             embed = discord.Embed(
@@ -52,7 +59,10 @@ def feedback_command():
                 description="This command can only be used as a slash command. Please use `/general feedback` instead.",
                 color=0xE02B2B,
             )
-            embed.set_author(name="Feedback System", icon_url="https://yes.nighty.works/raw/gSxqzV.png")
+            embed.set_author(
+                name="Feedback System",
+                icon_url="https://yes.nighty.works/raw/gSxqzV.png",
+            )
             await context.send(embed=embed)
-    
+
     return feedback

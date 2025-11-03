@@ -22,9 +22,11 @@ class Idevice(commands.GroupCog, name="idevice"):
         embed = discord.Embed(
             title="idevice Commands",
             description="Choose a command from the dropdown below to get help with specific issues:",
-            color=0xfa8c4a
+            color=0xFA8C4A,
         )
-        embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
+        embed.set_author(
+            name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png"
+        )
         view = ideviceView(self.bot)
         await context.send(embed=embed, view=view)
 
@@ -33,9 +35,11 @@ class Idevice(commands.GroupCog, name="idevice"):
         embed = discord.Embed(
             title="idevice Commands",
             description="Choose a command from the dropdown below to get help with specific issues:",
-            color=0xfa8c4a
+            color=0xFA8C4A,
         )
-        embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
+        embed.set_author(
+            name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png"
+        )
         view = ideviceView(self.bot)
         await context.send(embed=embed, view=view)
 
@@ -72,32 +76,29 @@ class Idevice(commands.GroupCog, name="idevice"):
     async def idevice_group_mountddi(self, context: Context):
         await self._invoke_hybrid(context, "mountddi")
 
-    @app_commands.command(
-        name="help",
-        description="idevice troubleshooting help"
-    )
+    @app_commands.command(name="help", description="idevice troubleshooting help")
     async def help(self, interaction: discord.Interaction):
         embed = discord.Embed(
             title="idevice Commands",
             description="Choose a command from the dropdown below to get help with specific issues:",
-            color=0xfa8c4a
+            color=0xFA8C4A,
         )
-        embed.set_author(name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png")
+        embed.set_author(
+            name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png"
+        )
         view = ideviceView(self.bot)
         await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="errorcodes",
-        description="Look up error codes and their meanings."
+        name="errorcodes", description="Look up error codes and their meanings."
     )
     async def errorcodes(self, context, *, error_code: str = None):
         return await errorcodes_command()(self, context, error_code=error_code)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="developermode",
-        description="How to turn on developer mode"
+        name="developermode", description="How to turn on developer mode"
     )
     async def developermode(self, context):
         return await developermode_command()(self, context)
@@ -105,23 +106,21 @@ class Idevice(commands.GroupCog, name="idevice"):
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="noapps",
-        description="Help when apps aren't showing in installed apps view"
+        description="Help when apps aren't showing in installed apps view",
     )
     async def noapps(self, context):
         return await noapps_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="mountddi",
-        description="How to manually mount DDI"
-    )
+    @commands.hybrid_command(name="mountddi", description="How to manually mount DDI")
     async def mountddi(self, context):
         return await mountddi_command()(self, context)
+
 
 async def setup(bot) -> None:
     cog = Idevice(bot)
     await bot.add_cog(cog)
-    
+
     bot.logger.info("Loaded extension 'idevice.help'")
     bot.logger.info("Loaded extension 'idevice.errorcodes'")
     bot.logger.info("Loaded extension 'idevice.developermode'")

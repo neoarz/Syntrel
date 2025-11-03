@@ -2,6 +2,7 @@ import random
 import discord
 from discord.ext import commands
 
+
 class RockPaperScissors(discord.ui.Select):
     def __init__(self) -> None:
         options = [
@@ -34,12 +35,14 @@ class RockPaperScissors(discord.ui.Select):
         bot_choice_index = choices[bot_choice]
 
         result_embed = discord.Embed(title="Rock Paper Scissors", color=0x7289DA)
-        result_embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+        result_embed.set_author(
+            name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp"
+        )
 
         winner = (3 + user_choice_index - bot_choice_index) % 3
-        
+
         user_mention = interaction.user.mention
-        
+
         if winner == 0:
             result_embed.description = f"**That's a draw!** You've chosen {user_choice} and I've chosen {bot_choice}.\n-# gg {user_mention}"
             result_embed.colour = 0xF59E42
@@ -54,10 +57,12 @@ class RockPaperScissors(discord.ui.Select):
             embed=result_embed, content=None, view=None
         )
 
+
 class RockPaperScissorsView(discord.ui.View):
     def __init__(self) -> None:
         super().__init__()
         self.add_item(RockPaperScissors())
+
 
 def rps_command():
     @commands.hybrid_command(
@@ -68,9 +73,11 @@ def rps_command():
         embed = discord.Embed(
             title="Rock Paper Scissors",
             description="Please make your choice",
-            color=0x7289DA
+            color=0x7289DA,
         )
-        embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
+        embed.set_author(
+            name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp"
+        )
         await context.send(embed=embed, view=view)
-    
+
     return rock_paper_scissors

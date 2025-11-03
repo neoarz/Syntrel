@@ -7,7 +7,7 @@ def get_uptime(start_time: float) -> str:
     hours = (uptime_seconds % 86400) // 3600
     minutes = (uptime_seconds % 3600) // 60
     seconds = uptime_seconds % 60
-    
+
     if days > 0:
         return f"{days}d {hours}h {minutes}m {seconds}s"
     elif hours > 0:

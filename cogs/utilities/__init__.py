@@ -20,10 +20,14 @@ class Utilities(commands.GroupCog, name="utils"):
         embed = discord.Embed(
             title="Utilities Commands",
             description="Use `.utils <subcommand>` or `/utils <subcommand>`.",
-            color=0x7289DA
+            color=0x7289DA,
         )
-        embed.set_author(name="Utilities", icon_url="https://yes.nighty.works/raw/8VLDcg.webp")
-        embed.add_field(name="Available", value="translate, codepreview, dictionary", inline=False)
+        embed.set_author(
+            name="Utilities", icon_url="https://yes.nighty.works/raw/8VLDcg.webp"
+        )
+        embed.add_field(
+            name="Available", value="translate, codepreview, dictionary", inline=False
+        )
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str, **kwargs):
@@ -47,62 +51,68 @@ class Utilities(commands.GroupCog, name="utils"):
     @app_commands.describe(
         text="The text to translate",
         to_lang="Target language (e.g., 'en', 'es', 'fr')",
-        from_lang="Source language (leave empty for auto-detect)"
+        from_lang="Source language (leave empty for auto-detect)",
     )
     @app_commands.autocomplete(to_lang=language_autocomplete)
     @app_commands.autocomplete(from_lang=language_autocomplete)
-    async def utilities_group_translate(self, context: Context, text: str = None, to_lang: str = "en", from_lang: str = None):
-        await self._invoke_hybrid(context, "translate", text=text, to_lang=to_lang, from_lang=from_lang)
+    async def utilities_group_translate(
+        self,
+        context: Context,
+        text: str = None,
+        to_lang: str = "en",
+        from_lang: str = None,
+    ):
+        await self._invoke_hybrid(
+            context, "translate", text=text, to_lang=to_lang, from_lang=from_lang
+        )
 
     @utilities_group.command(name="codepreview")
     async def utilities_group_codepreview(self, context: Context, url: str = None):
         await self._invoke_hybrid(context, "codepreview", url=url)
 
     @utilities_group.command(name="dictionary")
-    @app_commands.describe(
-        word="The word to look up"
-    )
+    @app_commands.describe(word="The word to look up")
     async def utilities_group_dictionary(self, context: Context, word: str = None):
         await self._invoke_hybrid(context, "dictionary", word=word)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="translate",
-        description="Translate text to another language"
+        name="translate", description="Translate text to another language"
     )
     @app_commands.describe(
         text="The text to translate",
         to_lang="Target language (e.g., 'en', 'es', 'fr')",
-        from_lang="Source language (leave empty for auto-detect)"
+        from_lang="Source language (leave empty for auto-detect)",
     )
     @app_commands.autocomplete(to_lang=language_autocomplete)
     @app_commands.autocomplete(from_lang=language_autocomplete)
-    async def translate(self, context, text: str = None, to_lang: str = "en", from_lang: str = None):
-        return await translate_command()(self, context, text=text, to_lang=to_lang, from_lang=from_lang)
+    async def translate(
+        self, context, text: str = None, to_lang: str = "en", from_lang: str = None
+    ):
+        return await translate_command()(
+            self, context, text=text, to_lang=to_lang, from_lang=from_lang
+        )
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="codepreview",
-        description="Preview code from GitHub URLs"
+        name="codepreview", description="Preview code from GitHub URLs"
     )
     async def codepreview(self, context, url: str = None):
         return await codepreview_command()(self, context, url=url)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="dictionary",
-        description="Get the definition of a word"
+        name="dictionary", description="Get the definition of a word"
     )
-    @app_commands.describe(
-        word="The word to look up"
-    )
+    @app_commands.describe(word="The word to look up")
     async def dictionary(self, context, word: str = None):
         return await dictionary_command()(self, context, word=word)
+
 
 async def setup(bot) -> None:
     cog = Utilities(bot)
     await bot.add_cog(cog)
-    
+
     bot.logger.info("Loaded extension 'utilities.translate'")
     bot.logger.info("Loaded extension 'utilities.codepreview'")
     bot.logger.info("Loaded extension 'utilities.dictionary'")

@@ -26,5 +26,5 @@ def rr_command():
                 await inter.followup.send(file=file, ephemeral=True)
         else:
             await context.send(file=file)
-    
+
     return rr

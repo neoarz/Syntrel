@@ -8,13 +8,17 @@ class CogManagement(commands.Cog, name="cog_management"):
     def __init__(self, bot) -> None:
         self.bot = bot
 
-    async def send_embed(self, context: Context, embed: discord.Embed, *, ephemeral: bool = False) -> None:
+    async def send_embed(
+        self, context: Context, embed: discord.Embed, *, ephemeral: bool = False
+    ) -> None:
         interaction = getattr(context, "interaction", None)
         if interaction is not None:
             if interaction.response.is_done():
                 await interaction.followup.send(embed=embed, ephemeral=ephemeral)
             else:
-                await interaction.response.send_message(embed=embed, ephemeral=ephemeral)
+                await interaction.response.send_message(
+                    embed=embed, ephemeral=ephemeral
+                )
         else:
             await context.send(embed=embed)
 
@@ -38,15 +42,20 @@ class CogManagement(commands.Cog, name="cog_management"):
         except Exception as e:
             embed = discord.Embed(
                 title="Error",
-                description=f"Could not load the `{cog}` cog.\n```{str(e)}```", color=0xE02B2B
+                description=f"Could not load the `{cog}` cog.\n```{str(e)}```",
+                color=0xE02B2B,
             )
-            embed.set_author(name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp")
+            embed.set_author(
+                name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp"
+            )
             await self.send_embed(context, embed, ephemeral=True)
             return
         embed = discord.Embed(
             description=f"Successfully loaded the `{cog}` cog.", color=0x7289DA
         )
-        embed.set_author(name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp")
+        embed.set_author(
+            name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp"
+        )
         await self.send_embed(context, embed)
 
     @commands.hybrid_command(
@@ -69,15 +78,20 @@ class CogManagement(commands.Cog, name="cog_management"):
         except Exception as e:
             embed = discord.Embed(
                 title="Error",
-                description=f"Could not unload the `{cog}` cog.\n```{str(e)}```", color=0xE02B2B
+                description=f"Could not unload the `{cog}` cog.\n```{str(e)}```",
+                color=0xE02B2B,
             )
-            embed.set_author(name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp")
+            embed.set_author(
+                name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp"
+            )
             await self.send_embed(context, embed, ephemeral=True)
             return
         embed = discord.Embed(
             description=f"Successfully unloaded the `{cog}` cog.", color=0x7289DA
         )
-        embed.set_author(name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp")
+        embed.set_author(
+            name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp"
+        )
         await self.send_embed(context, embed)
 
     @commands.hybrid_command(
@@ -100,16 +114,22 @@ class CogManagement(commands.Cog, name="cog_management"):
         except Exception as e:
             embed = discord.Embed(
                 title="Error",
-                description=f"Could not reload the `{cog}` cog.\n```{str(e)}```", color=0xE02B2B
+                description=f"Could not reload the `{cog}` cog.\n```{str(e)}```",
+                color=0xE02B2B,
             )
-            embed.set_author(name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp")
+            embed.set_author(
+                name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp"
+            )
             await self.send_embed(context, embed, ephemeral=True)
             return
         embed = discord.Embed(
             title="Cog Management",
-            description=f"Successfully reloaded the `{cog}` cog.", color=0x7289DA
+            description=f"Successfully reloaded the `{cog}` cog.",
+            color=0x7289DA,
         )
-        embed.set_author(name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp")
+        embed.set_author(
+            name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp"
+        )
         await self.send_embed(context, embed)
 
     async def cog_command_error(self, context: Context, error) -> None:
@@ -117,9 +137,11 @@ class CogManagement(commands.Cog, name="cog_management"):
             embed = discord.Embed(
                 title="Permission Denied",
                 description="You are not the owner of the bot!",
-                color=0xE02B2B
+                color=0xE02B2B,
             )
-            embed.set_author(name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp")
+            embed.set_author(
+                name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp"
+            )
             await self.send_embed(context, embed, ephemeral=True)
         else:
             raise error

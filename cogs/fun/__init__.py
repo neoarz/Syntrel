@@ -22,10 +22,16 @@ class Fun(commands.GroupCog, name="fun"):
         embed = discord.Embed(
             title="Fun Commands",
             description="Use `.fun <subcommand>` or slash `/fun <subcommand>`.",
-            color=0x7289DA
+            color=0x7289DA,
         )
-        embed.set_author(name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp")
-        embed.add_field(name="Available", value="coinflip, 8ball, minesweeper, randomfact, rps", inline=False)
+        embed.set_author(
+            name="Fun", icon_url="https://yes.nighty.works/raw/eW5lLm.webp"
+        )
+        embed.add_field(
+            name="Available",
+            value="coinflip, 8ball, minesweeper, randomfact, rps",
+            inline=False,
+        )
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str, **kwargs):
@@ -67,8 +73,7 @@ class Fun(commands.GroupCog, name="fun"):
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="coinflip",
-        description="Make a coin flip, but give your bet before."
+        name="coinflip", description="Make a coin flip, but give your bet before."
     )
     async def coinflip(self, context):
         return await coinflip_command()(self, context)
@@ -83,8 +88,7 @@ class Fun(commands.GroupCog, name="fun"):
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="minesweeper", 
-        description="Play a buttoned minesweeper mini-game."
+        name="minesweeper", description="Play a buttoned minesweeper mini-game."
     )
     async def minesweeper(self, context):
         return await minesweeper_command()(self, context)
@@ -101,10 +105,11 @@ class Fun(commands.GroupCog, name="fun"):
     async def rock_paper_scissors(self, context):
         return await rps_command()(self, context)
 
+
 async def setup(bot) -> None:
     cog = Fun(bot)
     await bot.add_cog(cog)
-    
+
     bot.logger.info("Loaded extension 'fun.coinflip'")
     bot.logger.info("Loaded extension 'fun.8ball'")
     bot.logger.info("Loaded extension 'fun.minesweeper'")

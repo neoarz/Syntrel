@@ -9,14 +9,18 @@ from discord.ext.commands import Context
 class Shutdown(commands.Cog, name="shutdown"):
     def __init__(self, bot) -> None:
         self.bot = bot
-    
-    async def send_embed(self, context: Context, embed: discord.Embed, *, ephemeral: bool = False) -> None:
+
+    async def send_embed(
+        self, context: Context, embed: discord.Embed, *, ephemeral: bool = False
+    ) -> None:
         interaction = getattr(context, "interaction", None)
         if interaction is not None:
             if interaction.response.is_done():
                 await interaction.followup.send(embed=embed, ephemeral=ephemeral)
             else:
-                await interaction.response.send_message(embed=embed, ephemeral=ephemeral)
+                await interaction.response.send_message(
+                    embed=embed, ephemeral=ephemeral
+                )
         else:
             await context.send(embed=embed)
 
@@ -42,7 +46,7 @@ class Shutdown(commands.Cog, name="shutdown"):
             self.bot.logger.info(
                 f"Executed shutdown command by {context.author} (ID: {context.author.id}) in DMs"
             )
-            
+
         embed = discord.Embed(
             title="Shutdown",
             description="Shutting down. Bye! <a:PandaThanos:1417483671253811262>",
@@ -59,7 +63,9 @@ class Shutdown(commands.Cog, name="shutdown"):
                 description="You are not the owner of this bot!",
                 color=0xE02B2B,
             )
-            embed.set_author(name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp")
+            embed.set_author(
+                name="Owner", icon_url="https://yes.nighty.works/raw/zReOib.webp"
+            )
             await self.send_embed(context, embed, ephemeral=True)
         else:
             raise error

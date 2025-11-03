@@ -13,18 +13,29 @@ class Help(commands.Cog, name="help"):
         interaction: discord.Interaction,
         current: str,
     ) -> list[app_commands.Choice[str]]:
-        categories = ["general", "fun", "moderation", "owner", "sidestore", "idevice", "melonx", "media", "miscellaneous", "utilities", "events"]
-        
+        categories = [
+            "general",
+            "fun",
+            "moderation",
+            "owner",
+            "sidestore",
+            "idevice",
+            "melonx",
+            "media",
+            "miscellaneous",
+            "utilities",
+            "events",
+        ]
+
         suggestions = []
         for category in categories:
             if current.lower() in category.lower():
                 suggestions.append(
                     app_commands.Choice(
-                        name=f"{category.capitalize()} Commands",
-                        value=category
+                        name=f"{category.capitalize()} Commands", value=category
                     )
                 )
-        
+
         return suggestions[:25]
 
     @commands.hybrid_command(
@@ -35,7 +46,6 @@ class Help(commands.Cog, name="help"):
     @app_commands.describe(category="Choose a specific category to view its commands")
     @app_commands.autocomplete(category=category_autocomplete)
     async def help(self, context: Context, category: str = None) -> None:
-        
         category_mapping = {
             "general": "general",
             "fun": "fun",
@@ -49,7 +59,6 @@ class Help(commands.Cog, name="help"):
             "utils": "utilities",
             "utilities": "utilities",
             "events": "events",
-            
             "sync": "owner",
             "logs": "owner",
             "invite": "owner",
@@ -59,10 +68,10 @@ class Help(commands.Cog, name="help"):
             "shutdown": "owner",
             "say": "owner",
         }
-        
+
         category_descriptions = {
             "general": "General commands",
-            "fun": "Fun commands", 
+            "fun": "Fun commands",
             "moderation": "Administration commands",
             "owner": "Owner commands",
             "sidestore": "SideStore troubleshooting commands",
@@ -71,48 +80,47 @@ class Help(commands.Cog, name="help"):
             "media": "Media commands",
             "utilities": "Utility commands",
             "miscellaneous": "Miscellaneous commands",
-            "events": "Events commands"
+            "events": "Events commands",
         }
-        
+
         if category is None:
-            embed = discord.Embed(
-                title="Help", 
-                color=0x7289DA
+            embed = discord.Embed(title="Help", color=0x7289DA)
+            embed.set_author(
+                name="Help", icon_url="https://yes.nighty.works/raw/T9mnBO.png"
             )
-            embed.set_author(name="Help", icon_url="https://yes.nighty.works/raw/T9mnBO.png")
-            
+
             standalone_commands = []
             botinfo_cmd = self.bot.tree.get_command("botinfo")
             if botinfo_cmd:
-                standalone_commands.append("**/botinfo** » Get information about this bot")
-            
+                standalone_commands.append(
+                    "**/botinfo** » Get information about this bot"
+                )
+
             if standalone_commands:
                 embed.add_field(
-                    name="",
-                    value="".join(standalone_commands) + "\n",
-                    inline=False
+                    name="", value="".join(standalone_commands) + "\n", inline=False
                 )
-                
+
             available_categories = set()
             for cog_name in self.bot.cogs:
                 mapped_category = category_mapping.get(cog_name.lower())
                 if mapped_category:
                     available_categories.add(mapped_category)
-            
+
             category_list = []
             for cat in sorted(available_categories):
-                description = category_descriptions.get(cat, f"{cat.capitalize()} commands")
-                category_list.append(f"**/help {cat}** » {description}")
-            
-            if category_list:
-                embed.add_field(
-                    name="", 
-                    value="\n".join(category_list), 
-                    inline=False
+                description = category_descriptions.get(
+                    cat, f"{cat.capitalize()} commands"
                 )
-            
+                category_list.append(f"**/help {cat}** » {description}")
+
+            if category_list:
+                embed.add_field(name="", value="\n".join(category_list), inline=False)
+
             if context.interaction:
-                await context.interaction.response.send_message(embed=embed, ephemeral=True)
+                await context.interaction.response.send_message(
+                    embed=embed, ephemeral=True
+                )
             else:
                 try:
                     await context.send(embed=embed)
@@ -122,16 +130,18 @@ class Help(commands.Cog, name="help"):
                     except discord.Forbidden:
                         pass  # User has DMs disabled
             return
-        
+
         category = category.lower()
         if category not in category_descriptions:
             embed = discord.Embed(
                 title="Error",
                 description=f"Category '{category}' not found. Use `/help` to see available categories.",
-                color=0x7289DA
+                color=0x7289DA,
             )
             if context.interaction:
-                await context.interaction.response.send_message(embed=embed, ephemeral=True)
+                await context.interaction.response.send_message(
+                    embed=embed, ephemeral=True
+                )
             else:
                 try:
                     await context.send(embed=embed)
@@ -139,10 +149,9 @@ class Help(commands.Cog, name="help"):
                     try:
                         await context.author.send(embed=embed)
                     except discord.Forbidden:
-                        pass 
+                        pass
             return
-        
-        
+
         commands_in_category = []
         seen_names = set()
         for cog_name in self.bot.cogs:
@@ -151,13 +160,20 @@ class Help(commands.Cog, name="help"):
                 if cog:
                     commands_list = cog.get_commands()
                     for command in commands_list:
-                        has_prefix_subcommands = hasattr(command, 'commands') and len(getattr(command, 'commands', [])) > 0
+                        has_prefix_subcommands = (
+                            hasattr(command, "commands")
+                            and len(getattr(command, "commands", [])) > 0
+                        )
                         if has_prefix_subcommands:
                             continue
                         name = command.name
                         if name in seen_names:
                             continue
-                        description = command.description.partition("\n")[0] if command.description else "No description available"
+                        description = (
+                            command.description.partition("\n")[0]
+                            if command.description
+                            else "No description available"
+                        )
                         commands_in_category.append((name, description))
                         seen_names.add(name)
 
@@ -168,30 +184,45 @@ class Help(commands.Cog, name="help"):
             bound_cog_name = getattr(bound_cog, "qualified_name", "").lower()
             if category_mapping.get(bound_cog_name) != category:
                 continue
-            has_subcommands = hasattr(app_command, 'commands') and len(getattr(app_command, 'commands', [])) > 0
+            has_subcommands = (
+                hasattr(app_command, "commands")
+                and len(getattr(app_command, "commands", [])) > 0
+            )
 
             if has_subcommands and category not in ["owner"]:
                 for subcommand in app_command.commands:
                     if subcommand.name in seen_names:
                         continue
-                    sub_desc = subcommand.description.partition("\n")[0] if getattr(subcommand, "description", None) else "No description available"
-                    commands_in_category.append((f"{app_command.name} {subcommand.name}", sub_desc))
+                    sub_desc = (
+                        subcommand.description.partition("\n")[0]
+                        if getattr(subcommand, "description", None)
+                        else "No description available"
+                    )
+                    commands_in_category.append(
+                        (f"{app_command.name} {subcommand.name}", sub_desc)
+                    )
                     seen_names.add(f"{app_command.name} {subcommand.name}")
             else:
                 if app_command.name in seen_names:
                     continue
-                description = app_command.description.partition("\n")[0] if getattr(app_command, "description", None) else "No description available"
+                description = (
+                    app_command.description.partition("\n")[0]
+                    if getattr(app_command, "description", None)
+                    else "No description available"
+                )
                 commands_in_category.append((app_command.name, description))
                 seen_names.add(app_command.name)
-        
+
         if not commands_in_category:
             embed = discord.Embed(
                 title="Error",
                 description=f"No commands found in category '{category}'.",
-                color=0x7289DA
+                color=0x7289DA,
             )
             if context.interaction:
-                await context.interaction.response.send_message(embed=embed, ephemeral=True)
+                await context.interaction.response.send_message(
+                    embed=embed, ephemeral=True
+                )
             else:
                 try:
                     await context.send(embed=embed)
@@ -199,23 +230,18 @@ class Help(commands.Cog, name="help"):
                     try:
                         await context.author.send(embed=embed)
                     except discord.Forbidden:
-                        pass 
+                        pass
             return
-        
-        embed = discord.Embed(
-            title=f"/help » {category.lower()}",
-            color=0x7289DA
+
+        embed = discord.Embed(title=f"/help » {category.lower()}", color=0x7289DA)
+        embed.set_author(
+            name="Help", icon_url="https://yes.nighty.works/raw/T9mnBO.png"
         )
-        embed.set_author(name="Help", icon_url="https://yes.nighty.works/raw/T9mnBO.png")
         data = []
         for command_name, description in sorted(commands_in_category):
             data.append(f"**/{command_name}** » {description}")
         help_text = "\n".join(data)
-        embed.add_field(
-            name="", 
-            value=help_text, 
-            inline=False
-        )
+        embed.add_field(name="", value=help_text, inline=False)
         if context.interaction:
             await context.interaction.response.send_message(embed=embed, ephemeral=True)
         else:
@@ -225,7 +251,7 @@ class Help(commands.Cog, name="help"):
                 try:
                     await context.author.send(embed=embed)
                 except discord.Forbidden:
-                    pass 
+                    pass
 
 
 async def setup(bot) -> None:

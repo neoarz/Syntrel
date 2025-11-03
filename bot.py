@@ -26,7 +26,7 @@ intents.dm_messages = True
 intents.dm_reactions = True
 intents.dm_typing = True
 intents.emojis = True
-intents.messages = True 
+intents.messages = True
 intents.reactions = True
 intents.typing = True
 intents.voice_states = True
@@ -41,7 +41,6 @@ intents.integrations = True
 intents.invites = True
 intents.presences = True
 intents.members = True
-
 
 
 logger = setup_logger()
@@ -67,7 +66,7 @@ class DiscordBot(commands.Bot):
         ) as db:
             with open(
                 f"{os.path.realpath(os.path.dirname(__file__))}/database/schema.sql",
-                encoding = "utf-8"
+                encoding="utf-8",
             ) as file:
                 await db.executescript(file.read())
             await db.commit()
@@ -75,11 +74,13 @@ class DiscordBot(commands.Bot):
     async def load_cogs(self) -> None:
         cogs_path = f"{os.path.realpath(os.path.dirname(__file__))}/cogs"
         disabled_env = os.getenv("DISABLED_COGS", "")
-        disabled_cogs = {entry.strip().lower() for entry in disabled_env.split(",") if entry.strip()}
-        
+        disabled_cogs = {
+            entry.strip().lower() for entry in disabled_env.split(",") if entry.strip()
+        }
+
         for folder in os.listdir(cogs_path):
             folder_path = os.path.join(cogs_path, folder)
-            if os.path.isdir(folder_path) and not folder.startswith('__'):
+            if os.path.isdir(folder_path) and not folder.startswith("__"):
                 init_file = os.path.join(folder_path, "__init__.py")
                 if os.path.exists(init_file):
                     try:
@@ -93,23 +94,30 @@ class DiscordBot(commands.Bot):
                         )
                 else:
                     for file in os.listdir(folder_path):
-                        if file.endswith(".py") and not file.startswith('__'):
+                        if file.endswith(".py") and not file.startswith("__"):
                             extension = file[:-3]
                             full_name = f"{folder}.{extension}".lower()
-                            if extension.lower() in disabled_cogs or full_name in disabled_cogs:
-                                self.logger.info(f"Skipped disabled extension '{full_name}'")
+                            if (
+                                extension.lower() in disabled_cogs
+                                or full_name in disabled_cogs
+                            ):
+                                self.logger.info(
+                                    f"Skipped disabled extension '{full_name}'"
+                                )
                                 continue
                             try:
                                 await self.load_extension(f"cogs.{folder}.{extension}")
-                                self.logger.info(f"Loaded extension '{folder}.{extension}'")
+                                self.logger.info(
+                                    f"Loaded extension '{folder}.{extension}'"
+                                )
                             except Exception as e:
                                 exception = f"{type(e).__name__}: {e}"
                                 self.logger.error(
                                     f"Failed to load extension {folder}.{extension}\n{exception}"
                                 )
-        
+
         for file in os.listdir(cogs_path):
-            if file.endswith(".py") and not file.startswith('__'):
+            if file.endswith(".py") and not file.startswith("__"):
                 extension = file[:-3]
                 if extension.lower() in disabled_cogs:
                     self.logger.info(f"Skipped disabled extension '{extension}'")
@@ -140,7 +148,7 @@ class DiscordBot(commands.Bot):
         self.logger.info(
             f"Running on: {platform.system()} {platform.release()} ({os.name})"
         )
-        
+
         try:
             app_info = await self.application_info()
             if app_info.team:
@@ -148,11 +156,12 @@ class DiscordBot(commands.Bot):
                 for member in app_info.team.members:
                     self.logger.info(f"Team member: {member.name} (ID: {member.id})")
             else:
-                self.logger.info(f"Bot owner: {app_info.owner.name} (ID: {app_info.owner.id})")
+                self.logger.info(
+                    f"Bot owner: {app_info.owner.name} (ID: {app_info.owner.id})"
+                )
         except Exception as e:
             self.logger.error(f"Error fetching application info: {e}")
-        
-            
+
         await self.init_db()
         await self.load_cogs()
         self.status_task.start()
@@ -169,20 +178,20 @@ class DiscordBot(commands.Bot):
         if self._shutdown:
             return
         self._shutdown = True
-        
+
         self.logger.info("Starting shutdown process...")
-        
+
         if self.status_task and not self.status_task.is_being_cancelled():
             self.status_task.cancel()
             self.logger.info("Status task cancelled")
-            
+
         if self.database and self.database.connection:
             try:
                 await self.database.connection.close()
                 self.logger.warning("Database connection closed")
             except Exception as e:
                 self.logger.error(f"Error closing database connection: {e}")
-            
+
         try:
             await super().close()
             self.logger.critical("Bot shutdown complete")
@@ -192,11 +201,13 @@ class DiscordBot(commands.Bot):
     async def on_message(self, message: discord.Message) -> None:
         if message.author == self.user or message.author.bot:
             return
-        
+
         if self.user in message.mentions:
             try:
                 emoji_string = "<a:PandaPing:1417550314260926575>"
-                self.logger.debug(f"Attempting to react with PandaPing emoji: {emoji_string}")
+                self.logger.debug(
+                    f"Attempting to react with PandaPing emoji: {emoji_string}"
+                )
                 await message.add_reaction(emoji_string)
                 self.logger.debug("Successfully reacted with PandaPing emoji")
             except Exception as e:
@@ -206,17 +217,19 @@ class DiscordBot(commands.Bot):
                     await message.add_reaction("👋")
                     self.logger.debug("Successfully reacted with wave emoji")
                 except Exception as fallback_error:
-                    self.logger.debug(f"Failed to react with fallback emoji: {fallback_error}")
+                    self.logger.debug(
+                        f"Failed to react with fallback emoji: {fallback_error}"
+                    )
         await self.process_commands(message)
 
     async def on_command_completion(self, context: Context) -> None:
         full_command_name = context.command.qualified_name
         split = full_command_name.split(" ")
         executed_command = str(split[0])
-        
+
         if executed_command.lower() in ["shutdown", "say", "embed"]:
             return
-            
+
         if context.guild is not None:
             self.logger.info(
                 f"Executed {executed_command} command in {context.guild.name} (ID: {context.guild.id}) by {context.author} (ID: {context.author.id})"
@@ -287,12 +300,12 @@ class DiscordBot(commands.Bot):
 bot = DiscordBot()
 
 if __name__ == "__main__":
-    os.system('clear' if os.name == 'posix' else 'cls')
-    
+    os.system("clear" if os.name == "posix" else "cls")
+
     print(ascii)
-    
+
     setup_signal_handlers(bot)
-    
+
     try:
         bot.run(os.getenv("TOKEN"))
     except KeyboardInterrupt:

@@ -27,10 +27,12 @@ def duck_command():
         if getattr(context, "interaction", None):
             inter = context.interaction
             if not inter.response.is_done():
-                await inter.response.send_message(f"```ansi\n{duck_art}\n```", ephemeral=False)
+                await inter.response.send_message(
+                    f"```ansi\n{duck_art}\n```", ephemeral=False
+                )
             else:
                 await inter.followup.send(f"```ansi\n{duck_art}\n```", ephemeral=True)
         else:
             await context.send(f"```ansi\n{duck_art}\n```")
-    
+
     return duck

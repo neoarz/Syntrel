@@ -49,7 +49,7 @@ class MelonxSelect(discord.ui.Select):
     async def callback(self, interaction: discord.Interaction):
         command_name = self.values[0]
         command = self.bot.get_command(command_name)
-        
+
         if command:
             try:
                 ctx = await self.bot.get_context(interaction.message)
@@ -58,44 +58,57 @@ class MelonxSelect(discord.ui.Select):
                     embed = discord.Embed(
                         title="Command Executed",
                         description=f"Successfully executed `/{command_name}`",
-                        color=0x00FF00
+                        color=0x00FF00,
                     )
-                    embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
+                    embed.set_author(
+                        name="MeloNX",
+                        icon_url="https://yes.nighty.works/raw/TLGaVa.png",
+                    )
                     await interaction.response.edit_message(embed=embed, view=None)
             except discord.Forbidden:
-                guild_info = f"server {interaction.guild.name} (ID: {interaction.guild.id})" if interaction.guild else "DM or private channel"
-                self.bot.logger.warning(f"Bot missing permissions in {guild_info} - cannot execute {command_name} command")
-                
+                guild_info = (
+                    f"server {interaction.guild.name} (ID: {interaction.guild.id})"
+                    if interaction.guild
+                    else "DM or private channel"
+                )
+                self.bot.logger.warning(
+                    f"Bot missing permissions in {guild_info} - cannot execute {command_name} command"
+                )
+
                 if interaction.guild is None:
                     embed = discord.Embed(
                         title="Error",
                         description="This command cannot be executed in DMs.",
-                        color=0xFF0000
+                        color=0xFF0000,
                     )
                 else:
                     embed = discord.Embed(
                         title="Permission Error",
                         description="The bot needs the `send messages` permission to execute this command.",
-                        color=0xFF0000
+                        color=0xFF0000,
                     )
-                embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
+                embed.set_author(
+                    name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png"
+                )
                 await interaction.response.edit_message(embed=embed, view=None)
             except Exception as e:
                 self.bot.logger.error(f"Error executing {command_name} command: {e}")
                 embed = discord.Embed(
                     title="Error",
                     description="An error occurred while executing the command.",
-                    color=0x963155
+                    color=0x963155,
                 )
-                embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
+                embed.set_author(
+                    name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png"
+                )
                 await interaction.response.edit_message(embed=embed, view=None)
         else:
             embed = discord.Embed(
-                title="Error",
-                description="Command not found!",
-                color=0x963155
+                title="Error", description="Command not found!", color=0x963155
             )
-            embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
+            embed.set_author(
+                name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png"
+            )
             await interaction.response.edit_message(embed=embed, view=None)
 
 
@@ -116,10 +129,14 @@ def melonx_command():
                 description="This command can only be used in servers.",
                 color=0xE02B2B,
             )
-            embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
-            
+            embed.set_author(
+                name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png"
+            )
+
             if context.interaction:
-                await context.interaction.response.send_message(embed=embed, ephemeral=True)
+                await context.interaction.response.send_message(
+                    embed=embed, ephemeral=True
+                )
             else:
                 await context.send(embed=embed, ephemeral=True)
             return
@@ -130,10 +147,14 @@ def melonx_command():
                 description="The bot needs send messages permissions in this channel.",
                 color=0xE02B2B,
             )
-            embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
-            
+            embed.set_author(
+                name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png"
+            )
+
             if context.interaction:
-                await context.interaction.response.send_message(embed=embed, ephemeral=True)
+                await context.interaction.response.send_message(
+                    embed=embed, ephemeral=True
+                )
             else:
                 await context.send(embed=embed, ephemeral=True)
             return
@@ -141,15 +162,19 @@ def melonx_command():
         embed = discord.Embed(
             title="MeloNX Commands",
             description="Choose a command from the dropdown below to get help with specific issues:",
-            color=0x963155
+            color=0x963155,
         )
-        embed.set_author(name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png")
-        
+        embed.set_author(
+            name="MeloNX", icon_url="https://yes.nighty.works/raw/TLGaVa.png"
+        )
+
         view = MelonxView(self.bot)
-        
+
         if context.interaction:
-            await context.interaction.response.send_message(embed=embed, view=view, ephemeral=True)
+            await context.interaction.response.send_message(
+                embed=embed, view=view, ephemeral=True
+            )
         else:
             await context.send(embed=embed, view=view)
-    
+
     return melonx

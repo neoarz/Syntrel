@@ -34,12 +34,20 @@ class Media(commands.GroupCog, name="media"):
         """Listen for bot mentions with 'tweety' command while replying to a message"""
         if message.author.bot:
             return
-        
-        if self.bot.user in message.mentions and message.reference and message.reference.message_id:
+
+        if (
+            self.bot.user in message.mentions
+            and message.reference
+            and message.reference.message_id
+        ):
             content = message.content.lower()
-            content_without_mention = content.replace(f'<@{self.bot.user.id}>', '').replace(f'<@!{self.bot.user.id}>', '').strip()
-            
-            if content_without_mention.strip() == 'tweety':
+            content_without_mention = (
+                content.replace(f"<@{self.bot.user.id}>", "")
+                .replace(f"<@!{self.bot.user.id}>", "")
+                .strip()
+            )
+
+            if content_without_mention.strip() == "tweety":
                 ctx = await self.bot.get_context(message)
                 await self.tweety(ctx)
 
@@ -48,27 +56,33 @@ class Media(commands.GroupCog, name="media"):
         embed = discord.Embed(
             title="Media Commands",
             description="Use `.media <subcommand>` or `/media <subcommand>`.",
-            color=0x7289DA
+            color=0x7289DA,
         )
-        embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-        embed.add_field(name="Available", value="download, mcquote, img2gif, tweety, tts", inline=False)
+        embed.set_author(
+            name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"
+        )
+        embed.add_field(
+            name="Available",
+            value="download, mcquote, img2gif, tweety, tts",
+            inline=False,
+        )
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str, *args, **kwargs):
         if name == "download":
-            await self.download(context, url=kwargs.get('url', ''))
+            await self.download(context, url=kwargs.get("url", ""))
             return
         if name == "mcquote":
-            await self.mcquote(context, text=kwargs.get('text', ''))
+            await self.mcquote(context, text=kwargs.get("text", ""))
             return
         if name == "img2gif":
-            await self.img2gif(context, attachment=kwargs.get('attachment'))
+            await self.img2gif(context, attachment=kwargs.get("attachment"))
             return
         if name == "tweety":
             await self.tweety(context)
             return
         if name == "tts":
-            await self.tts(context, text=kwargs.get('text'))
+            await self.tts(context, text=kwargs.get("text"))
             return
         await context.send(f"Unknown media command: {name}")
 
@@ -81,7 +95,9 @@ class Media(commands.GroupCog, name="media"):
         await self._invoke_hybrid(context, "mcquote", text=text)
 
     @media_group.command(name="img2gif")
-    async def media_group_img2gif(self, context: Context, attachment: Optional[discord.Attachment] = None):
+    async def media_group_img2gif(
+        self, context: Context, attachment: Optional[discord.Attachment] = None
+    ):
         await self._invoke_hybrid(context, "img2gif", attachment=attachment)
 
     @media_group.command(name="tweety")
@@ -131,6 +147,7 @@ class Media(commands.GroupCog, name="media"):
     )
     async def tts(self, context, text: str = None):
         return await tts_command()(context, text=text)
+
 
 async def setup(bot) -> None:
     cog = Media(bot)

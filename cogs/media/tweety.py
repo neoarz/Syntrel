@@ -16,22 +16,25 @@ import asyncio
 
 
 def break_long_words(text: str, max_word_length: int = 50) -> str:
-    words = text.split(' ')
+    words = text.split(" ")
     result = []
-    
+
     for word in words:
         if len(word) > max_word_length:
-            chunks = [word[i:i+max_word_length] for i in range(0, len(word), max_word_length)]
-            result.append(' '.join(chunks))
+            chunks = [
+                word[i : i + max_word_length]
+                for i in range(0, len(word), max_word_length)
+            ]
+            result.append(" ".join(chunks))
         else:
             result.append(word)
-    
-    return ' '.join(result)
+
+    return " ".join(result)
 
 
 class TweetyHelpView(discord.ui.View):
     """This is the help view for the slash command cuz only the pinging and prefix versions can use this command"""
-    
+
     def __init__(self, user_id: int, bot):
         super().__init__(timeout=180)
         self.user_id = user_id
@@ -41,22 +44,30 @@ class TweetyHelpView(discord.ui.View):
             {
                 "title": "Tweety (Method 1)",
                 "description": "Use the prefix command `.media tweety` while replying to a message.",
-                "gif_url": "https://yes.nighty.works/raw/VrKX1L.gif", 
+                "gif_url": "https://yes.nighty.works/raw/VrKX1L.gif",
                 "fields": [
-                    {"name": "How to use", "value": "1. Reply to any message\n2. Type `.media tweety`\n3. Use the buttons to customize!", "inline": False},
-                ]
+                    {
+                        "name": "How to use",
+                        "value": "1. Reply to any message\n2. Type `.media tweety`\n3. Use the buttons to customize!",
+                        "inline": False,
+                    },
+                ],
             },
             {
                 "title": "Tweety (Method 2)",
                 "description": f"Mention <@{bot.user.id}> with `tweety` while replying to a message.",
-                "gif_url": "https://yes.nighty.works/raw/9XEe9j.gif", 
+                "gif_url": "https://yes.nighty.works/raw/9XEe9j.gif",
                 "fields": [
-                    {"name": "How to use", "value": f"1. Reply to any message\n2. Type `<@{bot.user.id}> tweety`\n3. Use the buttons to customize!", "inline": False},
-                ]
-            }
+                    {
+                        "name": "How to use",
+                        "value": f"1. Reply to any message\n2. Type `<@{bot.user.id}> tweety`\n3. Use the buttons to customize!",
+                        "inline": False,
+                    },
+                ],
+            },
         ]
         self.update_buttons()
-    
+
     def create_embed(self):
         page = self.pages[self.current_page]
         embed = discord.Embed(
@@ -64,68 +75,87 @@ class TweetyHelpView(discord.ui.View):
             description=page["description"],
             color=0x7289DA,
         )
-        embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
-        
+        embed.set_author(
+            name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"
+        )
+
         for field in page["fields"]:
-            embed.add_field(name=field["name"], value=field["value"], inline=field["inline"])
-        
+            embed.add_field(
+                name=field["name"], value=field["value"], inline=field["inline"]
+            )
+
         embed.set_image(url=page["gif_url"])
         embed.set_footer(text=f"Page {self.current_page + 1}/{len(self.pages)}")
-        
+
         return embed
-    
+
     def update_buttons(self):
         self.clear_items()
-        
+
         prev_button = discord.ui.Button(
             label="Prev",
             style=discord.ButtonStyle.secondary,
             emoji=discord.PartialEmoji(name="left", id=1420240344926126090),
-            disabled=self.current_page == 0
+            disabled=self.current_page == 0,
         )
         prev_button.callback = self.previous_page
         self.add_item(prev_button)
-        
+
         next_button = discord.ui.Button(
             label="Next",
             style=discord.ButtonStyle.secondary,
             emoji=discord.PartialEmoji(name="right", id=1420240334100627456),
-            disabled=self.current_page == len(self.pages) - 1
+            disabled=self.current_page == len(self.pages) - 1,
         )
         next_button.callback = self.next_page
         self.add_item(next_button)
-    
+
     async def previous_page(self, interaction: discord.Interaction):
         if interaction.user.id != self.user_id:
-            await interaction.response.send_message("You can't control someone else's help menu!", ephemeral=True)
+            await interaction.response.send_message(
+                "You can't control someone else's help menu!", ephemeral=True
+            )
             return
-        
+
         if self.current_page > 0:
             self.current_page -= 1
             self.update_buttons()
-            await interaction.response.edit_message(embed=self.create_embed(), view=self)
+            await interaction.response.edit_message(
+                embed=self.create_embed(), view=self
+            )
         else:
             await interaction.response.defer()
-    
+
     async def next_page(self, interaction: discord.Interaction):
         if interaction.user.id != self.user_id:
-            await interaction.response.send_message("You can't control someone else's help menu!", ephemeral=True)
+            await interaction.response.send_message(
+                "You can't control someone else's help menu!", ephemeral=True
+            )
             return
-        
+
         if self.current_page < len(self.pages) - 1:
             self.current_page += 1
             self.update_buttons()
-            await interaction.response.edit_message(embed=self.create_embed(), view=self)
+            await interaction.response.edit_message(
+                embed=self.create_embed(), view=self
+            )
         else:
             await interaction.response.defer()
-    
+
     async def on_timeout(self):
         for item in self.children:
             item.disabled = True
 
 
 class TweetyView(discord.ui.View):
-    def __init__(self, author_id: int, original_message, tweet_data: dict, api_url: str, image_message: Optional[discord.Message] = None):
+    def __init__(
+        self,
+        author_id: int,
+        original_message,
+        tweet_data: dict,
+        api_url: str,
+        image_message: Optional[discord.Message] = None,
+    ):
         super().__init__(timeout=300)
         self.author_id = author_id
         self.original_message = original_message
@@ -138,28 +168,34 @@ class TweetyView(discord.ui.View):
         self.click_count = 0
 
         self.update_button_styles()
-    
+
     def update_button_styles(self):
         self.clear_items()
-        
+
         dark_button = discord.ui.Button(
             label="Dark Mode" if self.is_dark else "Light Mode",
-            style=discord.ButtonStyle.primary if self.is_dark else discord.ButtonStyle.secondary,
+            style=discord.ButtonStyle.primary
+            if self.is_dark
+            else discord.ButtonStyle.secondary,
             emoji=discord.PartialEmoji(name="darkmode", id=1425165393751965884),
-            custom_id="toggle_dark"
+            custom_id="toggle_dark",
         )
         dark_button.callback = self.toggle_dark_callback
         self.add_item(dark_button)
-        
+
         verified_button = discord.ui.Button(
             label="Verified",
-            style=discord.ButtonStyle.primary if self.is_verified else discord.ButtonStyle.secondary,
-            emoji=discord.PartialEmoji(name="TwitterVerifiedBadge", id=1425165432142172392),
-            custom_id="toggle_verified"
+            style=discord.ButtonStyle.primary
+            if self.is_verified
+            else discord.ButtonStyle.secondary,
+            emoji=discord.PartialEmoji(
+                name="TwitterVerifiedBadge", id=1425165432142172392
+            ),
+            custom_id="toggle_verified",
         )
         verified_button.callback = self.toggle_verified_callback
         self.add_item(verified_button)
-    
+
     async def regenerate_tweet(self, interaction: discord.Interaction):
         """Regenerate only the image message with current settings"""
         if self.click_count >= 10:
@@ -168,7 +204,9 @@ class TweetyView(discord.ui.View):
                 description="Stop spamming! You've reached the maximum number of changes for this tweet.",
                 color=0xE02B2B,
             )
-            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            embed.set_author(
+                name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"
+            )
             await interaction.response.send_message(embed=embed, ephemeral=True)
             return
 
@@ -176,7 +214,7 @@ class TweetyView(discord.ui.View):
 
         current_time = time.time()
         time_since_last = current_time - self.last_regenerate_time
-        
+
         if time_since_last < 3 and self.last_regenerate_time > 0:
             wait_time = 3 - time_since_last
             await asyncio.sleep(wait_time)
@@ -189,9 +227,8 @@ class TweetyView(discord.ui.View):
                 async with session.post(
                     f"{self.api_url}/api/render",
                     json=self.tweet_data,
-                    headers={"Content-Type": "application/json"}
+                    headers={"Content-Type": "application/json"},
                 ) as response:
-                    
                     if response.status != 200:
                         error_text = await response.text()
                         embed = discord.Embed(
@@ -199,23 +236,27 @@ class TweetyView(discord.ui.View):
                             description=f"API Error ({response.status}): {error_text}",
                             color=0xE02B2B,
                         )
-                        embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+                        embed.set_author(
+                            name="Media",
+                            icon_url="https://yes.nighty.works/raw/y5SEZ9.webp",
+                        )
                         await interaction.followup.send(embed=embed, ephemeral=True)
                         return
-                    
+
                     image_data = await response.read()
-                    
-                    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_file:
+
+                    with tempfile.NamedTemporaryFile(
+                        delete=False, suffix=".png"
+                    ) as temp_file:
                         temp_file.write(image_data)
                         temp_file_path = temp_file.name
-                    
-                    with open(temp_file_path, 'rb') as f:
+
+                    with open(temp_file_path, "rb") as f:
                         author_name = self.original_message.author.name
-                        filename = f"tweet_{author_name}_{int(datetime.now().timestamp())}.png"
-                        file = discord.File(
-                            f, 
-                            filename=filename
+                        filename = (
+                            f"tweet_{author_name}_{int(datetime.now().timestamp())}.png"
                         )
+                        file = discord.File(f, filename=filename)
 
                         self.update_button_styles()
 
@@ -223,18 +264,20 @@ class TweetyView(discord.ui.View):
                             await self.image_message.edit(attachments=[file], view=self)
                         else:
                             await interaction.followup.send(file=file, view=self)
-                    
+
                     os.remove(temp_file_path)
-                    
+
         except Exception as e:
             embed = discord.Embed(
                 title="Error",
                 description="Error regenerating tweet image",
                 color=0xE02B2B,
             )
-            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            embed.set_author(
+                name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"
+            )
             await interaction.followup.send(embed=embed, ephemeral=True)
-    
+
     async def _check_author(self, interaction: discord.Interaction) -> bool:
         """Check if user is authorized to modify the tweet"""
         if interaction.user.id != self.author_id:
@@ -243,11 +286,13 @@ class TweetyView(discord.ui.View):
                 description="You can't modify someone else's tweet!",
                 color=0xE02B2B,
             )
-            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            embed.set_author(
+                name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"
+            )
             await interaction.response.send_message(embed=embed, ephemeral=True)
             return False
         return True
-    
+
     async def toggle_dark_callback(self, interaction: discord.Interaction):
         """Handle dark mode toggle button click"""
         if not await self._check_author(interaction):
@@ -255,7 +300,7 @@ class TweetyView(discord.ui.View):
         self.is_dark = not self.is_dark
         self.tweet_data["dark"] = self.is_dark
         await self.regenerate_tweet(interaction)
-    
+
     async def toggle_verified_callback(self, interaction: discord.Interaction):
         """Handle verified toggle button click"""
         if not await self._check_author(interaction):
@@ -263,16 +308,16 @@ class TweetyView(discord.ui.View):
         self.is_verified = not self.is_verified
         self.tweet_data["verified"] = self.is_verified
         await self.regenerate_tweet(interaction)
-    
+
     async def on_timeout(self):
         """Disable buttons when view times out"""
         for item in self.children:
             item.disabled = True
 
+
 def tweety_command():
     @commands.hybrid_command(
-        name="tweety",
-        description="Convert a replied message to a tweet image."
+        name="tweety", description="Convert a replied message to a tweet image."
     )
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def tweety(self, context):
@@ -281,44 +326,60 @@ def tweety_command():
             embed = view.create_embed()
             await context.send(embed=embed, view=view, ephemeral=True)
             return
-        
+
         if not context.message.reference or not context.message.reference.message_id:
             embed = discord.Embed(
                 title="Error",
                 description="You must reply to a message to use this command!",
                 color=0xE02B2B,
             )
-            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            embed.set_author(
+                name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"
+            )
             await context.send(embed=embed)
             return
-        
+
         try:
-            original_message = await context.channel.fetch_message(context.message.reference.message_id)
+            original_message = await context.channel.fetch_message(
+                context.message.reference.message_id
+            )
 
             processing_embed = discord.Embed(
                 title="Tweet Generator (Processing)",
                 description="<a:mariospin:1423677027013103709> Generating tweet... This may take a moment.",
                 color=0x7289DA,
             )
-            processing_embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            processing_embed.set_author(
+                name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"
+            )
             processing_msg = await context.send(embed=processing_embed)
 
             author = original_message.author
             display_name = author.display_name or author.name
             username = f"@{author.name}"
-            avatar_url = str(author.avatar.url) if author.avatar else str(author.default_avatar.url)
+            avatar_url = (
+                str(author.avatar.url)
+                if author.avatar
+                else str(author.default_avatar.url)
+            )
             message_text = original_message.content
-            
+
             for mention in original_message.mentions:
-                message_text = message_text.replace(f'<@{mention.id}>', f'@{mention.name}')
-                message_text = message_text.replace(f'<@!{mention.id}>', f'@{mention.name}')
-            
+                message_text = message_text.replace(
+                    f"<@{mention.id}>", f"@{mention.name}"
+                )
+                message_text = message_text.replace(
+                    f"<@!{mention.id}>", f"@{mention.name}"
+                )
+
             for role in original_message.role_mentions:
-                message_text = message_text.replace(f'<@&{role.id}>', f'@{role.name}')
-            
+                message_text = message_text.replace(f"<@&{role.id}>", f"@{role.name}")
+
             for channel in original_message.channel_mentions:
-                message_text = message_text.replace(f'<#{channel.id}>', f'#{channel.name}')
-            
+                message_text = message_text.replace(
+                    f"<#{channel.id}>", f"#{channel.name}"
+                )
+
             if not message_text.strip():
                 await processing_msg.delete()
                 embed = discord.Embed(
@@ -326,10 +387,12 @@ def tweety_command():
                     description="No text found! This command only works with text messages.",
                     color=0xE02B2B,
                 )
-                embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+                embed.set_author(
+                    name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"
+                )
                 await context.send(embed=embed)
                 return
-            
+
             if len(message_text) > 300:
                 await processing_msg.delete()
                 embed = discord.Embed(
@@ -337,13 +400,15 @@ def tweety_command():
                     description=f"Message is too long! Maximum 300 characters allowed.\nYour message: {len(message_text)} characters",
                     color=0xE02B2B,
                 )
-                embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+                embed.set_author(
+                    name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"
+                )
                 await context.send(embed=embed)
                 return
-            
+
             message_text = break_long_words(message_text, max_word_length=50)
-            
-            ny_tz = pytz.timezone('America/New_York')
+
+            ny_tz = pytz.timezone("America/New_York")
             msg_time_ny = original_message.created_at.astimezone(ny_tz)
             timestamp = msg_time_ny.strftime("%I:%M %p · %b %d, %Y").replace(" 0", " ")
             tweet_data = {
@@ -353,19 +418,18 @@ def tweety_command():
                 "avatar": avatar_url,
                 "timestamp": timestamp,
                 "verified": False,
-                "dark": False
+                "dark": False,
             }
-            
+
             API_BASE_URL = "http://tweet.6969.pro"
-            
+
             async with aiohttp.ClientSession() as session:
                 try:
                     async with session.post(
                         f"{API_BASE_URL}/api/render",
                         json=tweet_data,
-                        headers={"Content-Type": "application/json"}
+                        headers={"Content-Type": "application/json"},
                     ) as response:
-                        
                         if response.status != 200:
                             await processing_msg.delete()
                             error_text = await response.text()
@@ -374,26 +438,37 @@ def tweety_command():
                                 description=f"API Error ({response.status}): {error_text}",
                                 color=0xE02B2B,
                             )
-                            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+                            embed.set_author(
+                                name="Media",
+                                icon_url="https://yes.nighty.works/raw/y5SEZ9.webp",
+                            )
                             await context.send(embed=embed)
                             return
-                        
+
                         image_data = await response.read()
-                        
-                        with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_file:
+
+                        with tempfile.NamedTemporaryFile(
+                            delete=False, suffix=".png"
+                        ) as temp_file:
                             temp_file.write(image_data)
                             temp_file_path = temp_file.name
 
                         await processing_msg.delete()
-                        
-                        with open(temp_file_path, 'rb') as f:
-                            file = discord.File(f, filename=f"tweet_{author.name}_{int(datetime.now().timestamp())}.png")
+
+                        with open(temp_file_path, "rb") as f:
+                            file = discord.File(
+                                f,
+                                filename=f"tweet_{author.name}_{int(datetime.now().timestamp())}.png",
+                            )
                             embed = discord.Embed(
                                 title="Tweet Generated",
                                 description=f"<:error:1424007141768822824> Tweet sometimes may look a bit broken, im gonna rewrite the API another time... (it wasnt made for Syntrel in the first place)",
                                 color=0x7289DA,
                             )
-                            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+                            embed.set_author(
+                                name="Media",
+                                icon_url="https://yes.nighty.works/raw/y5SEZ9.webp",
+                            )
                             embed.set_footer(
                                 text=f"Requested by {context.author.name}",
                                 icon_url=context.author.display_avatar.url,
@@ -403,7 +478,7 @@ def tweety_command():
                                 author_id=context.author.id,
                                 original_message=original_message,
                                 tweet_data=tweet_data,
-                                api_url=API_BASE_URL
+                                api_url=API_BASE_URL,
                             )
 
                             await context.send(embed=embed)
@@ -411,7 +486,7 @@ def tweety_command():
                             view.image_message = image_message
 
                         os.remove(temp_file_path)
-                        
+
                 except aiohttp.ClientError:
                     await processing_msg.delete()
                     embed = discord.Embed(
@@ -419,7 +494,10 @@ def tweety_command():
                         description=f"Connection error: Could not reach tweet API",
                         color=0xE02B2B,
                     )
-                    embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+                    embed.set_author(
+                        name="Media",
+                        icon_url="https://yes.nighty.works/raw/y5SEZ9.webp",
+                    )
                     await context.send(embed=embed)
                 except Exception:
                     await processing_msg.delete()
@@ -428,7 +506,10 @@ def tweety_command():
                         description="Error generating tweet image",
                         color=0xE02B2B,
                     )
-                    embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+                    embed.set_author(
+                        name="Media",
+                        icon_url="https://yes.nighty.works/raw/y5SEZ9.webp",
+                    )
                     await context.send(embed=embed)
 
         except Exception:
@@ -437,7 +518,9 @@ def tweety_command():
                 description="Error processing the message!",
                 color=0xE02B2B,
             )
-            embed.set_author(name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp")
+            embed.set_author(
+                name="Media", icon_url="https://yes.nighty.works/raw/y5SEZ9.webp"
+            )
             await context.send(embed=embed)
-    
+
     return tweety

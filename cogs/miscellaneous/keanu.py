@@ -28,14 +28,16 @@ def keanu_command():
             "https://yes.nighty.works/raw/C7gy4v.jpg",
             "https://yes.nighty.works/raw/XqHg1q.jpg",
             "https://yes.nighty.works/raw/RUXNK7.png",
-            "https://yes.nighty.works/raw/CBNs9L.jpg"
+            "https://yes.nighty.works/raw/CBNs9L.jpg",
         ]
-        
+
         embed = discord.Embed(
             description="## Reeves",
             color=0x7289DA,
         )
-        embed.set_author(name="Keanu", icon_url="https://yes.nighty.works/raw/YxMC0r.png")
+        embed.set_author(
+            name="Keanu", icon_url="https://yes.nighty.works/raw/YxMC0r.png"
+        )
         embed.set_image(url=random.choice(images))
         if getattr(context, "interaction", None):
             inter = context.interaction
@@ -45,5 +47,5 @@ def keanu_command():
                 await inter.followup.send(embed=embed, ephemeral=True)
         else:
             await context.send(embed=embed)
-    
+
     return keanu

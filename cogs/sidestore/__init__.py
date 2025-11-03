@@ -27,9 +27,12 @@ class Sidestore(commands.GroupCog, name="sidestore"):
         embed = discord.Embed(
             title="SideStore Commands",
             description="Choose a command from the dropdown below to get help with specific issues:",
-            color=0x8e82f9
+            color=0x8E82F9,
         )
-        embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
+        embed.set_author(
+            name="SideStore",
+            icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true",
+        )
         view = SidestoreView(self.bot)
         await context.send(embed=embed, view=view)
 
@@ -38,9 +41,12 @@ class Sidestore(commands.GroupCog, name="sidestore"):
         embed = discord.Embed(
             title="SideStore Commands",
             description="Choose a command from the dropdown below to get help with specific issues:",
-            color=0x8e82f9
+            color=0x8E82F9,
         )
-        embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
+        embed.set_author(
+            name="SideStore",
+            icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true",
+        )
         view = SidestoreView(self.bot)
         await context.send(embed=embed, view=view)
 
@@ -97,17 +103,17 @@ class Sidestore(commands.GroupCog, name="sidestore"):
     async def sidestore_group_sparse(self, context: Context):
         await self._invoke_hybrid(context, "sparse")
 
-    @app_commands.command(
-        name="help",
-        description="SideStore troubleshooting help"
-    )
+    @app_commands.command(name="help", description="SideStore troubleshooting help")
     async def help(self, interaction: discord.Interaction):
         embed = discord.Embed(
             title="SideStore Commands",
             description="Choose a command from the dropdown below to get help with specific issues:",
-            color=0x8e82f9
+            color=0x8E82F9,
         )
-        embed.set_author(name="SideStore", icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true")
+        embed.set_author(
+            name="SideStore",
+            icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true",
+        )
 
         view = SidestoreView(self.bot)
 
@@ -115,80 +121,70 @@ class Sidestore(commands.GroupCog, name="sidestore"):
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="refresh",
-        description="Help with refreshing or installing apps"
+        name="refresh", description="Help with refreshing or installing apps"
     )
     async def refresh(self, context):
         return await refresh_command()(self, context)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="code",
-        description="No code received when signing in with Apple ID"
+        name="code", description="No code received when signing in with Apple ID"
     )
     async def code(self, context):
         return await code_command()(self, context)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="crash",
-        description="Help with SideStore crashing issues"
+        name="crash", description="Help with SideStore crashing issues"
     )
     async def crash(self, context):
         return await crash_command()(self, context)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="pairing",
-        description="Help with pairing file issues"
+        name="pairing", description="Help with pairing file issues"
     )
     async def pairing(self, context):
         return await pairing_command()(self, context)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="server",
-        description="Help with anisette server issues"
+        name="server", description="Help with anisette server issues"
     )
     async def server(self, context):
         return await server_command()(self, context)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="afc",
-        description="Help with AFC Connection Failure issues"
+        name="afc", description="Help with AFC Connection Failure issues"
     )
     async def afc(self, context):
         return await afc_command()(self, context)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="udid",
-        description="SideStore could not determine device UDID"
+        name="udid", description="SideStore could not determine device UDID"
     )
     async def udid(self, context):
         return await udid_command()(self, context)
 
     @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="half",
-        description="Help with half-installed apps"
-    )
+    @commands.hybrid_command(name="half", description="Help with half-installed apps")
     async def half(self, context):
         return await half_command()(self, context)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="sparse",
-        description="Help with sparse bundle issues"
+        name="sparse", description="Help with sparse bundle issues"
     )
     async def sparse(self, context):
         return await sparse_command()(self, context)
 
+
 async def setup(bot) -> None:
     cog = Sidestore(bot)
     await bot.add_cog(cog)
-    
+
     bot.logger.info("Loaded extension 'sidestore.help'")
     bot.logger.info("Loaded extension 'sidestore.refresh'")
     bot.logger.info("Loaded extension 'sidestore.code'")

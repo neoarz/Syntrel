@@ -13,6 +13,7 @@ def timeout_command():
         app_commands.Choice(name="1 day", value="1d"),
         app_commands.Choice(name="1 week", value="1w"),
     ]
+
     @commands.hybrid_command(
         name="timeout",
         description="Timeout a user for a specified duration.",
@@ -24,7 +25,12 @@ def timeout_command():
     )
     @app_commands.choices(duration=DURATION_CHOICES)
     async def timeout(
-        self, context, user: discord.User, duration: str, *, reason: str = "Not specified"
+        self,
+        context,
+        user: discord.User,
+        duration: str,
+        *,
+        reason: str = "Not specified",
     ):
         try:
             member = context.guild.get_member(user.id)
@@ -36,16 +42,25 @@ def timeout_command():
                         title="Error!",
                         description="This user is not in the server.",
                         color=0xE02B2B,
-                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+                    ).set_author(
+                        name="Moderation",
+                        icon_url="https://yes.nighty.works/raw/CPKHQd.png",
+                    )
                     await context.send(embed=embed, ephemeral=True)
                     return
 
-            if not context.author.guild_permissions.moderate_members and context.author != context.guild.owner:
+            if (
+                not context.author.guild_permissions.moderate_members
+                and context.author != context.guild.owner
+            ):
                 embed = discord.Embed(
                     title="Missing Permissions!",
                     description="You don't have the `Timeout Members` permission to use this command.",
                     color=0xE02B2B,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+                ).set_author(
+                    name="Moderation",
+                    icon_url="https://yes.nighty.works/raw/CPKHQd.png",
+                )
                 await context.send(embed=embed, ephemeral=True)
                 return
 
@@ -54,7 +69,10 @@ def timeout_command():
                     title="Cannot Timeout User",
                     description="This user has a higher or equal role to me. Make sure my role is above theirs.",
                     color=0xE02B2B,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+                ).set_author(
+                    name="Moderation",
+                    icon_url="https://yes.nighty.works/raw/CPKHQd.png",
+                )
                 await context.send(embed=embed, ephemeral=True)
                 return
 
@@ -64,7 +82,10 @@ def timeout_command():
                         title="Cannot Timeout User",
                         description="You cannot timeout this user as they have a higher or equal role to you.",
                         color=0xE02B2B,
-                    ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+                    ).set_author(
+                        name="Moderation",
+                        icon_url="https://yes.nighty.works/raw/CPKHQd.png",
+                    )
                     await context.send(embed=embed, ephemeral=True)
                     return
 
@@ -74,7 +95,10 @@ def timeout_command():
                     title="Invalid Duration",
                     description="Choose one of: 60 secs, 5 mins, 10 mins, 1 hour, 1 day, 1 week.",
                     color=0xE02B2B,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+                ).set_author(
+                    name="Moderation",
+                    icon_url="https://yes.nighty.works/raw/CPKHQd.png",
+                )
                 await context.send(embed=embed, ephemeral=True)
                 return
 
@@ -89,9 +113,14 @@ def timeout_command():
                     title="Timeout",
                     description=f"**{user}** was timed out by **{context.author}**!",
                     color=0x7289DA,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+                ).set_author(
+                    name="Moderation",
+                    icon_url="https://yes.nighty.works/raw/CPKHQd.png",
+                )
                 embed.add_field(name="Reason:", value=reason)
-                embed.add_field(name="Duration:", value=_format_duration(duration), inline=False)
+                embed.add_field(
+                    name="Duration:", value=_format_duration(duration), inline=False
+                )
                 await context.send(embed=embed)
 
             except discord.Forbidden:
@@ -99,21 +128,30 @@ def timeout_command():
                     title="Error!",
                     description="I don't have permission to timeout this user. Make sure my role is above theirs.",
                     color=0xE02B2B,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+                ).set_author(
+                    name="Moderation",
+                    icon_url="https://yes.nighty.works/raw/CPKHQd.png",
+                )
                 await context.send(embed=embed, ephemeral=True)
             except discord.HTTPException as e:
                 embed = discord.Embed(
                     title="Error!",
                     description=f"Discord API error: {str(e)}",
                     color=0xE02B2B,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+                ).set_author(
+                    name="Moderation",
+                    icon_url="https://yes.nighty.works/raw/CPKHQd.png",
+                )
                 await context.send(embed=embed, ephemeral=True)
             except Exception as e:
                 embed = discord.Embed(
                     title="Debug Error!",
                     description=f"Error type: {type(e).__name__}\nError message: {str(e)}",
                     color=0xE02B2B,
-                ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+                ).set_author(
+                    name="Moderation",
+                    icon_url="https://yes.nighty.works/raw/CPKHQd.png",
+                )
                 await context.send(embed=embed, ephemeral=True)
 
         except Exception:
@@ -121,13 +159,19 @@ def timeout_command():
                 title="Error!",
                 description="An unexpected error occurred.",
                 color=0xE02B2B,
-            ).set_author(name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png")
+            ).set_author(
+                name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png"
+            )
             await context.send(embed=embed, ephemeral=True)
 
     @timeout.autocomplete("duration")
     async def duration_autocomplete(interaction: discord.Interaction, current: str):
         query = (current or "").lower()
-        filtered = [c for c in DURATION_CHOICES if query in c.name.lower() or query in c.value.lower()]
+        filtered = [
+            c
+            for c in DURATION_CHOICES
+            if query in c.name.lower() or query in c.value.lower()
+        ]
         return filtered[:25]
 
     return timeout
@@ -172,5 +216,3 @@ def _format_duration(duration: str) -> str:
         return f"{value} seconds"
     except Exception:
         return duration
-
-
