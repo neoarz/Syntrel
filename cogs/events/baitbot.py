@@ -230,7 +230,6 @@ class BaitBotListener(commands.Cog):
 
         message_content = message.content if message.content else "*No text content*"
         message_attachments = message.attachments
-        message_embeds = message.embeds
 
         try:
             await message.delete()
@@ -344,27 +343,6 @@ class BaitBotListener(commands.Cog):
 
                     if image_url:
                         log_embed.set_image(url=image_url)
-
-                    if message_embeds:
-                        embed_info = []
-                        for embed in message_embeds[:3]:
-                            embed_desc = f"**Embed:** {embed.title or 'Untitled'}\n"
-                            if embed.description:
-                                desc_text = (
-                                    embed.description[:200] + "..."
-                                    if len(embed.description) > 200
-                                    else embed.description
-                                )
-                                embed_desc += f"{desc_text}\n"
-                            if embed.url:
-                                embed_desc += f"[Link]({embed.url})"
-                            embed_info.append(embed_desc)
-                        if embed_info:
-                            log_embed.add_field(
-                                name="Embeds",
-                                value="\n\n".join(embed_info),
-                                inline=False,
-                            )
 
                     log_embed.set_footer(text=f"Message ID: {message.id}")
 
