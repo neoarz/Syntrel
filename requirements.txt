@@ -1,6 +1,6 @@
 aiohttp
 aiosqlite
-discord.py==2.6.3
+discord.py
 python-dotenv
 yt-dlp
 Pillow
