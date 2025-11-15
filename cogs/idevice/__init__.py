@@ -30,26 +30,6 @@ class Idevice(commands.GroupCog, name="idevice"):
         view = ideviceView(self.bot)
         await context.send(embed=embed, view=view)
 
-    @idevice_group.command(name="help")
-    async def idevice_group_help(self, context: Context):
-        embed = discord.Embed(
-            title="idevice Commands",
-            description="Choose a command from the dropdown below to get help with specific issues:",
-            color=0xFA8C4A,
-        )
-        embed.set_author(
-            name="idevice", icon_url="https://yes.nighty.works/raw/snLMuO.png"
-        )
-        view = ideviceView(self.bot)
-        await context.send(embed=embed, view=view)
-
-    async def _invoke_hybrid(self, context: Context, name: str):
-        command = self.bot.get_command(name)
-        if command is not None:
-            await context.invoke(command)
-        else:
-            await context.send(f"Unknown idevice command: {name}")
-
     def _require_group_prefix(context: Context) -> bool:
         if getattr(context, "interaction", None):
             return True
@@ -59,22 +39,6 @@ class Idevice(commands.GroupCog, name="idevice"):
         prefix = context.prefix or ""
         content = context.message.content.strip().lower()
         return content.startswith(f"{prefix}{group} ")
-
-    @idevice_group.command(name="errorcodes")
-    async def idevice_group_errorcodes(self, context: Context):
-        await self._invoke_hybrid(context, "errorcodes")
-
-    @idevice_group.command(name="developermode")
-    async def idevice_group_developermode(self, context: Context):
-        await self._invoke_hybrid(context, "developermode")
-
-    @idevice_group.command(name="noapps")
-    async def idevice_group_noapps(self, context: Context):
-        await self._invoke_hybrid(context, "noapps")
-
-    @idevice_group.command(name="mountddi")
-    async def idevice_group_mountddi(self, context: Context):
-        await self._invoke_hybrid(context, "mountddi")
 
     @app_commands.command(name="help", description="idevice troubleshooting help")
     async def help(self, interaction: discord.Interaction):
@@ -94,7 +58,7 @@ class Idevice(commands.GroupCog, name="idevice"):
         name="errorcodes", description="Look up error codes and their meanings."
     )
     async def errorcodes(self, context, *, error_code: str = None):
-        return await errorcodes_command()(self, context, error_code=error_code)
+        return await errorcodes_command()(self, context, name=error_code)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
