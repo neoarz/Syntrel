@@ -280,6 +280,6 @@ if __name__ == "__main__":
     try:
         bot.run(os.getenv("TOKEN"))
     except KeyboardInterrupt:
-        pass
-    except Exception:
-        pass
+        logger.info("Received keyboard interrupt")
+    except Exception as e:
+        logger.critical(f"Fatal error during bot execution: {type(e).__name__}: {e}")
