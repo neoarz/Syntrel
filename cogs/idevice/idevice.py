@@ -172,7 +172,7 @@ class ideviceSelect(discord.ui.Select):
 
                 success_embed = discord.Embed(
                     title="Command Executed",
-                    description="Successfully executed `/errorcodes`. Please run /[errorcode_name] to get more information about an error code, and send it in chat",
+                    description="Successfully executed `/errorcodes`. Please run /[errorcode_number] to get more information about an error code, and send it in chat",
                     color=0x00FF00,
                 )
                 success_embed.set_author(

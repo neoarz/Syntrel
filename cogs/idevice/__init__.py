@@ -30,6 +30,29 @@ class Idevice(commands.GroupCog, name="idevice"):
         view = ideviceView(self.bot)
         await context.send(embed=embed, view=view)
 
+    @idevice_group.command(name="errorcodes")
+    async def idevice_group_errorcodes(self, context: Context, *, error_code: str = None):
+        await self._invoke_hybrid(context, "errorcodes", error_code=error_code)
+
+    @idevice_group.command(name="developermode")
+    async def idevice_group_developermode(self, context: Context):
+        await self._invoke_hybrid(context, "developermode")
+
+    @idevice_group.command(name="noapps")
+    async def idevice_group_noapps(self, context: Context):
+        await self._invoke_hybrid(context, "noapps")
+
+    @idevice_group.command(name="mountddi")
+    async def idevice_group_mountddi(self, context: Context):
+        await self._invoke_hybrid(context, "mountddi")
+
+    async def _invoke_hybrid(self, context: Context, name: str, **kwargs):
+        command = self.bot.get_command(name)
+        if command is not None:
+            await context.invoke(command, **kwargs)
+        else:
+            await context.send(f"Unknown idevice command: {name}")
+
     def _require_group_prefix(context: Context) -> bool:
         if getattr(context, "interaction", None):
             return True

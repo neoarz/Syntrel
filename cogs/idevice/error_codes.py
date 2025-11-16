@@ -43,6 +43,8 @@ def errorcodes_command():
             try:
                 num = int(name)
                 key = code_to_key.get(num)
+                if key is None and num > 0:
+                    key = code_to_key.get(-num)
             except ValueError:
                 key = None
         if key is None or key not in key_to_data:
