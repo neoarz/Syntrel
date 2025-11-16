@@ -3,7 +3,6 @@ import os
 import discord
 from discord import app_commands
 from discord.ext import commands
-from discord.ext.commands import Context
 
 
 def errorcodes_command():
@@ -11,7 +10,16 @@ def errorcodes_command():
         name="errorcodes", description="Look up an idevice error code by name or number"
     )
     @app_commands.describe(name="Start typing to search all error names and codes")
-    async def errorcodes(self, context, name: str):
+    async def errorcodes(self, context, name: str | None = None):
+        if name is None:
+            if context.interaction:
+                await context.interaction.response.send_message(
+                    "Please provide an error code.", ephemeral=True
+                )
+            else:
+                await context.send("Please provide an error code.")
+            return
+
         def load_errors():
             json_path = os.path.join(os.path.dirname(__file__), "files/errorcodes.json")
             try:
@@ -35,6 +43,8 @@ def errorcodes_command():
             try:
                 num = int(name)
                 key = code_to_key.get(num)
+                if key is None and num > 0:
+                    key = code_to_key.get(-num)
             except ValueError:
                 key = None
         if key is None or key not in key_to_data:
