@@ -76,7 +76,7 @@ class Livecontainer(commands.GroupCog, name="livecontainer"):
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
-        name="26jit", description="26JIT information"
+        name="26jit", description="Interactive walkthrough for iOS 26 JIT and sideloading"
     )
     async def jit26(self, context):
         return await jit26_command()(self, context)
