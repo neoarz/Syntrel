@@ -8,7 +8,7 @@ class LivecontainerSelect(discord.ui.Select):
             discord.SelectOption(
                 label="iOS 26 JIT & Sideloading",
                 value="26jit",
-                description="Interactive walkthrough for iOS 26 JIT and sideloading",
+                description="Walkthrough for iOS 26 JIT and sideloading",
             ),
         ]
         super().__init__(placeholder="Choose a LiveContainer command...", options=options)
