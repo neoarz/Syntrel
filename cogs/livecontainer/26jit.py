@@ -1,5 +1,4 @@
 import discord
-from discord.ext import commands
 from discord.ext.commands import Context
 
 
@@ -9,6 +8,9 @@ def jit26_command():
             title="Hello World",
             description="hello world",
             color=0x0169FF,
+        )
+        embed.set_author(
+            name="26JIT", icon_url="https://raw.githubusercontent.com/LiveContainer/LiveContainer/main/screenshots/livecontainer_icon.png"
         )
         
         if context.interaction:
