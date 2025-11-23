@@ -57,4 +57,3 @@ def upgrade_command():
             await context.send(embed=embed, view=view)
 
     return upgrade
-

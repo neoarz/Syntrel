@@ -1,9 +1,8 @@
 import discord
-from discord import app_commands
 from discord.ext import commands
 
 
-class FeedbackForm(discord.ui.Modal, title="Feeedback"):
+class FeedbackForm(discord.ui.Modal, title="Feedback"):
     feedback = discord.ui.TextInput(
         label="What do you think about this bot?",
         style=discord.TextStyle.long,

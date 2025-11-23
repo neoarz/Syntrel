@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from discord.ext.commands import Context
 
 
 def labubu_command():
@@ -52,7 +51,7 @@ def labubu_command():
         embed.set_author(
             name="Labubu", icon_url="https://yes.nighty.works/raw/YxMC0r.png"
         )
-        embed.set_footer(text=f"May look broken on mobile")
+        embed.set_footer(text="May look broken on mobile")
 
         if getattr(context, "interaction", None):
             inter = context.interaction

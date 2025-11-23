@@ -1,6 +1,5 @@
 import asyncio
 import io
-import tempfile
 from typing import Optional
 
 import discord

@@ -1,7 +1,6 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from discord.ext.commands import Context
 
 
 def ban_command():
@@ -222,7 +221,7 @@ def ban_command():
                 )
                 await context.send(embed=embed, ephemeral=True)
 
-        except Exception as e:
+        except Exception:
             embed = discord.Embed(
                 title="Error!",
                 description="An unexpected error occurred.",

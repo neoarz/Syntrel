@@ -31,7 +31,9 @@ class Idevice(commands.GroupCog, name="idevice"):
         await context.send(embed=embed, view=view)
 
     @idevice_group.command(name="errorcodes")
-    async def idevice_group_errorcodes(self, context: Context, *, error_code: str = None):
+    async def idevice_group_errorcodes(
+        self, context: Context, *, error_code: str = None
+    ):
         await self._invoke_hybrid(context, "errorcodes", error_code=error_code)
 
     @idevice_group.command(name="developermode")

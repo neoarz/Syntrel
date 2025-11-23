@@ -1,10 +1,8 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from discord.ext.commands import Context
 import aiohttp
 import re
-import json
 
 
 def codepreview_command():

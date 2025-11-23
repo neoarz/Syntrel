@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # From https://github.com/neoarz/Velora/blob/main/Velora/ui/ascii.py
 
-import math
 
 
 def gradient_text(text, start_color, end_color):

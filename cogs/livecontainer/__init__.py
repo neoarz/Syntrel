@@ -22,7 +22,8 @@ class Livecontainer(commands.GroupCog, name="livecontainer"):
             color=0x0169FF,
         )
         embed.set_author(
-            name="LiveContainer", icon_url="https://raw.githubusercontent.com/LiveContainer/LiveContainer/main/screenshots/livecontainer_icon.png"
+            name="LiveContainer",
+            icon_url="https://raw.githubusercontent.com/LiveContainer/LiveContainer/main/screenshots/livecontainer_icon.png",
         )
         view = LivecontainerView(self.bot)
         await context.send(embed=embed, view=view)
@@ -35,7 +36,8 @@ class Livecontainer(commands.GroupCog, name="livecontainer"):
             color=0x0169FF,
         )
         embed.set_author(
-            name="LiveContainer", icon_url="https://raw.githubusercontent.com/LiveContainer/LiveContainer/main/screenshots/livecontainer_icon.png"
+            name="LiveContainer",
+            icon_url="https://raw.githubusercontent.com/LiveContainer/LiveContainer/main/screenshots/livecontainer_icon.png",
         )
         view = LivecontainerView(self.bot)
         await context.send(embed=embed, view=view)
@@ -69,7 +71,8 @@ class Livecontainer(commands.GroupCog, name="livecontainer"):
             color=0x0169FF,
         )
         embed.set_author(
-            name="LiveContainer", icon_url="https://raw.githubusercontent.com/LiveContainer/LiveContainer/main/screenshots/livecontainer_icon.png"
+            name="LiveContainer",
+            icon_url="https://raw.githubusercontent.com/LiveContainer/LiveContainer/main/screenshots/livecontainer_icon.png",
         )
         view = LivecontainerView(self.bot)
         await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
@@ -88,4 +91,3 @@ async def setup(bot) -> None:
 
     bot.logger.info("Loaded extension 'livecontainer.help'")
     bot.logger.info("Loaded extension 'livecontainer.26jit'")
-

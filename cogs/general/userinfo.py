@@ -2,10 +2,8 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 import aiohttp
-import asyncio
 from io import BytesIO
 from PIL import Image
-import re
 from datetime import datetime, timezone
 
 ONE_MONTH = 2628000

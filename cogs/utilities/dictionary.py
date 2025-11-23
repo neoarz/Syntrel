@@ -1,7 +1,6 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from discord.ext.commands import Context
 import aiohttp
 
 
@@ -38,7 +37,7 @@ def dictionary_command():
                         }
         except aiohttp.ClientError:
             return {"success": False, "error": "Network error occurred"}
-        except Exception as e:
+        except Exception:
             return {"success": False, "error": "An unexpected error occurred"}
 
     @commands.hybrid_command(
@@ -124,7 +123,7 @@ def dictionary_command():
         meanings = entry.get("meanings", [])
 
         embed = discord.Embed(
-            title=f"Dictionary",
+            title="Dictionary",
             description=f"**```{word_title}```**",
             color=0x7289DA,
         )

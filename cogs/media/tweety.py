@@ -267,7 +267,7 @@ class TweetyView(discord.ui.View):
 
                     os.remove(temp_file_path)
 
-        except Exception as e:
+        except Exception:
             embed = discord.Embed(
                 title="Error",
                 description="Error regenerating tweet image",
@@ -462,7 +462,7 @@ def tweety_command():
                             )
                             embed = discord.Embed(
                                 title="Tweet Generated",
-                                description=f"<:error:1424007141768822824> Tweet sometimes may look a bit broken, im gonna rewrite the API another time... (it wasnt made for Syntrel in the first place)",
+                                description="<:error:1424007141768822824> Tweet sometimes may look a bit broken, im gonna rewrite the API another time... (it wasnt made for Syntrel in the first place)",
                                 color=0x7289DA,
                             )
                             embed.set_author(
@@ -491,7 +491,7 @@ def tweety_command():
                     await processing_msg.delete()
                     embed = discord.Embed(
                         title="Error",
-                        description=f"Connection error: Could not reach tweet API",
+                        description="Connection error: Could not reach tweet API",
                         color=0xE02B2B,
                     )
                     embed.set_author(

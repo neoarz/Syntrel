@@ -1,5 +1,4 @@
 import random
-from itertools import repeat
 import discord
 from discord.ext import commands
 import asyncio
@@ -62,21 +61,21 @@ class RowButton(discord.ui.Button):
 
             def checkpos(count, rawpos, pos):
                 pos = view.GetBoardPos(rawpos)
-                if not rawpos - 1 in self.bombs or pos == 0:
+                if rawpos - 1 not in self.bombs or pos == 0:
                     count.append(rawpos - 1)
-                if not rawpos + 1 in self.bombs or pos == 4:
+                if rawpos + 1 not in self.bombs or pos == 4:
                     count.append(rawpos + 1)
-                if not rawpos - 6 in self.bombs or pos == 0:
+                if rawpos - 6 not in self.bombs or pos == 0:
                     count.append(rawpos - 6)
-                if not rawpos - 4 in self.bombs or pos == 4:
+                if rawpos - 4 not in self.bombs or pos == 4:
                     count.append(rawpos - 4)
-                if not rawpos + 6 in self.bombs or pos == 4:
+                if rawpos + 6 not in self.bombs or pos == 4:
                     count.append(rawpos + 6)
-                if not rawpos + 4 in self.bombs or pos == 0:
+                if rawpos + 4 not in self.bombs or pos == 0:
                     count.append(rawpos + 4)
-                if not rawpos - 5 in self.bombs:
+                if rawpos - 5 not in self.bombs:
                     count.append(rawpos - 5)
-                if not rawpos + 5 in self.bombs:
+                if rawpos + 5 not in self.bombs:
                     count.append(rawpos + 5)
                 return count
 

@@ -1,8 +1,5 @@
 import discord
-from discord import app_commands
 from discord.ext import commands
-from discord.ext.commands import Context
-import time
 
 
 def half_command():
@@ -29,7 +26,7 @@ def half_command():
             name="SideStore",
             icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true",
         )
-        embed.set_footer(text=f"Last Edited by CelloSerenity")
+        embed.set_footer(text="Last Edited by CelloSerenity")
         embed.timestamp = discord.utils.utcnow()
 
         view = discord.ui.View()

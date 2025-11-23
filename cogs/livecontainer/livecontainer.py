@@ -11,7 +11,9 @@ class LivecontainerSelect(discord.ui.Select):
                 description="Walkthrough for iOS 26 JIT and sideloading",
             ),
         ]
-        super().__init__(placeholder="Choose a LiveContainer command...", options=options)
+        super().__init__(
+            placeholder="Choose a LiveContainer command...", options=options
+        )
 
     async def callback(self, interaction: discord.Interaction):
         command_name = self.values[0]

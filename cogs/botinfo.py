@@ -4,7 +4,6 @@ from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 from datetime import datetime
-import time
 import pytz
 from utils.contributors import generate_contributors_image
 

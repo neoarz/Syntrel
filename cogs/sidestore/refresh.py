@@ -1,8 +1,5 @@
 import discord
-from discord import app_commands
 from discord.ext import commands
-from discord.ext.commands import Context
-import time
 
 
 def refresh_command():
@@ -24,7 +21,7 @@ def refresh_command():
             name="SideStore",
             icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true",
         )
-        embed.set_footer(text=f"Last Edited by neoarz")
+        embed.set_footer(text="Last Edited by neoarz")
         embed.timestamp = discord.utils.utcnow()
 
         view = discord.ui.View()

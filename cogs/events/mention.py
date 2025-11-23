@@ -35,5 +35,3 @@ class MentionListener(commands.Cog):
                     self.bot.logger.debug(
                         f"Failed to react with fallback emoji: {fallback_error}"
                     )
-
-

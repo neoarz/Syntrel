@@ -92,7 +92,7 @@ class Logs(commands.Cog, name="logs"):
             selected_lines = all_lines[-lines:] if len(all_lines) > lines else all_lines
             log_content = "".join(selected_lines)
 
-            log_file = f"logs.txt"
+            log_file = "logs.txt"
             with open(log_file, "w", encoding="utf-8") as f:
                 f.write(
                     f"Bot logs extracted at {discord.utils.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC\n"
