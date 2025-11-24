@@ -36,7 +36,7 @@ def sparse_command():
             discord.ui.Button(
                 label="Documentation",
                 style=discord.ButtonStyle.primary,
-                url="https://docs.sidestore.io/docs/advanced/sparserestore",
+                url="https://docs.sidestore.io/docs/advanced/alternative#sparserestore-3-app-limit",
                 emoji="<:sidestorepride:1417717648795631787>",
             )
         )
