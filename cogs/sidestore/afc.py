@@ -36,7 +36,7 @@ def afc_command():
             discord.ui.Button(
                 label="Documentation",
                 style=discord.ButtonStyle.primary,
-                url="https://docs.sidestore.io/docs/troubleshooting/common-issues#afc-connection-failure",
+                url="https://docs.sidestore.io/docs/troubleshooting/common-issues/#afc-connection-failure--no-wi-fi-or-vpn-connection",
                 emoji="<:sidestorepride:1417717648795631787>",
             )
         )
