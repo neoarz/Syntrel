@@ -8,7 +8,7 @@ def jit26_command():
             color=0x0169FF,
             description=(
                 "# iOS 26 JIT & Sideloading Walkthrough\n\n---\n\n"
-                "Click the [button below](https://github.com/CelloSerenity/iOS-26-Sideloading-and-JIT-Complete-Walkthrough) to get started with iOS 26 JIT and sideloading."
+                "Click the [button below](https://github.com/CelloSerenity/iOS-26-Sideloading-and-JIT-Complete-Walkthrough) to set up sideloading and enabling JIT for LiveContainer on iOS 26."
             ),
         )
         embed.set_author(
