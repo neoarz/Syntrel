@@ -13,8 +13,8 @@ def refresh_command():
                 "# Can't Refresh or Install Apps\n\n---\n\n"
                 + "1. Make sure your device is connected to a stable Wi-Fi network and not using cellular data.\n"
                 + "2. Verify VPN is connected in the StosVPN app.\n"
-                + "3. **Create a brand new pairing file.**\n"
-                + "   - If none of the above worked, it is very likely that the pairing file is corrupted. You can reference the documentation on how to create a new pairing file [here](https://docs.sidestore.io/docs/installation/pairing-file).\n"
+                + "3. **Replace your pairing file.**\n"
+                + "   - If none of the above worked, it is very likely that the pairing file is corrupted. You can reference the documentation on how to replace your pairing file [here](https://docs.sidestore.io/docs/advanced/pairing-file).\n"
             ),
         )
         embed.set_author(
@@ -37,7 +37,7 @@ def refresh_command():
             discord.ui.Button(
                 label="Documentation",
                 style=discord.ButtonStyle.primary,
-                url="https://docs.sidestore.io/docs/installation/pairing-file",
+                url="https://docs.sidestore.io/docs/advanced/pairing-file",
                 emoji="<:sidestorepride:1417717648795631787>",
             )
         )

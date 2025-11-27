@@ -47,7 +47,7 @@ def pairing_command():
             discord.ui.Button(
                 label="Documentation",
                 style=discord.ButtonStyle.primary,
-                url="https://docs.sidestore.io/docs/troubleshooting/#cannot-choose-pairing-file",
+                url="https://docs.sidestore.io/docs/advanced/pairing-file",
                 emoji="<:sidestorepride:1417717648795631787>",
             )
         )

@@ -13,7 +13,7 @@ def afc_command():
                 "# AFC Connection Failure\n\n---\n\n"
                 + "1. Make sure Wi-Fi is connected to a stable network\n"
                 + "2. Make sure StosVPN is connected and updated\n"
-                + "3. If issue still persists, create and import a new pairing file using `idevice_pair`. See [Pairing File instructions](https://docs.sidestore.io/docs/installation/pairing-file) for details"
+                + "3. If issue still persists, replace pairing file using `iloader`. See [Pairing File instructions](https://docs.sidestore.io/docs/advanced/pairing-file) for details"
             ),
         )
         embed.set_author(
@@ -36,7 +36,7 @@ def afc_command():
             discord.ui.Button(
                 label="Documentation",
                 style=discord.ButtonStyle.primary,
-                url="https://docs.sidestore.io/docs/troubleshooting/common-issues#afc-connection-failure",
+                url="https://docs.sidestore.io/docs/troubleshooting/common-issues/#afc-connection-failure--no-wi-fi-or-vpn-connection",
                 emoji="<:sidestorepride:1417717648795631787>",
             )
         )

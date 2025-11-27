@@ -18,7 +18,7 @@ def half_command():
                 + "- Change Anisette Server\n"
                 + "- Reset adi.pb\n"
                 + "- Sign out from SideStore and sign back in\n"
-                + "- Recreate pairing file\n"
+                + "- Replace pairing file\n"
                 + "- Reinstall SideStore\n\n"
             ),
         )
@@ -42,7 +42,7 @@ def half_command():
             discord.ui.Button(
                 label="Documentation",
                 style=discord.ButtonStyle.primary,
-                url="https://docs.sidestore.io/docs/troubleshooting/common-issues#sidestore-hangs-halfway-through-installation",
+                url="https://docs.sidestore.io/docs/troubleshooting/common-issues/#sidestore-hangs-partway-through-installation",
                 emoji="<:sidestorepride:1417717648795631787>",
             )
         )
