@@ -11,17 +11,21 @@ def mountddi_command():
         embed = discord.Embed(
             color=0xFA8C4A,
             description=(
-                "# How to Manually Mount DDI\n\n---\n\n"
+                "# How to Mount your DDI (Developer Disk Image):\n\n---\n\n"
+                "1. Ensure you are connected to StikDebug's VPN and Wi-Fi.*\n"
+                "2. Force close StikDebug from the app switcher, then repon it.*\n"
+                "## This should resolve your error! Remember, this must be done every time you restart your device.:*\n"
+                "If it doesn't work after a couple tries or you live in a country where github.com is blocked, try the steps below to manually mount the DDI:*\n"
                 "1. **Download the DDI.zip file attached above:**\n"
                 "   - Save it to your device and extract the contents\n\n"
                 "2. **Replace the DDI folder in StikDebug:**\n"
                 "   - Navigate to the StikDebug default directory on your iPhone/iPad\n"
                 "   - Delete the existing DDI folder completely\n"
-                "   - Replace it with the DDI folder from the downloaded zip\n"
-                "   - Make sure it's in the StikDebug default directory\n\n"
+                "   - Replace it with the DDI folder from uncompressing the downloaded zip\n"
+                "   - Make sure it's in StikDebug's default directory\n\n"
                 "3. **Restart and retry:**\n"
                 "   - Completely restart StikDebug\n"
-                "   - See if you get the same error again\n\n"
+                "   - If you still get the same error, ask the idevice server for more help\n\n"
             ),
         )
         embed.set_author(
