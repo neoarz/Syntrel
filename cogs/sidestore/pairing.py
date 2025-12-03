@@ -4,27 +4,14 @@ from discord.ext import commands
 
 def pairing_command():
     @commands.hybrid_command(
-        name="pairing", description="Help with pairing file issues"
+        name="pairing", description="Link to the pairing guide"
     )
     async def pairing(self, context):
         embed = discord.Embed(
             color=0x8E82F9,
             description=(
-                "# Cannot Choose Pairing File\n\n---\n\n"
-                + "1. **Check File Extension:**\n"
-                + "   Make sure your pairing file's extension ends with `.mobiledevicepairing` or `.plist`\n"
-                + "   - If it doesn't, double-check to see if you had zipped your pairing file before sending it to your phone. Failing to do so may lead to the file being corrupted during transport\n\n"
-                + "2. **Move Pairing File:**\n"
-                + "   If you are unable to select the pairing file from within the app:\n"
-                + "   - Rename the file to `ALTPairingFile.mobiledevicepairing`\n"
-                + '   - Try moving the pairing file to the root directory of the SideStore folder in the Files app under "On My iPhone/iPad"\n\n'
-                + "3. **Certificate Signing:**\n"
-                + "   When signing SideStore with certain certificates, you won't be able to select the pairing file from within the app\n"
-                + "   - Try the fix mentioned above\n"
-                + "   - If you do not see the SideStore folder in the Files app:\n"
-                + "     • Connect your phone to your computer\n"
-                + "     • Drag and drop the pairing file into the SideStore app's files section\n"
-                + "     • Ensure the file is renamed to `ALTPairingFile.mobiledevicepairing`\n"
+                "# How to obtain your pairing file:\n\n---\n\n"
+                + "[Click here](https://docs.sidestore.io/advanced/pairing-file) to read the SideStore documentation on replacing your pairing file.**\n"
             ),
         )
         embed.set_author(
