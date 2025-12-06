@@ -12,7 +12,7 @@ def refresh_command():
             description=(
                 "# Can't Refresh or Install Apps\n\n---\n\n"
                 + "1. Make sure your device is connected to a stable Wi-Fi network and not using cellular data.\n"
-                + "2. Verify VPN is connected in the StosVPN app.\n"
+                + "2. Verify VPN is connected in the LocalDevVPN app.\n"
                 + "3. **Replace your pairing file.**\n"
                 + "   - If none of the above worked, it is very likely that the pairing file is corrupted. You can reference the documentation on how to replace your pairing file [here](https://docs.sidestore.io/docs/advanced/pairing-file).\n"
             ),
@@ -21,7 +21,7 @@ def refresh_command():
             name="SideStore",
             icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true",
         )
-        embed.set_footer(text="Last Edited by neoarz")
+        embed.set_footer(text="Last Edited by CelloSerenity")
         embed.timestamp = discord.utils.utcnow()
 
         view = discord.ui.View()

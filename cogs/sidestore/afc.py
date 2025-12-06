@@ -12,7 +12,7 @@ def afc_command():
             description=(
                 "# AFC Connection Failure\n\n---\n\n"
                 + "1. Make sure Wi-Fi is connected to a stable network\n"
-                + "2. Make sure StosVPN is connected and updated\n"
+                + "2. Make sure LocalDevVPN is connected and updated\n"
                 + "3. If issue still persists, replace pairing file using `iloader`. See [Pairing File instructions](https://docs.sidestore.io/docs/advanced/pairing-file) for details"
             ),
         )
