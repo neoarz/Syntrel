@@ -1,7 +1,9 @@
 import discord
 from discord.ext import commands
 import os
-
+import aiohttp
+import shutil
+import tempfile
 
 def mountddi_command():
     @commands.hybrid_command(name="mountddi", description="How to manually mount DDI")
@@ -13,8 +15,8 @@ def mountddi_command():
             description=(
                 "# How to Mount your DDI (Developer Disk Image):\n\n---\n\n"
                 "1. Ensure you are connected to StikDebug's VPN and Wi-Fi.*\n"
-                "2. Force close StikDebug from the app switcher, then repon it.*\n"
-                "## This should resolve your error! Remember, this must be done every time you restart your device.:*\n"
+                "2. Force close StikDebug from the app switcher, then repon it.\n"
+                "## This should resolve your error! Remember, this must be done every time you restart your device.\n"
                 "If it doesn't work after a couple tries or you live in a country where github.com is blocked, try the steps below to manually mount the DDI:*\n"
                 "1. **Download the DDI.zip file attached above:**\n"
                 "   - Save it to your device and extract the contents\n\n"
@@ -44,16 +46,43 @@ def mountddi_command():
             )
         )
 
-        ddi_file_path = os.path.join(os.path.dirname(__file__), "files/DDI.zip")
-        file = (
-            discord.File(ddi_file_path, filename="DDI.zip")
-            if os.path.exists(ddi_file_path)
-            else None
-        )
-
-        if file:
-            await context.send(embed=embed, view=view, file=file)
-        else:
-            await context.send(embed=embed, view=view)
+        temp_dir = tempfile.mkdtemp()
+        try:
+            ddi_dir = os.path.join(temp_dir, "DDI")
+            os.makedirs(ddi_dir)
+            
+            base_url = "https://raw.githubusercontent.com/doronz88/DeveloperDiskImage/main/PersonalizedImages/Xcode_iOS_DDI_Personalized"
+            files = ["BuildManifest.plist", "Image.dmg", "Image.dmg.trustcache"]
+            
+            async with aiohttp.ClientSession() as session:
+                for filename in files:
+                    file_url = f"{base_url}/{filename}"
+                    async with session.get(file_url) as response:
+                        if response.status != 200:
+                            await context.send(f"Error: Failed to download {filename} (Status: {response.status})")
+                            return
+                        
+                        file_path = os.path.join(ddi_dir, filename)
+                        with open(file_path, "wb") as f:
+                            while True:
+                                chunk = await response.content.read(8192)
+                                if not chunk:
+                                    break
+                                f.write(chunk)
+            
+            zip_base_name = os.path.join(temp_dir, "DDI")
+            shutil.make_archive(zip_base_name, 'zip', root_dir=temp_dir, base_dir="DDI")
+            
+            zip_file_path = zip_base_name + ".zip"
+            
+            if os.path.exists(zip_file_path):
+                await context.send(embed=embed, view=view, file=discord.File(zip_file_path, filename="DDI.zip"))
+            else:
+                 await context.send("Error: Failed to create zip file.", embed=embed, view=view)
+                 
+        except Exception as e:
+            await context.send(f"An error occurred: {e}")
+        finally:
+            shutil.rmtree(temp_dir)
 
     return mountddi

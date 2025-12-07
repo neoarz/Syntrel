@@ -328,5 +328,10 @@
         "name": "malformed_package_archive",
         "description": "malformed package archive",
         "code": -67
+    },
+    {
+        "name": "developer_mode_not_enabled",
+        "description": "Developer mode is not enabled",
+        "code": -68
     }
 ]
