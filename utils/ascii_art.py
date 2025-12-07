@@ -2,7 +2,6 @@
 # From https://github.com/neoarz/Velora/blob/main/Velora/ui/ascii.py
 
 
-
 def gradient_text(text, start_color, end_color):
     def rgb_interp(start, end, t):
         return tuple(int(start[i] + (end[i] - start[i]) * t) for i in range(3))
