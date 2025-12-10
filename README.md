@@ -33,7 +33,7 @@
 | events | `baitbot` |
 | miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`, `depart`, `docs` `sigma`, `duck`, `silly`, `color` |
 | utilities | `translate`, `codepreview`, `dictionary` |
-| media | `download`, `mcquote`, `img2gif`, `tweety`, `tts` |
+| media | `mcquote`, `img2gif`, `tweety`, `tts` |
 
 
 ## Download

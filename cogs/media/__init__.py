@@ -4,7 +4,6 @@ from discord.ext import commands
 from discord.ext.commands import Context
 from typing import Optional
 
-from .download import download_command
 from .mcquote import mcquote_command
 from .img2gif import img2gif_command
 from .tweety import tweety_command
@@ -63,15 +62,12 @@ class Media(commands.GroupCog, name="media"):
         )
         embed.add_field(
             name="Available",
-            value="download, mcquote, img2gif, tweety, tts",
+            value="mcquote, img2gif, tweety, tts",
             inline=False,
         )
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str, *args, **kwargs):
-        if name == "download":
-            await self.download(context, url=kwargs.get("url", ""))
-            return
         if name == "mcquote":
             await self.mcquote(context, text=kwargs.get("text", ""))
             return
@@ -85,10 +81,6 @@ class Media(commands.GroupCog, name="media"):
             await self.tts(context, text=kwargs.get("text"))
             return
         await context.send(f"Unknown media command: {name}")
-
-    @media_group.command(name="download")
-    async def media_group_download(self, context: Context, *, url: str):
-        await self._invoke_hybrid(context, "download", url=url)
 
     @media_group.command(name="mcquote")
     async def media_group_mcquote(self, context: Context, *, text: str):
@@ -107,14 +99,6 @@ class Media(commands.GroupCog, name="media"):
     @media_group.command(name="tts")
     async def media_group_tts(self, context: Context, *, text: str = None):
         await self._invoke_hybrid(context, "tts", text=text)
-
-    @commands.check(_require_group_prefix)
-    @commands.hybrid_command(
-        name="download",
-        description="Download a video from a URL using yt-dlp.",
-    )
-    async def download(self, context, *, url: str):
-        return await download_command()(self, context, url=url)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
@@ -153,7 +137,6 @@ async def setup(bot) -> None:
     cog = Media(bot)
     await bot.add_cog(cog)
 
-    bot.logger.info("Loaded extension 'media.download'")
     bot.logger.info("Loaded extension 'media.mcquote'")
     bot.logger.info("Loaded extension 'media.img2gif'")
     bot.logger.info("Loaded extension 'media.tweety'")

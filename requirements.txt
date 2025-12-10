@@ -2,7 +2,6 @@ aiohttp
 aiosqlite
 discord.py
 python-dotenv
-yt-dlp
 Pillow
 pillow-heif
 pytz
