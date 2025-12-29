@@ -11,9 +11,9 @@ STICKY_CONFIGS = {
             1454627326854692984,
         ],
         "allowed_role_id": 1432165329483857940,
-        "message": "# Example sticky message", # You can add your own markdown here
-        "footer": "This is an automated sticky message.", # This will be appended to the message and uses "-#" to format the footer
-        "delay": 5, # in seconds
+        "message": "# Example sticky message",  # You can add your own markdown here
+        "footer": "This is an automated sticky message.",  # This will be appended to the message and uses "-#" to format the footer
+        "delay": 5,  # in seconds
     },
     "SideStore": {
         "guild_id": 949183273383395328,
@@ -109,7 +109,7 @@ def stickybot_command():
                 guild_id = config.get("guild_id")
                 if context.guild and guild_id == context.guild.id:
                     channel_ids = config.get("channel_ids", [])
-                    
+
                     channel_displays = []
                     for channel_id in channel_ids:
                         channel = context.guild.get_channel(channel_id)
@@ -127,9 +127,11 @@ def stickybot_command():
                     allowed_role_id = config.get("allowed_role_id", "Not set")
                     role = context.guild.get_role(allowed_role_id)
                     role_display = (
-                        f"<@&{allowed_role_id}> (`{allowed_role_id}`)" if role else f"`{allowed_role_id}`"
+                        f"<@&{allowed_role_id}> (`{allowed_role_id}`)"
+                        if role
+                        else f"`{allowed_role_id}`"
                     )
-                    
+
                     message_content = config.get("message", "*No message set*")
                     if len(message_content) > 100:
                         message_content = message_content[:97] + "..."
@@ -166,17 +168,24 @@ class StickyBotListener(commands.Cog):
         try:
             active_config = None
             for config in STICKY_CONFIGS.values():
-                if channel.guild.id == config.get("guild_id") and channel.id in config.get("channel_ids", []):
+                if channel.guild.id == config.get(
+                    "guild_id"
+                ) and channel.id in config.get("channel_ids", []):
                     active_config = config
                     break
 
             if not active_config:
                 return
 
-            target_footer = active_config.get("footer", "This is an automated sticky message.")
+            target_footer = active_config.get(
+                "footer", "This is an automated sticky message."
+            )
 
             async for message in channel.history(limit=20):
-                if message.author.id == self.bot.user.id and target_footer in message.content:
+                if (
+                    message.author.id == self.bot.user.id
+                    and target_footer in message.content
+                ):
                     await message.delete()
         except Exception as e:
             self.bot.logger.warning(
@@ -280,9 +289,7 @@ class StickyBotListener(commands.Cog):
                 if self.debounce_tasks.get(channel_id) == asyncio.current_task():
                     del self.debounce_tasks[channel_id]
 
-        self.debounce_tasks[channel_id] = self.bot.loop.create_task(
-            debounce_wrapper()
-        )
+        self.debounce_tasks[channel_id] = self.bot.loop.create_task(debounce_wrapper())
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):

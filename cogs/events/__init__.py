@@ -5,7 +5,11 @@ from discord.ext.commands import Context
 
 from .baitbot import baitbot_command, BaitBotListener, has_protected_role
 from .mention import MentionListener
-from .stickybot import stickybot_command, StickyBotListener, has_allowed_role as has_sticky_role
+from .stickybot import (
+    stickybot_command,
+    StickyBotListener,
+    has_allowed_role as has_sticky_role,
+)
 
 
 def _require_group_prefix(context: Context) -> bool:
@@ -36,9 +40,7 @@ class Events(commands.GroupCog, name="events"):
         embed.set_author(
             name="Events", icon_url="https://yes.nighty.works/raw/eW5lLm.webp"
         )
-        embed.add_field(
-            name="Available", value="baitbot, stickybot", inline=False
-        )
+        embed.add_field(name="Available", value="baitbot, stickybot", inline=False)
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str, **kwargs):
