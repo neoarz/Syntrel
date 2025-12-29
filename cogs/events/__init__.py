@@ -5,6 +5,7 @@ from discord.ext.commands import Context
 
 from .baitbot import baitbot_command, BaitBotListener, has_protected_role
 from .mention import MentionListener
+from .stickybot import stickybot_command, StickyBotListener, has_allowed_role as has_sticky_role
 
 
 def _require_group_prefix(context: Context) -> bool:
@@ -35,7 +36,9 @@ class Events(commands.GroupCog, name="events"):
         embed.set_author(
             name="Events", icon_url="https://yes.nighty.works/raw/eW5lLm.webp"
         )
-        embed.add_field(name="Available", value="baitbot", inline=False)
+        embed.add_field(
+            name="Available", value="baitbot, stickybot", inline=False
+        )
         await context.send(embed=embed)
 
     async def _invoke_hybrid(self, context: Context, name: str, **kwargs):
@@ -50,6 +53,11 @@ class Events(commands.GroupCog, name="events"):
     async def events_group_baitbot(self, context: Context):
         await self._invoke_hybrid(context, "baitbot")
 
+    @events_group.command(name="stickybot")
+    @has_sticky_role()
+    async def events_group_stickybot(self, context: Context):
+        await self._invoke_hybrid(context, "stickybot")
+
     @commands.check(_require_group_prefix)
     @has_protected_role()
     @commands.hybrid_command(
@@ -57,6 +65,14 @@ class Events(commands.GroupCog, name="events"):
     )
     async def baitbot(self, context):
         return await baitbot_command()(self, context)
+
+    @commands.check(_require_group_prefix)
+    @has_sticky_role()
+    @commands.hybrid_command(
+        name="stickybot", description="View sticky bot configuration and status."
+    )
+    async def stickybot(self, context):
+        return await stickybot_command()(self, context)
 
 
 async def setup(bot) -> None:
@@ -69,5 +85,9 @@ async def setup(bot) -> None:
     mention_listener = MentionListener(bot)
     await bot.add_cog(mention_listener)
 
+    sticky_bot = StickyBotListener(bot)
+    await bot.add_cog(sticky_bot)
+
     bot.logger.info("Loaded extension 'events.baitbot'")
     bot.logger.info("Loaded extension 'events.mention'")
+    bot.logger.info("Loaded extension 'events.stickybot'")
