@@ -5,6 +5,7 @@ import aiohttp
 import shutil
 import tempfile
 
+
 def mountddi_command():
     @commands.hybrid_command(name="mountddi", description="How to manually mount DDI")
     async def mountddi(self, context):
@@ -50,18 +51,20 @@ def mountddi_command():
         try:
             ddi_dir = os.path.join(temp_dir, "DDI")
             os.makedirs(ddi_dir)
-            
+
             base_url = "https://raw.githubusercontent.com/doronz88/DeveloperDiskImage/main/PersonalizedImages/Xcode_iOS_DDI_Personalized"
             files = ["BuildManifest.plist", "Image.dmg", "Image.dmg.trustcache"]
-            
+
             async with aiohttp.ClientSession() as session:
                 for filename in files:
                     file_url = f"{base_url}/{filename}"
                     async with session.get(file_url) as response:
                         if response.status != 200:
-                            await context.send(f"Error: Failed to download {filename} (Status: {response.status})")
+                            await context.send(
+                                f"Error: Failed to download {filename} (Status: {response.status})"
+                            )
                             return
-                        
+
                         file_path = os.path.join(ddi_dir, filename)
                         with open(file_path, "wb") as f:
                             while True:
@@ -69,17 +72,23 @@ def mountddi_command():
                                 if not chunk:
                                     break
                                 f.write(chunk)
-            
+
             zip_base_name = os.path.join(temp_dir, "DDI")
-            shutil.make_archive(zip_base_name, 'zip', root_dir=temp_dir, base_dir="DDI")
-            
+            shutil.make_archive(zip_base_name, "zip", root_dir=temp_dir, base_dir="DDI")
+
             zip_file_path = zip_base_name + ".zip"
-            
+
             if os.path.exists(zip_file_path):
-                await context.send(embed=embed, view=view, file=discord.File(zip_file_path, filename="DDI.zip"))
+                await context.send(
+                    embed=embed,
+                    view=view,
+                    file=discord.File(zip_file_path, filename="DDI.zip"),
+                )
             else:
-                 await context.send("Error: Failed to create zip file.", embed=embed, view=view)
-                 
+                await context.send(
+                    "Error: Failed to create zip file.", embed=embed, view=view
+                )
+
         except Exception as e:
             await context.send(f"An error occurred: {e}")
         finally:
