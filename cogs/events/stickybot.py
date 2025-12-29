@@ -11,9 +11,19 @@ STICKY_CONFIGS = {
             1454627326854692984,
         ],
         "allowed_role_id": 1432165329483857940,
-        "message": "# Please read the README in https://discord.com/channels/949183273383395328/1155736594679083089 and the documentation at <https://docs.sidestore.io> before asking your question here.", # You can add your own markdown here
+        "message": "# Example sticky message", # You can add your own markdown here
         "footer": "This is an automated sticky message.", # This will be appended to the message and uses "-#" to format the footer
         "delay": 5, # in seconds
+    },
+    "SideStore": {
+        "guild_id": 949183273383395328,
+        "channel_ids": [
+            1279548738586673202,
+        ],
+        "allowed_role_id": 949207813815697479,
+        "message": "# Please read the README in https://discord.com/channels/949183273383395328/1155736594679083089 and the documentation at <https://docs.sidestore.io> before asking your question here.",
+        "footer": "This is an automated sticky message.",
+        "delay": 5,
     },
 }
 
