@@ -11,7 +11,7 @@ STICKY_CONFIGS = {
             1454627326854692984,
         ],
         "allowed_role_id": 1432165329483857940,
-        "message": "## Please read the README in https://discord.com/channels/949183273383395328/1155736594679083089 and the documentation at <https://docs.sidestore.io> before asking your question here.", # You can add your own markdown here
+        "message": "# Please read the README in https://discord.com/channels/949183273383395328/1155736594679083089 and the documentation at <https://docs.sidestore.io> before asking your question here.", # You can add your own markdown here
         "footer": "This is an automated sticky message.", # This will be appended to the message and uses "-#" to format the footer
         "delay": 5, # in seconds
     },
@@ -153,13 +153,17 @@ class StickyBotListener(commands.Cog):
         self.debounce_tasks = {}
 
     async def delete_last_sticky(self, channel):
-        """Attempts to find and delete the last sticky message in the channel history."""
         try:
-            target_footer = "This is an automated sticky message."
+            active_config = None
             for config in STICKY_CONFIGS.values():
                 if channel.guild.id == config.get("guild_id") and channel.id in config.get("channel_ids", []):
-                    target_footer = config.get("footer", target_footer)
+                    active_config = config
                     break
+
+            if not active_config:
+                return
+
+            target_footer = active_config.get("footer", "This is an automated sticky message.")
 
             async for message in channel.history(limit=20):
                 if message.author.id == self.bot.user.id and target_footer in message.content:
@@ -181,7 +185,7 @@ class StickyBotListener(commands.Cog):
                 await old_msg.delete()
                 deleted = True
             except discord.NotFound:
-                deleted = True  # Message already deleted
+                deleted = True
             except discord.Forbidden:
                 self.bot.logger.warning(
                     f"[STICKYBOT] Missing delete permissions in #{channel.name}"
@@ -219,9 +223,6 @@ class StickyBotListener(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         await self.bot.wait_until_ready()
-        self.bot.logger.info(
-            "[STICKYBOT] Bot is ready, initializing sticky messages..."
-        )
         await self.initialize_stickies()
 
     async def initialize_stickies(self):
