@@ -8,7 +8,7 @@ STICKY_CONFIGS = {
     "neotest": {
         "guild_id": 1069946178659160076,
         "channel_ids": [
-            1454627326854692984,
+            1455338488546459789,
         ],
         "allowed_role_id": 1432165329483857940,
         "message": "# Example sticky message",  # You can add your own markdown here
@@ -21,7 +21,7 @@ STICKY_CONFIGS = {
             1279548738586673202,
         ],
         "allowed_role_id": 949207813815697479,
-        "message": "# Please read the README in https://discord.com/channels/949183273383395328/1155736594679083089 and the documentation at <https://docs.sidestore.io> before asking your question here.",
+        "message": "## Please read the README in https://discord.com/channels/949183273383395328/1155736594679083089 and the documentation at <https://docs.sidestore.io> before asking your question.",
         "footer": "This is an automated sticky message.",
         "delay": 5,
     },
@@ -133,12 +133,12 @@ def stickybot_command():
                     )
 
                     message_content = config.get("message", "*No message set*")
-                    if len(message_content) > 100:
-                        message_content = message_content[:97] + "..."
+                    footer_text = config.get("footer", "This is an automated sticky message.")
+                    full_content = f"{message_content}\n-# {footer_text}"
 
                     embed.add_field(
                         name="\u200b",
-                        value=f"**Channels:**\n{channels_text}\n\n**Allowed Role:**\n{role_display}\n\n**Message Preview:**\n{message_content}",
+                        value=f"**Channels:**\n{channels_text}\n\n**Allowed Role:**\n{role_display}\n\n**Message Preview:**\n```\n{full_content}\n```",
                         inline=False,
                     )
                     found_config = True
