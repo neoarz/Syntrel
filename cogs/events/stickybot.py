@@ -96,7 +96,7 @@ def stickybot_command():
     async def wrapper(self, context: Context):
         embed = discord.Embed(
             title="Sticky Bot",
-            description="Manages sticky messages in configured channels.",
+            description="Sends sticky messages in configured channels.",
             color=0x7289DA,
         )
         embed.set_author(
