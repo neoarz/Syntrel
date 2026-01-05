@@ -13,7 +13,7 @@ STICKY_CONFIGS = {
         "allowed_role_id": 1432165329483857940,
         "message": "# Example sticky message",  # You can add your own markdown here
         "footer": "This is an automated sticky message.",  # This will be appended to the message and uses "-#" to format the footer
-        "delay": 5,  # in seconds
+        "delay": 10,  # in seconds
     },
     "SideStore": {
         "guild_id": 949183273383395328,
@@ -23,7 +23,7 @@ STICKY_CONFIGS = {
         "allowed_role_id": 949207813815697479,
         "message": "## Please read the README in https://discord.com/channels/949183273383395328/1155736594679083089 and the documentation at <https://docs.sidestore.io> before asking your question.",
         "footer": "This is an automated sticky message.",
-        "delay": 5,
+        "delay": 10,
     },
 }
 
