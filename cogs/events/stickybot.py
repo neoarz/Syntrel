@@ -133,7 +133,9 @@ def stickybot_command():
                     )
 
                     message_content = config.get("message", "*No message set*")
-                    footer_text = config.get("footer", "This is an automated sticky message.")
+                    footer_text = config.get(
+                        "footer", "This is an automated sticky message."
+                    )
                     full_content = f"{message_content}\n-# {footer_text}"
 
                     embed.add_field(

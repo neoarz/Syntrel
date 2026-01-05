@@ -13,6 +13,7 @@ from .afc import afc_command
 from .udid import udid_command
 from .half import half_command
 from .sparse import sparse_command
+from .unofficial import unofficial_command
 
 
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
@@ -103,6 +104,10 @@ class Sidestore(commands.GroupCog, name="sidestore"):
     async def sidestore_group_sparse(self, context: Context):
         await self._invoke_hybrid(context, "sparse")
 
+    @sidestore_group.command(name="unofficial")
+    async def sidestore_group_unofficial(self, context: Context):
+        await self._invoke_hybrid(context, "unofficial")
+
     @app_commands.command(name="help", description="SideStore troubleshooting help")
     async def help(self, interaction: discord.Interaction):
         embed = discord.Embed(
@@ -180,6 +185,13 @@ class Sidestore(commands.GroupCog, name="sidestore"):
     async def sparse(self, context):
         return await sparse_command()(self, context)
 
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="unofficial", description="Unofficial guides and video walkthroughs"
+    )
+    async def unofficial(self, context):
+        return await unofficial_command()(self, context)
+
 
 async def setup(bot) -> None:
     cog = Sidestore(bot)
@@ -195,3 +207,4 @@ async def setup(bot) -> None:
     bot.logger.info("Loaded extension 'sidestore.udid'")
     bot.logger.info("Loaded extension 'sidestore.half'")
     bot.logger.info("Loaded extension 'sidestore.sparse'")
+    bot.logger.info("Loaded extension 'sidestore.unofficial'")

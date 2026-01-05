@@ -51,6 +51,11 @@ class SidestoreSelect(discord.ui.Select):
                 value="udid",
                 description="SideStore could not determine device UDID",
             ),
+            discord.SelectOption(
+                label="Unofficial Guides",
+                value="unofficial",
+                description="Unofficial guides and video walkthroughs",
+            ),
         ]
         super().__init__(placeholder="Choose a SideStore command...", options=options)
 
