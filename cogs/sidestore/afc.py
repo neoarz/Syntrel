@@ -13,7 +13,8 @@ def afc_command():
                 "# AFC Connection Failure\n\n---\n\n"
                 + "1. Make sure Wi-Fi is connected to a stable network\n"
                 + "2. Make sure LocalDevVPN is connected and updated\n"
-                + "3. If issue still persists, replace pairing file using `iloader`. See [Pairing File instructions](https://docs.sidestore.io/docs/advanced/pairing-file) for details"
+                + "3. If issue still persists, replace pairing file using `iloader`. See [Pairing File instructions](https://docs.sidestore.io/docs/advanced/pairing-file) for details\n"
+                + "-# These steps also apply to heartbeat failures from other idevice-based apps such as StikDebug."
             ),
         )
         embed.set_author(
