@@ -9,7 +9,7 @@ def pairing_command():
             color=0x8E82F9,
             description=(
                 "# How to obtain your pairing file:\n\n---\n\n"
-                + "[Click here](https://docs.sidestore.io/advanced/pairing-file) to read the SideStore documentation on replacing your pairing file.\n"
+                + "[Click here](https://docs.sidestore.io/docs/advanced/pairing-file) to read the SideStore documentation on replacing your pairing file.\n"
             ),
         )
         embed.set_author(
