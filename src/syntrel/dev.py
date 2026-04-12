@@ -30,7 +30,3 @@ def lint() -> None:
 def format() -> None:
     _run("ruff", "check", "--fix", ".")
     _run("ruff", "format", ".")
-
-
-def check() -> None:
-    lint()

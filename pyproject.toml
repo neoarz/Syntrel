@@ -12,7 +12,6 @@ dependencies = []
 syntrel = "syntrel.cli:main"
 lint = "syntrel.dev:lint"
 format = "syntrel.dev:format"
-check = "syntrel.dev:check"
 
 [build-system]
 requires = ["uv_build>=0.11.3,<0.12.0"]
