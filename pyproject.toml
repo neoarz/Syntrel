@@ -1,0 +1,35 @@
+[project]
+name = "syntrel"
+version = "0.1.0"
+description = "Clean-slate rewrite of the Syntrel Discord bot."
+authors = [
+    { name = "neoarz", email = "hi@neoarz.com" }
+]
+requires-python = ">=3.14"
+dependencies = []
+
+[project.scripts]
+syntrel = "syntrel.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.11.3,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.10",
+    "ty>=0.0.29",
+]
+
+[tool.ruff]
+target-version = "py314"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ty.environment]
+python-version = "3.14"
+
+[tool.ty.src]
+include = ["src/**/*.py", "tests/**/*.py"]

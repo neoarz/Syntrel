@@ -1,9 +1,0 @@
-aiohttp
-aiosqlite
-discord.py
-python-dotenv
-Pillow
-pillow-heif
-pytz
-gTTS
-ruff
