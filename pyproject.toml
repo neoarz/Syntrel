@@ -1,15 +1,18 @@
 [project]
 name = "syntrel"
 version = "0.1.0"
-description = "Clean-slate rewrite of the Syntrel Discord bot."
+description = "Syntrel Discord bot"
 authors = [
-    { name = "neoarz", email = "hi@neoarz.com" }
+    { name = "Nazeef", email = "neoarz@proton.me" }
 ]
 requires-python = ">=3.14"
 dependencies = []
 
 [project.scripts]
 syntrel = "syntrel.cli:main"
+lint = "syntrel.dev:lint"
+format = "syntrel.dev:format"
+check = "syntrel.dev:check"
 
 [build-system]
 requires = ["uv_build>=0.11.3,<0.12.0"]
