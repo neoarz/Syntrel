@@ -21,6 +21,17 @@ def archive_command():
         :param context: The hybrid command context.
         :param limit: The limit of messages that should be archived. Default is 10.
         """
+        if not context.author.guild_permissions.manage_messages:
+            embed = discord.Embed(
+                title="Missing Permissions!",
+                description="You are missing the permission(s) `manage_messages` to execute this command!",
+                color=0xE02B2B,
+            ).set_author(
+                name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png"
+            )
+            await context.send(embed=embed, ephemeral=True)
+            return
+
         log_file = f"{context.channel.id}.log"
 
         messages = []

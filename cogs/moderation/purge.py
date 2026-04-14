@@ -15,6 +15,28 @@ def purge_command():
         user="The user whose messages should be deleted (optional).",
     )
     async def purge(self, context, amount: int, user: discord.Member = None):
+        if not context.author.guild_permissions.manage_messages:
+            embed = discord.Embed(
+                title="Missing Permissions!",
+                description="You are missing the permission(s) `manage_messages` to execute this command!",
+                color=0xE02B2B,
+            ).set_author(
+                name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png"
+            )
+            await context.send(embed=embed, ephemeral=True)
+            return
+
+        if not context.guild.me.guild_permissions.manage_messages:
+            embed = discord.Embed(
+                title="Missing Permissions!",
+                description="I am missing the permission(s) `manage_messages` to execute this command!",
+                color=0xE02B2B,
+            ).set_author(
+                name="Moderation", icon_url="https://yes.nighty.works/raw/CPKHQd.png"
+            )
+            await context.send(embed=embed, ephemeral=True)
+            return
+
         if context.interaction:
             await context.defer(ephemeral=True)
 

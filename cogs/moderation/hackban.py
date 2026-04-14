@@ -23,6 +23,33 @@ def hackban_command():
         :param reason: The reason for the ban. Default is "Not specified".
         """
         try:
+            if (
+                not context.author.guild_permissions.ban_members
+                and context.author != context.guild.owner
+            ):
+                embed = discord.Embed(
+                    title="Missing Permissions!",
+                    description="You don't have the `Ban Members` permission to use this command.",
+                    color=0xE02B2B,
+                ).set_author(
+                    name="Moderation",
+                    icon_url="https://yes.nighty.works/raw/CPKHQd.png",
+                )
+                await context.send(embed=embed, ephemeral=True)
+                return
+
+            if not context.guild.me.guild_permissions.ban_members:
+                embed = discord.Embed(
+                    title="Missing Permissions!",
+                    description="I am missing the permission(s) `ban_members` to execute this command!",
+                    color=0xE02B2B,
+                ).set_author(
+                    name="Moderation",
+                    icon_url="https://yes.nighty.works/raw/CPKHQd.png",
+                )
+                await context.send(embed=embed, ephemeral=True)
+                return
+
             await self.bot.http.ban(user_id, context.guild.id, reason=reason)
             user = self.bot.get_user(int(user_id)) or await self.bot.fetch_user(
                 int(user_id)
