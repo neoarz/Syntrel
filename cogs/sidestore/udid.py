@@ -10,7 +10,7 @@ def udid_command():
         embed = discord.Embed(
             color=0x8E82F9,
             description=(
-                "# SideStore Could Not Determine Device UDID\n\n--- For iOS 26.4 ---\n\n"
+                "# SideStore Could Not Determine Device UDID\n\n--- For iOS 26.4+ ---\n\n"
                 + "1. Open Settings, click General, click VPN & Device Management, click your email developer apps, delete them all."
                 + "2. Open iLoader, scroll down, click Delete Stored Pairing."
                 + "3. Scroll back up, click Refresh."
