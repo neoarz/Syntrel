@@ -19,6 +19,7 @@ def udid_command():
                 + "6. Open SideStore when it's done installing"
                 + "7. Refresh SideStore to see if everything is working"
                 + "8. If Step #7 does not work, reboot your idevice"
+                + "9. If Step #8 does not work, read the documentation."
             ),
         )
         embed.set_author(
