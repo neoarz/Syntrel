@@ -5,7 +5,7 @@ from discord.ext import commands
 def google_command():
     @commands.hybrid_command(
         name="google",
-        description="Search it using this handy dandy tool",
+        description="Search it using this handy dandy tool!",
     )
     async def google(self, context):
         message = "https://google.com"
