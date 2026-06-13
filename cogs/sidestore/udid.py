@@ -10,15 +10,16 @@ def udid_command():
         embed = discord.Embed(
             color=0x8E82F9,
             description=(
-                "# SideStore Could Not Determine Device UDID\n\n--- For iOS 26.4+ ---\n\n"
-                + "1. Open Settings, click General, click VPN & Device Management, click your email developer apps, delete them all."
-                + "2. Open iLoader, scroll down, click Delete Stored Pairing."
-                + "3. Scroll back up, click Refresh."
-                + "4. Pair your idevice with iLoader."
-                + "5. Click SideStore (Stable)"
-                + "6. Open SideStore when it's done installing"
-                + "7. Refresh SideStore to see if everything is working"
-                + "8. If Step #7 does not work, reboot your idevice"
+                "# SideStore Could Not Determine Device UDID\n\n"
+                + "---\n\n"
+                + "1. Open Settings, click General, click VPN & Device Management, click your email developer apps, delete them all.\n"
+                + "2. Open iLoader, scroll down, click Delete Stored Pairing.\n"
+                + "3. Scroll back up, click Refresh.\n"
+                + "4. Pair your idevice with iLoader.\n"
+                + "5. Click SideStore (Stable).\n"
+                + "6. Open SideStore when it's done installing.\n"
+                + "7. Refresh SideStore to see if everything is working.\n"
+                + "8. If Step #7 does not work, reboot your idevice.\n"
                 + "9. If Step #8 does not work, read the documentation."
             ),
         )
