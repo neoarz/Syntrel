@@ -31,7 +31,7 @@
 | idevice | `help`, `noapps`, `errorcode`, `developermode`, `mountddi` |
 | melonx | `help`, `transfer`, `mods`, `gamecrash`, `requirements`, `error`, `26`, `legal` |
 | events | `baitbot`, `stickybot` |
-| miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`, `depart`, `docs` `sigma`, `duck`, `silly`, `color` |
+| miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`, `depart`, `docs`, `sigma`, `duck`, `silly`, `color`, `google` |
 | utilities | `translate`, `codepreview`, `dictionary` |
 | media | `mcquote`, `img2gif`, `tweety`, `tts` |
 

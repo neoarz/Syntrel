@@ -10,16 +10,24 @@ def udid_command():
         embed = discord.Embed(
             color=0x8E82F9,
             description=(
-                "# SideStore Could Not Determine Device UDID\n\n---\n\n"
-                + "This error usually occurs when the pairing file is corrupted. Please replace your pairing file using `iloader` and try again.\n\n"
-                + "If you forgot how to replace your pairing file, you can refer to the documentation below."
+                "# SideStore Could Not Determine Device UDID\n\n"
+                + "---\n\n"
+                + "1. Open Settings, click General, click VPN & Device Management, click your email developer apps, delete them all.\n"
+                + "2. Open iLoader, scroll down, click Delete Stored Pairing.\n"
+                + "3. Scroll back up, click Refresh.\n"
+                + "4. Pair your idevice with iLoader.\n"
+                + "5. Click SideStore (Stable).\n"
+                + "6. Open SideStore when it's done installing.\n"
+                + "7. Refresh SideStore to see if everything is working.\n"
+                + "8. If Step #7 does not work, reboot your idevice.\n"
+                + "9. If Step #8 does not work, read the documentation."
             ),
         )
         embed.set_author(
             name="SideStore",
             icon_url="https://github.com/SideStore/assets/blob/main/icons/classic/Default.png?raw=true",
         )
-        embed.set_footer(text="Last Edited by CelloSerenity")
+        embed.set_footer(text="Last Edited by Mr Saturn")
         embed.timestamp = discord.utils.utcnow()
 
         view = discord.ui.View()
@@ -35,7 +43,7 @@ def udid_command():
             discord.ui.Button(
                 label="Documentation",
                 style=discord.ButtonStyle.secondary,
-                url="https://docs.sidestore.io/docs/advanced/pairing-file/",
+                url="https://docs.sidestore.io/docs/troubleshooting/error-codes#1006-sidestore-could-not-determine-this-devices-udid",
                 emoji="<:sidestorepride:1417717648795631787>",
             )
         )

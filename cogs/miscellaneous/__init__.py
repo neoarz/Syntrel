@@ -16,6 +16,7 @@ from .docs import docs_command
 from .sigma import sigma_command
 from .silly import silly_command
 from .color import color_command
+from .google import google_command
 
 
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
@@ -37,15 +38,15 @@ class Miscellaneous(commands.GroupCog, name="misc"):
         )
         embed.add_field(
             name="Available",
-            value="dontasktoask, rr, depart, labubu, duck, tryitandsee, piracy, keanu, support, docs, sigma, silly, color",
+            value="dontasktoask, rr, depart, labubu, duck, tryitandsee, piracy, keanu, support, docs, sigma, silly, color, google",
             inline=False,
         )
         await context.send(embed=embed)
 
-    async def _invoke_hybrid(self, context: Context, name: str):
+    async def _invoke_hybrid(self, context: Context, name: str, *args, **kwargs):
         command = self.bot.get_command(name)
         if command is not None:
-            await context.invoke(command)
+            await context.invoke(command, *args, **kwargs)
         else:
             await context.send(f"Unknown miscellaneous command: {name}")
 
@@ -112,6 +113,12 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     @miscellaneous_group.command(name="color")
     async def miscellaneous_group_color(self, context: Context):
         await self._invoke_hybrid(context, "color")
+
+    @miscellaneous_group.command(name="google")
+    async def miscellaneous_group_google(
+        self, context: Context, *, query: str | None = None
+    ):
+        await self._invoke_hybrid(context, "google", query=query)
 
     @commands.check(_require_group_prefix)
     @commands.hybrid_command(
@@ -187,6 +194,14 @@ class Miscellaneous(commands.GroupCog, name="misc"):
     async def color(self, context):
         return await color_command()(self, context)
 
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="google", description="Open Google or search for a query."
+    )
+    @app_commands.describe(query="Optional search query.")
+    async def google(self, context, *, query: str | None = None):
+        return await google_command()(self, context, query=query)
+
 
 async def setup(bot) -> None:
     cog = Miscellaneous(bot)
@@ -205,3 +220,4 @@ async def setup(bot) -> None:
     bot.logger.info("Loaded extension 'miscellaneous.sigma'")
     bot.logger.info("Loaded extension 'miscellaneous.silly'")
     bot.logger.info("Loaded extension 'miscellaneous.color'")
+    bot.logger.info("Loaded extension 'miscellaneous.google'")
