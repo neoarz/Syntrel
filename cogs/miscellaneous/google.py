@@ -11,7 +11,7 @@ def google_command():
     async def google(self, context, *, query: str | None = None):
         if query:
             search_url = "https://www.google.com/search?" + urlencode({"q": query})
-            message = f"Refer to this magical site for an answer: {query}\n{search_url}"
+            message = f"Refer to this magical site for an answer: {search_url}"
         else:
             message = "Refer to this magical site for an answer: https://www.google.com"
 
