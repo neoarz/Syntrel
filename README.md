@@ -18,7 +18,7 @@
 
 ## Commands
 
-![Total Commands](https://img.shields.io/badge/Total%20Commands-71-5865F2)
+![Total Commands](https://img.shields.io/badge/Total%20Commands-73-5865F2)
 
 | Command&nbsp;group | Subcommands |
 | ------------ | --- |
@@ -26,7 +26,7 @@
 | owner | `sync`, `cog_management`, `shutdown`, `say`, `invite`, `logs` |
 | general | `serverinfo`, `ping`, `feedback`, `uptime`, `userinfo` |
 | fun | `randomfact`, `coinflip`, `rps`, `8ball`, `minesweeper` |
-| moderation | `kick`, `ban`, `nick`, `purge`, `hackban`, `warnings`, `archive`, `timeout` |
+| moderation | `kick`, `ban`, `softban`, `nick`, `purge`, `hackban`, `warnings`, `archive`, `timeout` |
 | sidestore | `help`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
 | idevice | `help`, `noapps`, `errorcode`, `developermode`, `mountddi` |
 | melonx | `help`, `transfer`, `mods`, `gamecrash`, `requirements`, `error`, `26`, `legal` |
