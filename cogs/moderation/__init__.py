@@ -4,6 +4,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 
 from .ban import ban_command
+from .softban import softban_command
 from .kick import kick_command
 from .purge import purge_command
 from .warnings import warnings_command
@@ -29,7 +30,7 @@ class Moderation(commands.GroupCog, name="moderation"):
         )
         embed.add_field(
             name="Available",
-            value="ban, kick, purge, warnings, archive, hackban, nick, timeout",
+            value="ban, softban, kick, purge, warnings, archive, hackban, nick, timeout",
             inline=False,
         )
         await context.send(embed=embed)
@@ -82,6 +83,23 @@ class Moderation(commands.GroupCog, name="moderation"):
     ):
         await self._invoke_hybrid(
             context, "ban", user=user, reason=reason, delete_messages=delete_messages
+        )
+
+    @moderation_group.command(name="softban")
+    async def moderation_group_softban(
+        self,
+        context: Context,
+        user: discord.User,
+        *,
+        reason: str = "Not specified",
+        delete_messages: str = "none",
+    ):
+        await self._invoke_hybrid(
+            context,
+            "softban",
+            user=user,
+            reason=reason,
+            delete_messages=delete_messages,
         )
 
     @moderation_group.command(name="kick")
@@ -140,6 +158,39 @@ class Moderation(commands.GroupCog, name="moderation"):
         delete_messages: str = "none",
     ):
         return await ban_command()(
+            self, context, user=user, reason=reason, delete_messages=delete_messages
+        )
+
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="softban",
+        description="Bans a user and immediately unbans them, deleting their messages.",
+    )
+    @app_commands.describe(
+        user="The user that should be softbanned.",
+        reason="The reason why the user should be softbanned.",
+        delete_messages="How far back to delete the user's messages.",
+    )
+    @app_commands.choices(
+        delete_messages=[
+            app_commands.Choice(name="Don't delete any messages", value="none"),
+            app_commands.Choice(name="Last 1 hour", value="1h"),
+            app_commands.Choice(name="Last 6 hours", value="6h"),
+            app_commands.Choice(name="Last 12 hours", value="12h"),
+            app_commands.Choice(name="Last 24 hours", value="1d"),
+            app_commands.Choice(name="Last 3 days", value="3d"),
+            app_commands.Choice(name="Last 7 days", value="7d"),
+        ]
+    )
+    async def softban(
+        self,
+        context,
+        user: discord.User,
+        *,
+        reason: str = "Not specified",
+        delete_messages: str = "none",
+    ):
+        return await softban_command()(
             self, context, user=user, reason=reason, delete_messages=delete_messages
         )
 
@@ -211,6 +262,7 @@ async def setup(bot) -> None:
     await bot.add_cog(cog)
 
     bot.logger.info("Loaded extension 'moderation.ban'")
+    bot.logger.info("Loaded extension 'moderation.softban'")
     bot.logger.info("Loaded extension 'moderation.kick'")
     bot.logger.info("Loaded extension 'moderation.purge'")
     bot.logger.info("Loaded extension 'moderation.warnings'")
