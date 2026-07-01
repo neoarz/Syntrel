@@ -25,10 +25,10 @@ STICKY_CONFIGS = {
         "footer": "This is an automated sticky message.",
         "delay": 10,
     },
-     "MeloNX": {
+    "MeloNX": {
         "guild_id": 1300369899704680479,
         "channel_ids": [
-           1485915998765977682,
+            1485915998765977682,
         ],
         "allowed_role_id": 1300372233788850196,
         "message": "## This channel is only for support with the SwitchVerifier. For support with MeloNX follow the instructions in https://discord.com/channels/1300369899704680479/1485915311772536986.",
