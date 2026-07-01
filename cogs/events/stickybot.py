@@ -21,7 +21,7 @@ STICKY_CONFIGS = {
             1279548738586673202,
         ],
         "allowed_role_id": 949207813815697479,
-        "message": "## Please read the README in https://discord.com/channels/949183273383395328/1155736594679083089 and the documentation at <https://docs.sidestore.io> before asking your question.",
+        "message": "## Please read the README in https://discord.com/channels/949183273383395328/1155736594679083089 and the documentation at <https://docs.sidestore.io> before asking your question. \nWait 30 minutes after asking your question to ping helpers.",
         "footer": "This is an automated sticky message.",
         "delay": 10,
     },
