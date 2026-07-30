@@ -21,7 +21,17 @@ STICKY_CONFIGS = {
             1279548738586673202,
         ],
         "allowed_role_id": 949207813815697479,
-        "message": "## Please read the README in https://discord.com/channels/949183273383395328/1155736594679083089 and the documentation at <https://docs.sidestore.io> before asking your question.",
+        "message": "## Please read the README in https://discord.com/channels/949183273383395328/1155736594679083089 and the documentation at <https://docs.sidestore.io> before asking your question. \nWait 30 minutes after asking your question to ping helpers.",
+        "footer": "This is an automated sticky message.",
+        "delay": 10,
+    },
+    "MeloNX": {
+        "guild_id": 1300369899704680479,
+        "channel_ids": [
+            1485915998765977682,
+        ],
+        "allowed_role_id": 1300372233788850196,
+        "message": "## This channel is only for support with the SwitchVerifier. For support with MeloNX follow the instructions in https://discord.com/channels/1300369899704680479/1485915311772536986.",
         "footer": "This is an automated sticky message.",
         "delay": 10,
     },
