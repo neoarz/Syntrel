@@ -14,6 +14,8 @@ from .udid import udid_command
 from .half import half_command
 from .sparse import sparse_command
 from .unofficial import unofficial_command
+from .install import install_command
+from .sideinstaller import sideinstaller_command
 
 
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
@@ -50,6 +52,14 @@ class Sidestore(commands.GroupCog, name="sidestore"):
         )
         view = SidestoreView(self.bot)
         await context.send(embed=embed, view=view)
+
+    @sidestore_group.command(name="install")
+    async def sidestore_group_install(self, context: Context):
+        await self._invoke_hybrid(context, "install")
+
+    @sidestore_group.command(name="sideinstaller")
+    async def sidestore_group_sideinstaller(self, context: Context):
+        await self._invoke_hybrid(context, "sideinstaller")
 
     async def _invoke_hybrid(self, context: Context, name: str):
         command = self.bot.get_command(name)
@@ -186,6 +196,18 @@ class Sidestore(commands.GroupCog, name="sidestore"):
         return await sparse_command()(self, context)
 
     @commands.check(_require_group_prefix)
+    @commands.hybrid_command(name="install", description="Install SideStore")
+    async def install(self, context):
+        return await install_command()(self, context)
+
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="sideinstaller", description="Warning about SideInstaller"
+    )
+    async def sideinstaller(self, context):
+        return await sideinstaller_command()(self, context)
+
+    @commands.check(_require_group_prefix)
     @commands.hybrid_command(
         name="unofficial", description="Unofficial guides and video walkthroughs"
     )
@@ -208,3 +230,5 @@ async def setup(bot) -> None:
     bot.logger.info("Loaded extension 'sidestore.half'")
     bot.logger.info("Loaded extension 'sidestore.sparse'")
     bot.logger.info("Loaded extension 'sidestore.unofficial'")
+    bot.logger.info("Loaded extension 'sidestore.install'")
+    bot.logger.info("Loaded extension 'sidestore.sideinstaller'")
