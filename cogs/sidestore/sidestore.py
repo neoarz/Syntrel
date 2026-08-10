@@ -57,6 +57,11 @@ class SidestoreSelect(discord.ui.Select):
                 description="SideStore could not determine device UDID",
             ),
             discord.SelectOption(
+                label="SideInstaller Warning",
+                value="sideinstaller",
+                description="Warning about using SideInstaller",
+            ),
+            discord.SelectOption(
                 label="Unofficial Guides",
                 value="unofficial",
                 description="Unofficial guides and video walkthroughs",
