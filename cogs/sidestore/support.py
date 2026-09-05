@@ -4,8 +4,8 @@ import aiohttp
 import io
 
 
-def support_command():
-    @commands.hybrid_command(name="support", description="Shows the support image.")
+def support_command_sidestore():
+    @commands.hybrid_command(name="support", description="Shows the support image for SideStore.")
     async def support(self, context):
         url = "https://yes.nighty.works/raw/wGzHIV.gif"
 
