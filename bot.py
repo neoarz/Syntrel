@@ -15,7 +15,6 @@ from utils import ascii, setup_logger, get_uptime, setup_signal_handlers
 load_dotenv()
 
 intents = discord.Intents.default()
-intents.message_content = True
 intents.bans = True
 intents.dm_messages = True
 intents.dm_reactions = True
@@ -34,8 +33,6 @@ intents.guild_typing = True
 intents.guilds = True
 intents.integrations = True
 intents.invites = True
-intents.presences = True
-intents.members = True
 
 
 logger = setup_logger()
