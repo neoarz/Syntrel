@@ -12,6 +12,11 @@ class SidestoreSelect(discord.ui.Select):
                 description="Help with refreshing or installing apps",
             ),
             discord.SelectOption(
+                label="Install",
+                value="install",
+                description="Install SideStore",
+            ),
+            discord.SelectOption(
                 label="Verification Code",
                 value="code",
                 description="No code received when signing in with Apple ID",
@@ -50,6 +55,11 @@ class SidestoreSelect(discord.ui.Select):
                 label="UDID Error",
                 value="udid",
                 description="SideStore could not determine device UDID",
+            ),
+            discord.SelectOption(
+                label="SideInstaller Warning",
+                value="sideinstaller",
+                description="Warning about using SideInstaller",
             ),
             discord.SelectOption(
                 label="Unofficial Guides",
