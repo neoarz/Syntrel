@@ -29,9 +29,10 @@ STICKY_CONFIGS = {
         "guild_id": 1300369899704680479,
         "channel_ids": [
             1485915998765977682,
+            1488212828061175971,
         ],
         "allowed_role_id": 1300372233788850196,
-        "message": "## This channel is only for support with the SwitchVerifier. For support with MeloNX follow the instructions in https://discord.com/channels/1300369899704680479/1485915311772536986.",
+        "message": "## This channel is only for support with console verification. For support with the emulator follow the instructions in https://discord.com/channels/1300369899704680479/1485915311772536986 or https://discord.com/channels/1300369899704680479/1488203102711578654.",
         "footer": "This is an automated sticky message.",
         "delay": 10,
     },
