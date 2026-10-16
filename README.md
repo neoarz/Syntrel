@@ -27,11 +27,11 @@
 | general | `serverinfo`, `ping`, `feedback`, `uptime`, `userinfo` |
 | fun | `randomfact`, `coinflip`, `rps`, `8ball`, `minesweeper` |
 | moderation | `kick`, `ban`, `softban`, `nick`, `purge`, `hackban`, `warnings`, `archive`, `timeout` |
-| sidestore | `help`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid` |
-| idevice | `help`, `noapps`, `errorcode`, `developermode`, `mountddi` |
+| sidestore | `help`, `refresh`, `code`, `crash`, `pairing`, `server`, `half`, `sparse`, `afc`, `udid`, `support` |
+| idevice | `help`, `noapps`, `errorcode`, `developermode`, `mountddi`, `support` |
 | melonx | `help`, `transfer`, `mods`, `gamecrash`, `requirements`, `error`, `26`, `legal` |
 | events | `baitbot`, `stickybot` |
-| miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `support`, `depart`, `docs`, `sigma`, `duck`, `silly`, `color`, `google` |
+| miscellaneous | `keanu`, `labubu`, `piracy`, `tryitandsee`, `rickroll`, `dontasktoask`, `depart`, `docs`, `sigma`, `duck`, `silly`, `color`, `google` |
 | utilities | `translate`, `codepreview`, `dictionary` |
 | media | `mcquote`, `img2gif`, `tweety`, `tts` |
 

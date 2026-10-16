@@ -14,6 +14,7 @@ from .udid import udid_command
 from .half import half_command
 from .sparse import sparse_command
 from .unofficial import unofficial_command
+from .support import support_command_sidestore
 
 
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
@@ -108,6 +109,10 @@ class Sidestore(commands.GroupCog, name="sidestore"):
     async def sidestore_group_unofficial(self, context: Context):
         await self._invoke_hybrid(context, "unofficial")
 
+    @sidestore_group.command(name="support")
+    async def sidestore_group_support(self, context: Context):
+        await self._invoke_hybrid(context, "support")
+
     @app_commands.command(name="help", description="SideStore troubleshooting help")
     async def help(self, interaction: discord.Interaction):
         embed = discord.Embed(
@@ -192,6 +197,13 @@ class Sidestore(commands.GroupCog, name="sidestore"):
     async def unofficial(self, context):
         return await unofficial_command()(self, context)
 
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(
+        name="support", description="Shows the support image for SideStore."
+    )
+    async def support(self, context):
+        return await support_command_sidestore()(self, context)
+
 
 async def setup(bot) -> None:
     cog = Sidestore(bot)
@@ -208,3 +220,4 @@ async def setup(bot) -> None:
     bot.logger.info("Loaded extension 'sidestore.half'")
     bot.logger.info("Loaded extension 'sidestore.sparse'")
     bot.logger.info("Loaded extension 'sidestore.unofficial'")
+    bot.logger.info("Loaded extension 'sidestore.support'")

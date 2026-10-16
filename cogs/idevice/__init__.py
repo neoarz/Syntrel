@@ -8,6 +8,7 @@ from .error_codes import errorcodes_command
 from .developermode import developermode_command
 from .noapps import noapps_command
 from .mountddi import mountddi_command
+from .support import support_command_idevice
 
 
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
@@ -47,6 +48,10 @@ class Idevice(commands.GroupCog, name="idevice"):
     @idevice_group.command(name="mountddi")
     async def idevice_group_mountddi(self, context: Context):
         await self._invoke_hybrid(context, "mountddi")
+
+    @idevice_group.command(name="support")
+    async def idevice_group_support(self, context: Context):
+        await self._invoke_hybrid(context, "support")
 
     async def _invoke_hybrid(self, context: Context, name: str, **kwargs):
         command = self.bot.get_command(name)
@@ -105,6 +110,10 @@ class Idevice(commands.GroupCog, name="idevice"):
     async def mountddi(self, context):
         return await mountddi_command()(self, context)
 
+    @commands.check(_require_group_prefix)
+    @commands.hybrid_command(name="support", description="Shows proper channels to go to for support in idevice.")
+    async def support(self, context):
+        return await support_command_idevice()(self, context)
 
 async def setup(bot) -> None:
     cog = Idevice(bot)
@@ -115,3 +124,4 @@ async def setup(bot) -> None:
     bot.logger.info("Loaded extension 'idevice.developermode'")
     bot.logger.info("Loaded extension 'idevice.noapps'")
     bot.logger.info("Loaded extension 'idevice.mountddi'")
+    bot.logger.info("Loaded extension 'idevice.support'")
